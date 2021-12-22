@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.data;
+package juicebox.genes;
 
 import juicebox.HiCGlobals;
 

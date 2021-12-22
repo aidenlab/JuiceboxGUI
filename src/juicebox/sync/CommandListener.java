@@ -22,7 +22,10 @@
  *  THE SOFTWARE.
  */
 
-package juicebox;
+package juicebox.sync;
+
+import juicebox.HiC;
+import juicebox.HiCGlobals;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +33,7 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-class CommandListener implements Runnable {
+public class CommandListener implements Runnable {
 
     private static CommandListener listener;
     private final Thread listenerThread;

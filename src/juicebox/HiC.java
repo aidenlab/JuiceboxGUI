@@ -31,7 +31,6 @@ import javastraw.reader.Matrix;
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.basics.ChromosomeHandler;
 import javastraw.reader.expected.ExpectedValueFunction;
-import javastraw.reader.norm.NormalizationVector;
 import javastraw.reader.type.HiCZoom;
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationHandler;
@@ -40,8 +39,11 @@ import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.ZoomAction;
 import juicebox.data.ZoomActionTracker;
 import juicebox.gui.SuperAdapter;
+import juicebox.sync.CommandBroadcaster;
+import juicebox.sync.CommandExecutor;
 import juicebox.track.*;
 import org.broad.igv.util.ResourceLocator;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,7 +79,6 @@ public class HiC {
     private ResourceTree resourceTree;
     private LoadEncodeAction encodeAction;
     private Point cursorPoint, diagonalCursorPoint, gwCursorPoint;
-    private Point selectedBin;
     private boolean linkedMode;
     private boolean m_zoomChanged;
     private boolean m_displayOptionChanged;
@@ -91,16 +92,6 @@ public class HiC {
         m_zoomChanged = false;
         m_displayOptionChanged = false;
         m_normalizationTypeChanged = false;
-    }
-
-    /**
-     * @param string
-     * @return string with replacements of 000000 with M and 000 with K
-     */
-    private static String cleanUpNumbersInName(String string) {
-        string = (new StringBuilder(string)).reverse().toString();
-        string = string.replaceAll("000000", "M").replaceAll("000", "K");
-        return (new StringBuilder(string)).reverse().toString();
     }
 
     public static HiCZoom.HiCUnit valueOfUnit(String unit) {
@@ -414,14 +405,6 @@ public class HiC {
 
     }
 
-    public void setSelectedBin(Point point) {
-        if (point.equals(this.selectedBin)) {
-            this.selectedBin = null;
-        } else {
-            this.selectedBin = point;
-        }
-    }
-
     public MatrixType getDisplayOption() {
         return displayOption;
     }
@@ -577,7 +560,7 @@ public class HiC {
         }
     }
 
-    public double[] getEigenvector(final int chrIdx, final int n, boolean isControl) {
+    public double[] getEigenvector(boolean isControl) {
         if (isControl) {
             if (controlDataset == null) return null;
             return getControlZd().getEigenvector(getExpectedControlValues());
@@ -595,16 +578,6 @@ public class HiC {
     public ExpectedValueFunction getExpectedControlValues() {
         if (controlDataset == null) return null;
         return controlDataset.getExpectedValues(currentZoom, ctrlNormalizationType, true);
-    }
-
-    public NormalizationVector getNormalizationVector(int chrIdx) {
-        if (dataset == null) return null;
-        return dataset.getNormalizationVector(chrIdx, currentZoom, obsNormalizationType);
-    }
-
-    public NormalizationVector getControlNormalizationVector(int chrIdx) {
-        if (controlDataset == null) return null;
-        return controlDataset.getNormalizationVector(chrIdx, currentZoom, ctrlNormalizationType);
     }
 
     // Note - this is an inefficient method, used to support tooltip text only.
@@ -1076,25 +1049,25 @@ public class HiC {
             if (controlDataset == null || controlDataset.getVersion() < HiCGlobals.minVersion) {
                 return new String[]{NormalizationHandler.NONE.getDescription()};
             } else {
-                ArrayList<String> tmp = new ArrayList<>();
-                tmp.add(NormalizationHandler.NONE.getDescription());
-                for (NormalizationType t : controlDataset.getNormalizationTypes()) {
-                    tmp.add(t.getDescription());
-                }
-                return tmp.toArray(new String[0]);
+                return getNormalizationsArray(controlDataset);
             }
         } else {
             if (dataset.getVersion() < HiCGlobals.minVersion) {
                 return new String[]{NormalizationHandler.NONE.getDescription()};
             } else {
-                ArrayList<String> tmp = new ArrayList<>();
-                tmp.add(NormalizationHandler.NONE.getDescription());
-                for (NormalizationType t : dataset.getNormalizationTypes()) {
-                    tmp.add(t.getDescription());
-                }
-                return tmp.toArray(new String[0]);
+                return getNormalizationsArray(dataset);
             }
         }
+    }
+
+    @NotNull
+    private String[] getNormalizationsArray(Dataset ds) {
+        ArrayList<String> tmp = new ArrayList<>();
+        tmp.add(NormalizationHandler.NONE.getDescription());
+        for (NormalizationType t : ds.getNormalizationTypes()) {
+            tmp.add(t.getDescription());
+        }
+        return tmp.toArray(new String[0]);
     }
 
     public void createNewDynamicResolutions(int newResolution) {

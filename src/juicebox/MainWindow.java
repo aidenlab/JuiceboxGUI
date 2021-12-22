@@ -27,6 +27,7 @@ package juicebox;
 
 import juicebox.gui.MainViewPanel;
 import juicebox.gui.SuperAdapter;
+import juicebox.sync.CommandListener;
 import juicebox.windowui.DisabledGlassPane;
 import juicebox.windowui.FileDropTargetListener;
 import juicebox.windowui.layers.LayersPanel;

@@ -28,7 +28,7 @@ import juicebox.Context;
 import juicebox.HiC;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
-import juicebox.tools.ArrayTools;
+import juicebox.utils.ArrayTools;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.broad.igv.renderer.GraphicUtils;
 import org.broad.igv.renderer.Renderer;
@@ -70,7 +70,7 @@ public class EigenvectorTrack extends HiCTrack {
 
     private double[] loadData(int chrIdxPreCtrlInt, int zoomBinSize) {
 
-        double[] data = hic.getEigenvector(chrIdxPreCtrlInt, 0, isControl);
+        double[] data = hic.getEigenvector(isControl);
         currentZoomBinSize = zoomBinSize;
         String cacheKey = getCacheKey(chrIdxPreCtrlInt, zoomBinSize);
 

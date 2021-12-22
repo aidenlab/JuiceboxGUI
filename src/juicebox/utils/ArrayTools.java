@@ -22,32 +22,29 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.tools.utils.dev;
+package juicebox.utils;
 
-public class PearsonCorrelationMetric {
+/**
+ * Helper methods for handling arrays
+ */
+public class ArrayTools {
 
-    public static double corr(final double[] x, final double[] y) {
-        double sumX = 0;
-        double sumY = 0;
-        for (int i = 0; i < x.length; i++) {
-            sumX += x[i];
-            sumY += y[i];
+    /**
+     * @return mean of given array
+     */
+    public static double mean(double[] doubles) {
+        double sum = 0;
+        for (double d : doubles) {
+            sum += d;
         }
-        double muX = sumX / x.length;
-        double muY = sumY / x.length;
+        return sum / doubles.length;
+    }
 
-        double dotProduct = 0.0;
-        double normX = 0.0;
-        double normY = 0.0;
-        for (int i = 0; i < x.length; i++) {
-            double nX = x[i] - muX;
-            double nY = y[i] - muY;
-
-            dotProduct += nX * nY;
-            normX += nX * nX;
-            normY += nY * nY;
+    public static double[] flipArrayValues(double[] array) {
+        double[] flipped = new double[array.length];
+        for (int i = 0; i < array.length; i++) {
+            flipped[i] = -1 * array[i];
         }
-
-        return dotProduct / Math.sqrt(normX * normY);
+        return flipped;
     }
 }

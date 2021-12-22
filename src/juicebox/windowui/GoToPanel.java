@@ -31,9 +31,9 @@ import javastraw.reader.type.HiCZoom;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.assembly.Scaffold;
-import juicebox.data.GeneLocation;
+import juicebox.genes.GeneFileTools;
+import juicebox.genes.GeneLocation;
 import juicebox.gui.SuperAdapter;
-import juicebox.tools.utils.juicer.GeneTools;
 import juicebox.track.HiCTrack;
 
 import javax.swing.*;
@@ -372,7 +372,7 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
         // Name1 Name2 chromosome position (where position is midpoint of transcription start and end)
         BufferedReader reader;
         try {
-            reader = GeneTools.getStreamToGeneFile(genomeID);
+            reader = GeneFileTools.getStreamToGeneFile(genomeID);
         } catch (Exception error) {
             SuperAdapter.showMessageDialog("Failed to read gene database");
             positionChrTop.setBackground(Color.yellow);
@@ -382,7 +382,7 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
 
         try {
             ChromosomeHandler handler = hic.getChromosomeHandler();
-            geneLocationHashMap = GeneTools.getLocationMap(reader, handler);
+            geneLocationHashMap = GeneFileTools.getLocationMap(reader, handler);
         } catch (Exception error) {
             SuperAdapter.showMessageDialog("Failed to parse gene database");
             positionChrTop.setBackground(Color.yellow);

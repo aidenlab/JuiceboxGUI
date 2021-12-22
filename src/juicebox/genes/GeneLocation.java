@@ -22,29 +22,24 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.tools;
+package juicebox.genes;
+import javastraw.reader.basics.Chromosome;
 
-/**
- * Helper methods for handling arrays
- */
-public class ArrayTools {
+public class GeneLocation {
 
-    /**
-     * @return mean of given array
-     */
-    public static double mean(double[] doubles) {
-        double sum = 0;
-        for (double d : doubles) {
-            sum += d;
-        }
-        return sum / doubles.length;
+    private final Chromosome chromosome;
+    private final int centerPosition;
+
+    public GeneLocation(Chromosome chromosome, int centerPosition) {
+        this.chromosome = chromosome;
+        this.centerPosition = centerPosition;
     }
 
-    public static double[] flipArrayValues(double[] array) {
-        double[] flipped = new double[array.length];
-        for (int i = 0; i < array.length; i++) {
-            flipped[i] = -1 * array[i];
-        }
-        return flipped;
+    public int getCenterPosition() {
+        return centerPosition;
+    }
+
+    public Chromosome getChromosome() {
+        return chromosome;
     }
 }

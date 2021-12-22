@@ -22,12 +22,10 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.tools.utils.juicer;
+package juicebox.genes;
 
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.basics.ChromosomeHandler;
-import juicebox.data.GeneFileParser;
-import juicebox.data.GeneLocation;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -40,7 +38,7 @@ import java.util.Map;
 /**
  * Created by muhammadsaadshamim on 8/3/16.
  */
-public class GeneTools {
+public class GeneFileTools {
 
 
     public static BufferedReader getStreamToGeneFile(String genomeID) {

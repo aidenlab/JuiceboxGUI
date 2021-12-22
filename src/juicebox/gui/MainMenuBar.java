@@ -179,12 +179,6 @@ public class MainMenuBar extends JMenuBar {
     fileMenu.add(showControlStats);
     fileMenu.addSeparator();
 
-
-    // TODO: make this an export of the data on screen instead of a GUI for CLT
-    JMenuItem dump = new JMenuItem("Export Data...");
-    dump.addActionListener(actionEvent -> superAdapter.exportDataLauncher());
-    fileMenu.add(dump);
-
     JMenuItem creditsMenu = new JMenuItem();
     creditsMenu.setText("About");
     creditsMenu.addActionListener(new ActionListener() {

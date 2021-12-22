@@ -141,15 +141,6 @@ public class SuperAdapter {
         }
     }
 
-    public void exportDataLauncher() {
-        if (hic.getDataset() == null) {
-            JOptionPane.showMessageDialog(mainWindow, "File must be loaded to show info",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            new DumpDialog(mainWindow, hic);
-        }
-    }
-
     public void setEnableForAllElements(boolean status) {
         mainViewPanel.setEnableForAllElements(this, status);
         for (AnnotationLayerHandler handler : annotationLayerHandlers) {

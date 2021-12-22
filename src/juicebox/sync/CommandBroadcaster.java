@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox;
+package juicebox.sync;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,10 +30,10 @@ import java.net.Socket;
 
 /**
  * @author jrobinso
- *         Date: 10/21/13
- *         Time: 2:59 PM
+ * Date: 10/21/13
+ * Time: 2:59 PM
  */
-class CommandBroadcaster {
+public class CommandBroadcaster {
 
     public static int selfPort;
     public static final int numPorts = 50;

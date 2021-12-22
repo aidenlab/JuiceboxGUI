@@ -27,15 +27,16 @@
  * and open the template in the editor.
  */
 
-package juicebox;
+package juicebox.sync;
 
 import javastraw.reader.type.HiCZoom;
+import juicebox.HiC;
 import org.broad.igv.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class CommandExecutor {
+public class CommandExecutor {
 
     private final HiC hic;
 
