@@ -22,12 +22,12 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.windowui.layers;
+package juicebox.layers;
 
 import javastraw.feature2D.Feature2DList;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
-import juicebox.track.feature.AnnotationLayer;
+import juicebox.guifeature2d.AnnotationLayer;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;

@@ -22,10 +22,10 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.windowui.layers;
+package juicebox.layers;
 
 import juicebox.gui.SuperAdapter;
-import juicebox.track.feature.AnnotationLayerHandler;
+import juicebox.guifeature2d.AnnotationLayerHandler;
 import org.broad.igv.ui.color.ColorChooserPanel;
 
 import javax.swing.*;

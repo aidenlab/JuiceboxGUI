@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.track.feature;
+package juicebox.guifeature2d;
 
 import javastraw.feature2D.Feature2D;
 import javastraw.feature2D.Feature2DList;
@@ -31,12 +31,12 @@ import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
+import juicebox.layers.MiniAnnotationsLayerPanel;
+import juicebox.layers.PlottingStyleButton;
+import juicebox.layers.SaveAnnotationsDialog;
 import juicebox.mapcolorui.Feature2DHandler;
 import juicebox.mapcolorui.FeatureRenderer;
 import juicebox.track.HiCGridAxis;
-import juicebox.windowui.layers.MiniAnnotationsLayerPanel;
-import juicebox.windowui.layers.PlottingStyleButton;
-import juicebox.windowui.layers.SaveAnnotationsDialog;
 import org.broad.igv.ui.color.ColorChooserPanel;
 import org.broad.igv.util.Pair;
 

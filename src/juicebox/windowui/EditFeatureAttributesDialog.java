@@ -30,7 +30,7 @@ package juicebox.windowui;
 
 import javastraw.feature2D.Feature2D;
 import juicebox.MainWindow;
-import juicebox.track.feature.AnnotationLayer;
+import juicebox.guifeature2d.AnnotationLayer;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

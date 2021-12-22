@@ -34,6 +34,7 @@ import juicebox.Context;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.data.GUIMatrixZoomData;
+import juicebox.layers.MiniAnnotationsLayerPanel;
 import juicebox.mapcolorui.HeatmapPanel;
 import juicebox.mapcolorui.JColorRangePanel;
 import juicebox.mapcolorui.ResolutionControl;
@@ -44,7 +45,6 @@ import juicebox.windowui.GoToPanel;
 import juicebox.windowui.HiCChromosomeFigPanel;
 import juicebox.windowui.HiCLayout;
 import juicebox.windowui.HiCRulerPanel;
-import juicebox.windowui.layers.MiniAnnotationsLayerPanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

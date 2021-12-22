@@ -32,12 +32,12 @@ import juicebox.assembly.AssemblyFileImporter;
 import juicebox.assembly.AssemblyStateTracker;
 import juicebox.assembly.PsfFileImporter;
 import juicebox.gui.SuperAdapter;
+import juicebox.guifeature2d.AnnotationLayer;
+import juicebox.guifeature2d.AnnotationLayerHandler;
+import juicebox.layers.LayersPanel;
+import juicebox.layers.Load2DAnnotationsDialog;
 import juicebox.mapcolorui.FeatureRenderer;
 import juicebox.track.ResourceFinder;
-import juicebox.track.feature.AnnotationLayer;
-import juicebox.track.feature.AnnotationLayerHandler;
-import juicebox.windowui.layers.LayersPanel;
-import juicebox.windowui.layers.Load2DAnnotationsDialog;
 import org.broad.igv.ui.util.FileDialogUtils;
 import org.broad.igv.util.ResourceLocator;
 

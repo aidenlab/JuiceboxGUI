@@ -32,7 +32,7 @@ import juicebox.HiCGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyOperationExecutor;
 import juicebox.gui.SuperAdapter;
-import juicebox.track.feature.Feature2DGuiContainer;
+import juicebox.guifeature2d.Feature2DGuiContainer;
 
 import javax.swing.*;
 import java.awt.*;

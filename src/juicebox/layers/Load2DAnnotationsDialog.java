@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.windowui.layers;
+package juicebox.layers;
 
 import com.jidesoft.swing.JideBoxLayout;
 import javastraw.reader.basics.ChromosomeHandler;
@@ -32,8 +32,8 @@ import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
 import juicebox.gui.SuperAdapter;
+import juicebox.guifeature2d.AnnotationLayerHandler;
 import juicebox.track.ResourceFinder;
-import juicebox.track.feature.AnnotationLayerHandler;
 import juicebox.windowui.JBTreeCellRenderer;
 import juicebox.windowui.LoadDialog;
 import org.broad.igv.ui.util.FileDialogUtils;

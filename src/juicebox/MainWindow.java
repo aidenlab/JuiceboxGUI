@@ -27,10 +27,10 @@ package juicebox;
 
 import juicebox.gui.MainViewPanel;
 import juicebox.gui.SuperAdapter;
+import juicebox.layers.LayersPanel;
 import juicebox.sync.CommandListener;
 import juicebox.windowui.DisabledGlassPane;
 import juicebox.windowui.FileDropTargetListener;
-import juicebox.windowui.layers.LayersPanel;
 import org.broad.igv.Globals;
 import org.broad.igv.ui.util.IconFactory;
 

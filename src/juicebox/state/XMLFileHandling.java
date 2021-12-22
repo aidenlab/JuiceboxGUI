@@ -31,8 +31,8 @@ import juicebox.Context;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.gui.SuperAdapter;
+import juicebox.guifeature2d.AnnotationLayerHandler;
 import juicebox.track.*;
-import juicebox.track.feature.AnnotationLayerHandler;
 import org.broad.igv.util.ResourceLocator;
 
 import java.util.ArrayList;

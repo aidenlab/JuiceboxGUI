@@ -32,9 +32,9 @@ import juicebox.assembly.AssemblyFileImporter;
 import juicebox.assembly.AssemblyScaffoldHandler;
 import juicebox.assembly.PsfFileImporter;
 import juicebox.gui.SuperAdapter;
+import juicebox.layers.LayersPanel;
+import juicebox.layers.Load2DAnnotationsDialog;
 import juicebox.track.ResourceFinder;
-import juicebox.windowui.layers.LayersPanel;
-import juicebox.windowui.layers.Load2DAnnotationsDialog;
 import org.broad.igv.ui.util.FileDialogUtils;
 import org.broad.igv.util.ResourceLocator;
 

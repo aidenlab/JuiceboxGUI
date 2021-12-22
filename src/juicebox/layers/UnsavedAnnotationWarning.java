@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.windowui.layers;
+package juicebox.layers;
 
 import juicebox.DirectoryManager;
 import juicebox.HiCGlobals;

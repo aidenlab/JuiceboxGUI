@@ -37,11 +37,11 @@ import juicebox.assembly.AssemblyScaffoldHandler;
 import juicebox.assembly.Scaffold;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
+import juicebox.guifeature2d.AnnotationLayer;
+import juicebox.guifeature2d.AnnotationLayerHandler;
+import juicebox.guifeature2d.Feature2DGuiContainer;
 import juicebox.track.HiCFragmentAxis;
 import juicebox.track.HiCGridAxis;
-import juicebox.track.feature.AnnotationLayer;
-import juicebox.track.feature.AnnotationLayerHandler;
-import juicebox.track.feature.Feature2DGuiContainer;
 import juicebox.windowui.EditFeatureAttributesDialog;
 import org.broad.igv.util.Pair;
 

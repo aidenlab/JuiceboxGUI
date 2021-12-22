@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.track.feature;
+package juicebox.guifeature2d;
 
 import javastraw.feature2D.Feature2D;
 

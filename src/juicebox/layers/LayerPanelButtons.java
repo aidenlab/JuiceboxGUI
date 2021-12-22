@@ -22,11 +22,11 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.windowui.layers;
+package juicebox.layers;
 
 import juicebox.gui.SuperAdapter;
+import juicebox.guifeature2d.AnnotationLayerHandler;
 import juicebox.mapcolorui.FeatureRenderer;
-import juicebox.track.feature.AnnotationLayerHandler;
 import org.broad.igv.ui.color.ColorChooserPanel;
 
 import javax.imageio.ImageIO;
