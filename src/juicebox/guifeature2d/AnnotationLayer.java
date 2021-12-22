@@ -28,8 +28,8 @@ import javastraw.feature2D.Feature2D;
 import javastraw.feature2D.Feature2DList;
 import javastraw.tools.HiCFileTools;
 import juicebox.HiCGlobals;
+import juicebox.data.DirectoryManager;
 import juicebox.data.GUIMatrixZoomData;
-import juicebox.utils.DirectoryManager;
 
 import java.awt.*;
 import java.io.File;

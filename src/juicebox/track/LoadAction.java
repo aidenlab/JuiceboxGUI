@@ -24,8 +24,8 @@
 
 package juicebox.track;
 
-import juicebox.HiC;
 import juicebox.MainWindow;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 import org.apache.commons.io.FilenameUtils;
 import org.broad.igv.util.ResourceLocator;

@@ -26,9 +26,9 @@ package juicebox.windowui;
 
 import com.jidesoft.swing.JideBoxLayout;
 import juicebox.MainWindow;
+import juicebox.data.DirectoryManager;
 import juicebox.data.HiCFileLoader;
 import juicebox.gui.SuperAdapter;
-import juicebox.utils.DirectoryManager;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

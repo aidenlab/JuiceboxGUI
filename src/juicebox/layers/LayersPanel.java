@@ -24,7 +24,7 @@
 
 package juicebox.layers;
 
-import juicebox.HiC;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 import juicebox.guifeature2d.AnnotationLayerHandler;
 import juicebox.track.*;

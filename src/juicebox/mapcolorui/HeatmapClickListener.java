@@ -27,10 +27,10 @@ package juicebox.mapcolorui;
 import javastraw.feature2D.Feature2D;
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyOperationExecutor;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 import juicebox.guifeature2d.Feature2DGuiContainer;
 

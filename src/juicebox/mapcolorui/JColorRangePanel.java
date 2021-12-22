@@ -26,8 +26,8 @@ package juicebox.mapcolorui;
 
 import com.jidesoft.swing.JideButton;
 import javastraw.reader.type.MatrixType;
-import juicebox.HiC;
 import juicebox.HiCGlobals;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 import org.broad.igv.ui.FontManager;
 

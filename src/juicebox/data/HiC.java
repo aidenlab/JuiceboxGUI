@@ -23,7 +23,7 @@
  */
 
 
-package juicebox;
+package juicebox.data;
 
 import javastraw.feature2D.Feature2D;
 import javastraw.reader.Dataset;
@@ -35,15 +35,11 @@ import javastraw.reader.type.HiCZoom;
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationHandler;
 import javastraw.reader.type.NormalizationType;
-import juicebox.data.GUIMatrixZoomData;
-import juicebox.data.ZoomAction;
-import juicebox.data.ZoomActionTracker;
+import juicebox.HiCGlobals;
 import juicebox.gui.SuperAdapter;
 import juicebox.sync.CommandBroadcaster;
 import juicebox.sync.CommandExecutor;
 import juicebox.track.*;
-import juicebox.utils.Context;
-import juicebox.utils.DirectoryManager;
 import org.broad.igv.util.ResourceLocator;
 import org.jetbrains.annotations.NotNull;
 

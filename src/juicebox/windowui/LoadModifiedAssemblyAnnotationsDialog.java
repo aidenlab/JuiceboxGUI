@@ -24,17 +24,17 @@
 
 package juicebox.windowui;
 
-import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyFileImporter;
 import juicebox.assembly.AssemblyScaffoldHandler;
 import juicebox.assembly.PsfFileImporter;
+import juicebox.data.DirectoryManager;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 import juicebox.layers.LayersPanel;
 import juicebox.layers.Load2DAnnotationsDialog;
 import juicebox.track.ResourceFinder;
-import juicebox.utils.DirectoryManager;
 import org.broad.igv.ui.util.FileDialogUtils;
 import org.broad.igv.util.ResourceLocator;
 

@@ -24,10 +24,10 @@
 
 package juicebox.track;
 
-import juicebox.HiC;
 import juicebox.assembly.OneDimAssemblyTrackLifter;
+import juicebox.data.Context;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
-import juicebox.utils.Context;
 import org.broad.igv.renderer.DataRange;
 import org.broad.igv.track.WindowFunction;
 import org.broad.igv.util.ResourceLocator;

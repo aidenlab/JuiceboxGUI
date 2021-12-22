@@ -24,7 +24,7 @@
 
 package juicebox.track;
 
-import juicebox.HiC;
+import juicebox.data.HiC;
 import org.broad.igv.data.BasicScore;
 import org.broad.igv.data.WiggleDataset;
 import org.broad.igv.data.WiggleParser;

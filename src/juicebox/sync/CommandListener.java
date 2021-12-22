@@ -24,8 +24,8 @@
 
 package juicebox.sync;
 
-import juicebox.HiC;
 import juicebox.HiCGlobals;
+import juicebox.data.HiC;
 
 import java.io.BufferedReader;
 import java.io.IOException;

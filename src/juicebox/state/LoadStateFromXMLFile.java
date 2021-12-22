@@ -25,7 +25,7 @@
 package juicebox.state;
 
 import javastraw.reader.type.MatrixType;
-import juicebox.HiC;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 import juicebox.track.*;
 import org.broad.igv.renderer.DataRange;

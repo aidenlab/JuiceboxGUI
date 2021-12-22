@@ -24,8 +24,8 @@
 
 package juicebox.track;
 
-import juicebox.HiC;
 import juicebox.HiCGlobals;
+import juicebox.data.HiC;
 
 import javax.swing.*;
 import java.awt.*;

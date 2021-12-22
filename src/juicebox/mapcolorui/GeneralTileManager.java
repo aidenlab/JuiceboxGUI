@@ -26,9 +26,9 @@ package juicebox.mapcolorui;
 
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationType;
-import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.data.GUIMatrixZoomData;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 
 import javax.swing.*;

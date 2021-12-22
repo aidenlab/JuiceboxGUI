@@ -30,7 +30,7 @@
 package juicebox.sync;
 
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiC;
+import juicebox.data.HiC;
 import org.broad.igv.util.StringUtils;
 
 import java.util.ArrayList;

@@ -27,11 +27,11 @@ package juicebox.gui;
 import juicebox.HiCGlobals;
 import juicebox.assembly.AssemblyFileImporter;
 import juicebox.assembly.IGVFeatureCopy;
+import juicebox.data.DirectoryManager;
+import juicebox.data.ProcessHelper;
 import juicebox.guifeature2d.Feature2DHandler;
 import juicebox.mapcolorui.ColorScaleHandler;
 import juicebox.state.SaveFileDialog;
-import juicebox.utils.DirectoryManager;
-import juicebox.utils.ProcessHelper;
 import juicebox.windowui.*;
 import org.broad.igv.ui.util.MessageUtils;
 

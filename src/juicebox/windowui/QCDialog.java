@@ -26,9 +26,9 @@ package juicebox.windowui;
 
 import javastraw.reader.Dataset;
 import javastraw.reader.expected.ExpectedValueFunction;
-import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
+import juicebox.data.HiC;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;

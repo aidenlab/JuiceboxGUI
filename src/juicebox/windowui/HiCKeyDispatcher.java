@@ -25,8 +25,8 @@
 package juicebox.windowui;
 
 import javastraw.reader.type.MatrixType;
-import juicebox.HiC;
 import juicebox.HiCGlobals;
+import juicebox.data.HiC;
 import juicebox.data.HiCFileLoader;
 import juicebox.gui.SuperAdapter;
 import juicebox.guifeature2d.AnnotationLayerHandler;

@@ -25,8 +25,8 @@
 package juicebox.assembly;
 
 import juicebox.HiCGlobals;
+import juicebox.data.DirectoryManager;
 import juicebox.gui.SuperAdapter;
-import juicebox.utils.DirectoryManager;
 
 import java.util.Stack;
 

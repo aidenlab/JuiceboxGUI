@@ -22,52 +22,29 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.utils;
-
-import javastraw.reader.basics.Chromosome;
-import javastraw.reader.type.HiCZoom;
+package juicebox.data;
 
 /**
- * @author jrobinso
- * @since Aug 11, 2010
+ * Helper methods for handling arrays
  */
-public class Context {
+public class ArrayTools {
 
-    private final Chromosome chromosome;
-    private HiCZoom zoom;
-
-    private double binOrigin = 0;
-
-    public Context(Chromosome chromosome) {
-        this.chromosome = chromosome;
+    /**
+     * @return mean of given array
+     */
+    public static double mean(double[] doubles) {
+        double sum = 0;
+        for (double d : doubles) {
+            sum += d;
+        }
+        return sum / doubles.length;
     }
 
-    public double getBinOrigin() {
-        return binOrigin;
+    public static double[] flipArrayValues(double[] array) {
+        double[] flipped = new double[array.length];
+        for (int i = 0; i < array.length; i++) {
+            flipped[i] = -1 * array[i];
+        }
+        return flipped;
     }
-
-    public void setBinOrigin(double binOrigin) {
-        this.binOrigin = binOrigin;
-    }
-
-    public int getGenomicPositionOrigin() {
-        return (int) (binOrigin * zoom.getBinSize());
-    }
-
-    public HiCZoom getZoom() {
-        return zoom;
-    }
-
-    public void setZoom(HiCZoom zoom) {
-        this.zoom = zoom;
-    }
-
-    public long getChrLength() {
-		return chromosome.getLength();
-	}
-
-    public Chromosome getChromosome() {
-        return chromosome;
-    }
-
 }

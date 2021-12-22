@@ -27,9 +27,9 @@ package juicebox.windowui;
 import de.erichseifert.vectorgraphics2d.PDFGraphics2D;
 import de.erichseifert.vectorgraphics2d.ProcessingPipeline;
 import de.erichseifert.vectorgraphics2d.SVGGraphics2D;
-import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
+import juicebox.data.HiC;
 
 import javax.swing.*;
 import java.awt.*;

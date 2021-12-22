@@ -25,8 +25,8 @@
 package juicebox.track;
 
 import javastraw.reader.Dataset;
-import juicebox.HiC;
 import juicebox.MainWindow;
+import juicebox.data.HiC;
 import juicebox.encode.EncodeFileBrowser;
 import juicebox.encode.EncodeFileRecord;
 import org.broad.igv.track.AttributeManager;

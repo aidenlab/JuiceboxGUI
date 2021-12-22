@@ -26,8 +26,8 @@ package juicebox.assembly;
 
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiC;
 import juicebox.HiCGlobals;
+import juicebox.data.HiC;
 import juicebox.track.*;
 import org.broad.igv.feature.Exon;
 import org.broad.igv.feature.IGVFeature;

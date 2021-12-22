@@ -25,7 +25,7 @@
 package juicebox.track;
 
 import javastraw.reader.basics.Chromosome;
-import juicebox.HiC;
+import juicebox.data.HiC;
 import org.broad.igv.feature.LocusScore;
 import org.broad.igv.track.WindowFunction;
 

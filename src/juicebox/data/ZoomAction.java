@@ -25,7 +25,6 @@
 package juicebox.data;
 
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiC;
 
 /**
  * Created by ranganmostofa on 7/8/17.

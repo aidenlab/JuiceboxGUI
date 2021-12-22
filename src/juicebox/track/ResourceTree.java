@@ -25,8 +25,8 @@
 package juicebox.track;
 
 import javastraw.reader.type.NormalizationType;
-import juicebox.HiC;
 import juicebox.HiCGlobals;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 import org.broad.igv.ui.color.ColorUtilities;
 import org.broad.igv.ui.util.FileDialogUtils;

@@ -29,8 +29,8 @@ import juicebox.MainWindow;
 import juicebox.assembly.AssemblyFileExporter;
 import juicebox.assembly.AssemblyScaffoldHandler;
 import juicebox.assembly.PsfFileExporter;
+import juicebox.data.DirectoryManager;
 import juicebox.gui.SuperAdapter;
-import juicebox.utils.DirectoryManager;
 
 import javax.swing.*;
 import java.io.File;

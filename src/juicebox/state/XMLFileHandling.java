@@ -27,12 +27,12 @@ package juicebox.state;
 import javastraw.feature2D.Feature2DList;
 import javastraw.reader.Dataset;
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiC;
 import juicebox.HiCGlobals;
+import juicebox.data.Context;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 import juicebox.guifeature2d.AnnotationLayerHandler;
 import juicebox.track.*;
-import juicebox.utils.Context;
 import org.broad.igv.util.ResourceLocator;
 
 import java.util.ArrayList;

@@ -25,8 +25,8 @@
 package juicebox.assembly;
 
 import javastraw.feature2D.Feature2D;
-import juicebox.HiC;
 import juicebox.HiCGlobals;
+import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 
 import java.util.List;

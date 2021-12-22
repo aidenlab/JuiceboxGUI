@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.utils;
+package juicebox.data;
 
 import juicebox.MainWindow;
 
@@ -37,12 +37,6 @@ import java.util.Map;
  */
 public class ProcessHelper {
 
-
-    public ProcessHelper() {
-
-
-    }
-
     public Process startNewJavaProcess()
             throws IOException {
 
@@ -51,7 +45,6 @@ public class ProcessHelper {
         processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         return processBuilder.start();
     }
-
 
     private ProcessBuilder createProcess() {
         String jvm = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
@@ -76,5 +69,4 @@ public class ProcessHelper {
         environment.put("CLASSPATH", classpath);
         return processBuilder;
     }
-
 }

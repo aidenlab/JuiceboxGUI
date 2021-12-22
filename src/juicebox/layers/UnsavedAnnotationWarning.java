@@ -25,8 +25,8 @@
 package juicebox.layers;
 
 import juicebox.HiCGlobals;
+import juicebox.data.DirectoryManager;
 import juicebox.gui.SuperAdapter;
-import juicebox.utils.DirectoryManager;
 
 import javax.swing.*;
 import java.io.File;
