@@ -26,7 +26,6 @@ package juicebox.guifeature2d;
 
 import javastraw.feature2D.Feature2D;
 import javastraw.feature2D.Feature2DList;
-import juicebox.mapcolorui.Feature2DHandler;
 
 import java.io.File;
 import java.io.PrintWriter;

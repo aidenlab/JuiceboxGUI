@@ -24,7 +24,6 @@
 
 package juicebox.windowui;
 
-import juicebox.DirectoryManager;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
@@ -34,10 +33,11 @@ import juicebox.assembly.PsfFileImporter;
 import juicebox.gui.SuperAdapter;
 import juicebox.guifeature2d.AnnotationLayer;
 import juicebox.guifeature2d.AnnotationLayerHandler;
+import juicebox.guifeature2d.FeatureRenderer;
 import juicebox.layers.LayersPanel;
 import juicebox.layers.Load2DAnnotationsDialog;
-import juicebox.mapcolorui.FeatureRenderer;
 import juicebox.track.ResourceFinder;
+import juicebox.utils.DirectoryManager;
 import org.broad.igv.ui.util.FileDialogUtils;
 import org.broad.igv.util.ResourceLocator;
 

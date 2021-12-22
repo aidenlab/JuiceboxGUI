@@ -26,7 +26,7 @@ package juicebox.layers;
 
 import juicebox.gui.SuperAdapter;
 import juicebox.guifeature2d.AnnotationLayerHandler;
-import juicebox.mapcolorui.FeatureRenderer;
+import juicebox.guifeature2d.FeatureRenderer;
 import org.broad.igv.ui.color.ColorChooserPanel;
 
 import javax.imageio.ImageIO;

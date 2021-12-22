@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
  */
 public class HiCGlobals {
 
-    public static final String versionNum = "3.01.01";
+    public static final String versionNum = "3.01.02";
     public static final String juiceboxTitle = "[Juicebox " + versionNum + "] Hi-C Map ";
 
     // MainWindow variables

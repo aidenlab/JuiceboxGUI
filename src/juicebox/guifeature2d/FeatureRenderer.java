@@ -22,12 +22,11 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.mapcolorui;
+package juicebox.guifeature2d;
 
 import javastraw.feature2D.Feature2D;
 import javastraw.tools.HiCFileTools;
 import juicebox.data.GUIMatrixZoomData;
-import juicebox.guifeature2d.AnnotationLayerHandler;
 import juicebox.track.HiCGridAxis;
 
 import java.awt.*;

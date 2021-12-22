@@ -26,12 +26,12 @@ package juicebox.windowui;
 
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.basics.ChromosomeHandler;
-import juicebox.Context;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.track.HiCGridAxis;
+import juicebox.utils.Context;
 
 import javax.swing.*;
 import java.awt.*;

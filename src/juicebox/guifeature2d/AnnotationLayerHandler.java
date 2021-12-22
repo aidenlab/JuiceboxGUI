@@ -34,8 +34,6 @@ import juicebox.gui.SuperAdapter;
 import juicebox.layers.MiniAnnotationsLayerPanel;
 import juicebox.layers.PlottingStyleButton;
 import juicebox.layers.SaveAnnotationsDialog;
-import juicebox.mapcolorui.Feature2DHandler;
-import juicebox.mapcolorui.FeatureRenderer;
 import juicebox.track.HiCGridAxis;
 import org.broad.igv.ui.color.ColorChooserPanel;
 import org.broad.igv.util.Pair;

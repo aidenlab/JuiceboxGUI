@@ -24,14 +24,14 @@
 
 package juicebox.gui;
 
-import juicebox.DirectoryManager;
 import juicebox.HiCGlobals;
-import juicebox.ProcessHelper;
 import juicebox.assembly.AssemblyFileImporter;
 import juicebox.assembly.IGVFeatureCopy;
+import juicebox.guifeature2d.Feature2DHandler;
 import juicebox.mapcolorui.ColorScaleHandler;
-import juicebox.mapcolorui.Feature2DHandler;
 import juicebox.state.SaveFileDialog;
+import juicebox.utils.DirectoryManager;
+import juicebox.utils.ProcessHelper;
 import juicebox.windowui.*;
 import org.broad.igv.ui.util.MessageUtils;
 

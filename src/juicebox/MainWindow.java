@@ -29,6 +29,7 @@ import juicebox.gui.MainViewPanel;
 import juicebox.gui.SuperAdapter;
 import juicebox.layers.LayersPanel;
 import juicebox.sync.CommandListener;
+import juicebox.utils.DirectoryManager;
 import juicebox.windowui.DisabledGlassPane;
 import juicebox.windowui.FileDropTargetListener;
 import org.broad.igv.Globals;

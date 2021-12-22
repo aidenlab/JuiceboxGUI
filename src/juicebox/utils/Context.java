@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox;
+package juicebox.utils;
 
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.type.HiCZoom;

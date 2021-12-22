@@ -42,6 +42,8 @@ import juicebox.gui.SuperAdapter;
 import juicebox.sync.CommandBroadcaster;
 import juicebox.sync.CommandExecutor;
 import juicebox.track.*;
+import juicebox.utils.Context;
+import juicebox.utils.DirectoryManager;
 import org.broad.igv.util.ResourceLocator;
 import org.jetbrains.annotations.NotNull;
 

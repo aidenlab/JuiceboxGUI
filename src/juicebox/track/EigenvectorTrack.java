@@ -24,11 +24,11 @@
 
 package juicebox.track;
 
-import juicebox.Context;
 import juicebox.HiC;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
 import juicebox.utils.ArrayTools;
+import juicebox.utils.Context;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.broad.igv.renderer.GraphicUtils;
 import org.broad.igv.renderer.Renderer;

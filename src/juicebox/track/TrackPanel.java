@@ -26,12 +26,12 @@ package juicebox.track;
 
 import javastraw.feature2D.Feature2D;
 import javastraw.tools.HiCFileTools;
-import juicebox.Context;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
-import juicebox.mapcolorui.FeatureRenderer;
+import juicebox.guifeature2d.FeatureRenderer;
+import juicebox.utils.Context;
 import org.broad.igv.util.Pair;
 
 import javax.swing.*;

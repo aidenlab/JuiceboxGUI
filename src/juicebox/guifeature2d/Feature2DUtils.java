@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.mapcolorui;
+package juicebox.guifeature2d;
 
 import javastraw.feature2D.Feature2D;
 import juicebox.HiCGlobals;

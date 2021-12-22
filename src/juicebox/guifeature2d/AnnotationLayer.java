@@ -27,10 +27,9 @@ package juicebox.guifeature2d;
 import javastraw.feature2D.Feature2D;
 import javastraw.feature2D.Feature2DList;
 import javastraw.tools.HiCFileTools;
-import juicebox.DirectoryManager;
 import juicebox.HiCGlobals;
 import juicebox.data.GUIMatrixZoomData;
-import juicebox.mapcolorui.Feature2DHandler;
+import juicebox.utils.DirectoryManager;
 
 import java.awt.*;
 import java.io.File;

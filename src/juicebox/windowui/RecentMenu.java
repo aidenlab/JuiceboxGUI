@@ -25,9 +25,9 @@
 package juicebox.windowui;
 
 import javastraw.tools.HiCFileTools;
-import juicebox.DirectoryManager;
 import juicebox.HiCGlobals;
 import juicebox.state.XMLFileWriter;
+import juicebox.utils.DirectoryManager;
 import org.broad.igv.Globals;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

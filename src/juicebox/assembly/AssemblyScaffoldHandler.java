@@ -27,7 +27,7 @@ package juicebox.assembly;
 import javastraw.feature2D.Feature2D;
 import javastraw.feature2D.Feature2DList;
 import juicebox.HiCGlobals;
-import juicebox.mapcolorui.Feature2DHandler;
+import juicebox.guifeature2d.Feature2DHandler;
 
 import java.awt.*;
 import java.util.List;

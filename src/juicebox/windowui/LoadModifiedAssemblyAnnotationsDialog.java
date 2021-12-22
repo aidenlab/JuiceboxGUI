@@ -24,7 +24,6 @@
 
 package juicebox.windowui;
 
-import juicebox.DirectoryManager;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
@@ -35,6 +34,7 @@ import juicebox.gui.SuperAdapter;
 import juicebox.layers.LayersPanel;
 import juicebox.layers.Load2DAnnotationsDialog;
 import juicebox.track.ResourceFinder;
+import juicebox.utils.DirectoryManager;
 import org.broad.igv.ui.util.FileDialogUtils;
 import org.broad.igv.util.ResourceLocator;
 

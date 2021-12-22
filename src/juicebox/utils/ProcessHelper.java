@@ -22,7 +22,9 @@
  *  THE SOFTWARE.
  */
 
-package juicebox;
+package juicebox.utils;
+
+import juicebox.MainWindow;
 
 import java.io.File;
 import java.io.IOException;

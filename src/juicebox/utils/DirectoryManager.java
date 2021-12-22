@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox;
+package juicebox.utils;
 
 import org.broad.igv.Globals;
 import org.broad.igv.exceptions.DataLoadException;

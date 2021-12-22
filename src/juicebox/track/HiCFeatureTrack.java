@@ -25,11 +25,11 @@
 package juicebox.track;
 
 import htsjdk.tribble.Feature;
-import juicebox.Context;
 import juicebox.HiC;
 import juicebox.assembly.IGVFeatureCopy;
 import juicebox.assembly.OneDimAssemblyTrackLifter;
 import juicebox.gui.SuperAdapter;
+import juicebox.utils.Context;
 import org.broad.igv.feature.Exon;
 import org.broad.igv.feature.FeatureUtils;
 import org.broad.igv.feature.IGVFeature;

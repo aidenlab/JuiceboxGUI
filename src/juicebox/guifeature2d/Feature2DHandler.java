@@ -22,7 +22,7 @@
  *  THE SOFTWARE.
  */
 
-package juicebox.mapcolorui;
+package juicebox.guifeature2d;
 
 import javastraw.feature2D.Feature2D;
 import javastraw.feature2D.Feature2DList;
@@ -31,8 +31,6 @@ import javastraw.reader.basics.Chromosome;
 import javastraw.reader.basics.ChromosomeHandler;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
-import juicebox.guifeature2d.AnnotationLayerHandler;
-import juicebox.guifeature2d.Feature2DGuiContainer;
 import juicebox.track.HiCGridAxis;
 import net.sf.jsi.SpatialIndex;
 import net.sf.jsi.rtree.RTree;

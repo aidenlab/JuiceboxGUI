@@ -24,7 +24,7 @@
 
 package juicebox.layers;
 
-import juicebox.mapcolorui.FeatureRenderer;
+import juicebox.guifeature2d.FeatureRenderer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
