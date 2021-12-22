@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2020 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -24,10 +24,12 @@
 
 package juicebox.track.feature;
 
+import javastraw.feature2D.Feature2D;
+import javastraw.feature2D.Feature2DList;
+import javastraw.tools.HiCFileTools;
 import juicebox.DirectoryManager;
 import juicebox.HiCGlobals;
-import juicebox.data.HiCFileTools;
-import juicebox.data.MatrixZoomData;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.mapcolorui.Feature2DHandler;
 
 import java.awt.*;
@@ -188,7 +190,7 @@ public class AnnotationLayer {
         customAnnotationRTreeHandler.autoSaveAll(tempWriter);
     }
 
-    public boolean hasLoop(MatrixZoomData zd, int chrIdx1, int chrIdx2, int x, int y, int n,
+    public boolean hasLoop(GUIMatrixZoomData zd, int chrIdx1, int chrIdx2, int x, int y, int n,
                            double binOriginX, double binOriginY, double scale, Feature2D feature) {
         if (chrIdx1 > 0 && chrIdx2 > 0) {
             List<Feature2D> featureList = getNearbyFeatures(zd, chrIdx1, chrIdx2, x, y, n, binOriginX, binOriginY, scale);
@@ -220,7 +222,7 @@ public class AnnotationLayer {
         reSaveAll();
     }
 
-    public void removeFromList(MatrixZoomData zd, int chrIdx1, int chrIdx2, int x, int y, int n,
+    public void removeFromList(GUIMatrixZoomData zd, int chrIdx1, int chrIdx2, int x, int y, int n,
                                double binOriginX, double binOriginY, double scale, Feature2D feature) {
 
         if (chrIdx1 > 0 && chrIdx2 > 0) {
@@ -276,7 +278,7 @@ public class AnnotationLayer {
         customAnnotationRTreeHandler.addAttributeFieldToAll(key, newValue);
     }
 
-    public List<Feature2D> getNearbyFeatures(MatrixZoomData zd, int chrIdx1, int chrIdx2, int x, int y, int n,
+    public List<Feature2D> getNearbyFeatures(GUIMatrixZoomData zd, int chrIdx1, int chrIdx2, int x, int y, int n,
                                              double binOriginX, double binOriginY, double scale) {
         return customAnnotationRTreeHandler.getNearbyFeatures(zd, chrIdx1, chrIdx2, x, y, n,
                 binOriginX, binOriginY, scale);

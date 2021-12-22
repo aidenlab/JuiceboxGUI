@@ -168,7 +168,7 @@ public class MainWindow extends JFrame {
             }
 
         } catch (Exception e) {
-            System.err.println(e.getLocalizedMessage());
+            System.err.println("JB Error: " + e.getLocalizedMessage());
         }
 
     }
@@ -181,7 +181,7 @@ public class MainWindow extends JFrame {
             HiCGlobals.xmlSavedStatesFile = new File(DirectoryManager.getHiCDirectory(),
                     "JuiceboxStatesForExport.xml");
         } catch (Exception e) {
-            System.err.println(e.getLocalizedMessage());
+            System.err.println("Init Error: " + e.getLocalizedMessage());
             if (HiCGlobals.guiIsCurrentlyActive) {
                 SuperAdapter.showMessageDialog("Error with state file\n" + e.getLocalizedMessage());
             }
@@ -428,7 +428,7 @@ public class MainWindow extends JFrame {
                         ".review.autosave.assembly";
             } catch (Exception e) {
                 System.err.println("Unable to get desired file name");
-                System.err.println(e.getLocalizedMessage());
+                System.err.println("Exit Error: " + e.getLocalizedMessage());
             }
             File autoSaveFile = new File(autoSaveFileName);
             autoSaveFile.delete();

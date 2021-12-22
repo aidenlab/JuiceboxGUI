@@ -24,13 +24,21 @@
 
 package juicebox.gui;
 
+import javastraw.feature2D.Feature2D;
+import javastraw.feature2D.Feature2DParser;
+import javastraw.reader.Dataset;
+import javastraw.reader.DatasetReader;
+import javastraw.reader.DatasetReaderFactory;
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.basics.ChromosomeHandler;
+import javastraw.reader.type.HiCZoom;
+import javastraw.reader.type.MatrixType;
+import javastraw.tools.HiCFileTools;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyStateTracker;
-import juicebox.data.*;
-import juicebox.data.anchor.MotifAnchorTools;
-import juicebox.data.basics.Chromosome;
+import juicebox.data.HiCFileLoader;
 import juicebox.mapcolorui.HeatmapPanel;
 import juicebox.mapcolorui.PearsonColorScale;
 import juicebox.mapcolorui.PearsonColorScaleEditor;
@@ -38,14 +46,13 @@ import juicebox.state.ImportStateFileDialog;
 import juicebox.state.LoadStateFromXMLFile;
 import juicebox.state.Slideshow;
 import juicebox.state.XMLFileHandling;
-import juicebox.tools.utils.norm.CustomNormVectorFileHandler;
 import juicebox.track.LoadAction;
 import juicebox.track.LoadEncodeAction;
-import juicebox.track.feature.*;
+import juicebox.track.feature.AnnotationLayer;
+import juicebox.track.feature.AnnotationLayerHandler;
 import juicebox.windowui.*;
 import juicebox.windowui.layers.LayersPanel;
 import juicebox.windowui.layers.UnsavedAnnotationWarning;
-import org.broad.igv.ui.util.FileDialogUtils;
 import org.broad.igv.ui.util.MessageUtils;
 
 import javax.swing.*;
@@ -55,7 +62,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -157,11 +163,6 @@ public class SuperAdapter {
         currentlyLoadedControlFiles = null;
         controlTitle = null;
         updateTitle();
-    }
-
-    public void toggleAdvancedViews() {
-        MatrixType.toggleAdvancedViews();
-        mainViewPanel.setSelectedDisplayOption(false, hic.isControlLoaded());
     }
 
     public void launchSlideShow() {
@@ -330,7 +331,7 @@ public class SuperAdapter {
 
         //For now, in case of Pearson - set initial to 500KB resolution.
         if (hic.isInPearsonsMode()) {
-            initialZoom = hic.getMatrix().getFirstPearsonZoomData(HiC.Unit.BP).getZoom();
+            initialZoom = hic.getMatrix().getFirstPearsonZoomData(HiCZoom.HiCUnit.BP).getZoom();
         } else if (ChromosomeHandler.isAllByAll(hic.getXContext().getChromosome())) {
             mainViewPanel.getResolutionSlider().setEnabled(false);
             initialZoom = hic.getMatrix().getFirstZoomData().getZoom();
@@ -342,13 +343,13 @@ public class SuperAdapter {
 
             // If this is the initial load hic.currentZoom will be null
             if (hic.getZoom() != null) {
-                HiC.Unit currentUnit = hic.getZoom().getUnit();
-                List<HiCZoom> zooms = (currentUnit == HiC.Unit.BP ? hic.getDataset().getBpZooms() :
+                HiCZoom.HiCUnit currentUnit = hic.getZoom().getUnit();
+                List<HiCZoom> zooms = (currentUnit == HiCZoom.HiCUnit.BP ? hic.getDataset().getBpZooms() :
                         hic.getDataset().getFragZooms());
 //            Find right zoom level
                 int pixels = mainViewPanel.getHeatmapPanel().getMinimumDimension();
                 long len;
-                if (currentUnit == HiC.Unit.BP) {
+                if (currentUnit == HiCZoom.HiCUnit.BP) {
                     len = (Math.max(hic.getXContext().getChrLength(), hic.getYContext().getChrLength()));
                 } else {
                     len = Math.max(hic.getDataset().getFragmentCounts().get(hic.getXContext().getChromosome().getName()),
@@ -378,7 +379,7 @@ public class SuperAdapter {
 
     public void unsafeClearAllMatrixZoomCache() {
         //not sure if this is a right place for this
-        hic.clearAllMatrixZoomDataCache();
+        hic.clearAllDataCache();
     }
 
     private void refreshMainOnly() {
@@ -433,7 +434,12 @@ public class SuperAdapter {
             //thumbnailPanel.setBorder(LineBorder.createBlackLineBorder());
             mainViewPanel.getMouseHoverTextPanel().setBorder(LineBorder.createGrayLineBorder());
 
-            DatasetReader reader = DatasetReaderFactory.getReader(files);
+            if (files.size() > 1) {
+                JOptionPane.showMessageDialog(mainWindow, "Hi-C file summing is not supported.\n" +
+                        "Using only the first file:\n" + files.get(0));
+            }
+            DatasetReader reader = DatasetReaderFactory.getReaderForFile(files.get(0), true);
+
             if (reader == null) return false;
             Dataset dataset = reader.read();
             if (reader.getVersion() < HiCGlobals.minVersion) {
@@ -975,37 +981,9 @@ public class SuperAdapter {
         this.assemblyStateTracker = assemblyStateTracker;
     }
 
-    public void createCustomChromosomesFromBED() {
-
-        FilenameFilter bedFilter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".bed");
-            }
-        };
-
-        File[] files = FileDialogUtils.chooseMultiple("Choose .bed file(s)",
-                LoadDialog.LAST_LOADED_HIC_FILE_PATH, bedFilter);
-
-        if (files != null && files.length > 0) {
-            LoadDialog.LAST_LOADED_HIC_FILE_PATH = files[0];
-
-            int minSize = MotifAnchorTools.getMinSizeForExpansionFromGUI();
-
-            for (File f : files) {
-                Chromosome custom = hic.getChromosomeHandler().generateCustomChromosomeFromBED(f, minSize);
-                updateChrHandlerAndMVP(custom);
-            }
-        }
-    }
-
     public void createAssemblyChromosome() {
         Chromosome assembly = hic.getChromosomeHandler().generateAssemblyChromosome();
         updateChrHandlerAndMVP(assembly);
-    }
-
-    public void createCustomChromosomeMap(Feature2DList featureList, String chrName) {
-        Chromosome custom = hic.getChromosomeHandler().addCustomChromosome(featureList, chrName);
-        updateChrHandlerAndMVP(custom);
     }
 
     private void updateChrHandlerAndMVP(Chromosome custom) {
@@ -1065,38 +1043,6 @@ public class SuperAdapter {
             resetAnnotationLayers();
             return true;
         }
-    }
-
-    public void safeLaunchImportNormalizations(boolean isControl) {
-
-        final File[] files = FileDialogUtils.chooseMultiple("Choose custom normalization file(s)",
-                LoadDialog.LAST_LOADED_HIC_FILE_PATH, null);
-
-        Runnable runnable = new Runnable() {
-            public void run() {
-                if (files != null && files.length > 0) {
-                    LoadDialog.LAST_LOADED_HIC_FILE_PATH = files[0];
-
-
-                    CustomNormVectorFileHandler.unsafeHandleUpdatingOfNormalizations(SuperAdapter.this, files, isControl);
-
-                    boolean versionStatus = hic.getDataset().getVersion() >= HiCGlobals.minVersion;
-                    if (isControl) {
-                        versionStatus = hic.getControlDataset().getVersion() >= HiCGlobals.minVersion;
-                    }
-
-                    mainViewPanel.setEnabledForNormalization(isControl, hic.getNormalizationOptions(isControl), versionStatus);
-                    repaint();
-                }
-            }
-        };
-        mainWindow.executeLongRunningTask(runnable, "safe add custom norms");
-
-    }
-
-    public void createGenomewideChromosomeFromChromDotSizes() {
-        Chromosome custom = hic.getChromosomeHandler().addGenomeWideChromosome();
-        updateChrHandlerAndMVP(custom);
     }
 
     public static int getNewResolutionGUI() {

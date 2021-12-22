@@ -25,11 +25,11 @@
 package juicebox.mapcolorui;
 
 import com.jidesoft.swing.JideButton;
+import javastraw.reader.type.HiCZoom;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
-import juicebox.data.MatrixZoomData;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
-import juicebox.windowui.HiCZoom;
 import org.broad.igv.ui.FontManager;
 
 import javax.swing.*;
@@ -59,8 +59,8 @@ public class ResolutionControl extends JPanel {
     private final JLabel resolutionLabel;
     private final Map<Integer, HiCZoom> idxZoomMap = new ConcurrentHashMap<>();
     private final Map<Integer, String> bpLabelMap;
-    private final HiCZoom pearsonZoom = new HiCZoom(HiC.Unit.BP, 500000);
-    public HiC.Unit unit = HiC.Unit.BP;
+    private final HiCZoom pearsonZoom = new HiCZoom(HiCZoom.HiCUnit.BP, 500000);
+    public HiCZoom.HiCUnit unit = HiCZoom.HiCUnit.BP;
     private boolean resolutionLocked = false;
     private final JSlider resolutionSlider;
     private int lastValue = 0;
@@ -145,7 +145,7 @@ public class ResolutionControl extends JPanel {
             }
 
             private void processClick() {
-                unit = (unit == HiC.Unit.FRAG ? HiC.Unit.BP : HiC.Unit.FRAG);
+                unit = (unit == HiCZoom.HiCUnit.FRAG ? HiCZoom.HiCUnit.BP : HiCZoom.HiCUnit.FRAG);
                 resolutionLabel.setText(getUnitLabel());
                 Runnable runnable = new Runnable() {
                     public void run() {
@@ -195,7 +195,7 @@ public class ResolutionControl extends JPanel {
             // Centering is relative to the bounds of the data, which might not be the bounds of the window
 
             public void stateChanged(ChangeEvent e) {
-                final MatrixZoomData zd;
+                final GUIMatrixZoomData zd;
                 try {
                     zd = hic.getZd();
                 } catch (Exception ex) {
@@ -212,7 +212,7 @@ public class ResolutionControl extends JPanel {
                 superAdapter.executeLongRunningTask(runnable, "Resolution slider change");
             }
 
-            private void unsafeStateChanged(ChangeEvent e, MatrixZoomData zd) {
+            private void unsafeStateChanged(ChangeEvent e, GUIMatrixZoomData zd) {
 
                 int idx = resolutionSlider.getValue();
 
@@ -273,7 +273,7 @@ public class ResolutionControl extends JPanel {
     }
 
     private String getUnitLabel() {
-        return unit == HiC.Unit.FRAG ? "Resolution (Frag)" : "Resolution (BP)";
+        return unit == HiCZoom.HiCUnit.FRAG ? "Resolution (Frag)" : "Resolution (BP)";
     }
 
     public void setEnabled(boolean enabled) {
@@ -291,7 +291,7 @@ public class ResolutionControl extends JPanel {
 
         int currentIdx = resolutionSlider.getValue();
 
-        List<HiCZoom> binSizes = unit == HiC.Unit.BP ?
+        List<HiCZoom> binSizes = unit == HiCZoom.HiCUnit.BP ?
                 hic.getDataset().getBpZooms() : hic.getDataset().getFragZooms();
 
         idxZoomMap.clear();
@@ -333,7 +333,7 @@ public class ResolutionControl extends JPanel {
 
     private String sizeToLabel(int binSize) {
 
-        if (unit == HiC.Unit.FRAG) {
+        if (unit == HiCZoom.HiCUnit.FRAG) {
             return binSize + " f";
         }
 

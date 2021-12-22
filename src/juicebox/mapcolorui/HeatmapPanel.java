@@ -24,21 +24,22 @@
 
 package juicebox.mapcolorui;
 
+import javastraw.feature2D.Feature2D;
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.basics.ChromosomeHandler;
+import javastraw.reader.type.MatrixType;
+import javastraw.reader.type.NormalizationType;
+import juicebox.Context;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyHeatmapHandler;
 import juicebox.assembly.AssemblyOperationExecutor;
 import juicebox.assembly.AssemblyScaffoldHandler;
-import juicebox.data.ChromosomeHandler;
-import juicebox.data.MatrixZoomData;
-import juicebox.data.basics.Chromosome;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
 import juicebox.track.feature.AnnotationLayerHandler;
-import juicebox.track.feature.Feature2D;
 import juicebox.track.feature.Feature2DGuiContainer;
-import juicebox.windowui.MatrixType;
-import juicebox.windowui.NormalizationType;
 import org.broad.igv.renderer.GraphicUtils;
 import org.broad.igv.ui.FontManager;
 import org.broad.igv.util.Pair;
@@ -104,14 +105,14 @@ public class HeatmapPanel extends JComponent {
         }
 
         // Are we ready to draw?
-        final MatrixZoomData zd;
+        final GUIMatrixZoomData zd;
         try {
             zd = hic.getZd();
         } catch (Exception ex) {
             return;
         }
 
-        MatrixZoomData controlZd = null;
+        GUIMatrixZoomData controlZd = null;
         try {
             controlZd = hic.getControlZd();
         } catch (Exception ee) {
@@ -146,17 +147,16 @@ public class HeatmapPanel extends JComponent {
 
 
         HeatmapRenderer renderer = new HeatmapRenderer(g, colorScaleHandler);
-        boolean allTilesNull = tileManager.renderHiCTiles(renderer, binOriginX, binOriginY, bRight, bBottom, zd, controlZd,
+        boolean allTilesNull = tileManager.renderHiCTiles(renderer, binOriginX, binOriginY,
+                bRight, bBottom, zd, controlZd,
                 scaleFactor, this.getBounds(), hic, this, superAdapter);
 
-        boolean isWholeGenome = ChromosomeHandler.isWholeGenomeView(hic.getXContext(), hic.getYContext());
+        boolean isWholeGenome = isWholeGenomeView(hic.getXContext(), hic.getYContext());
 
         Color color0 = g.getColor();
 
         if (isWholeGenome) {
             boundingBoxRenderer.drawAllByAllGrid(g, zd, showGridLines, binOriginX, binOriginY, scaleFactor);
-        } else {
-            boundingBoxRenderer.drawRegularGrid(g, zd, showGridLines, hic.getChromosomeHandler(), binOriginX, binOriginY, scaleFactor);
         }
         CursorRenderer cursorRenderer = new CursorRenderer(this);
         cursorRenderer.drawCursors(g, hic.getCursorPoint(), hic.getDiagonalCursorPoint(),
@@ -209,7 +209,12 @@ public class HeatmapPanel extends JComponent {
         }
     }
 
-    public Image getThumbnailImage(MatrixZoomData zd0, MatrixZoomData ctrl0, int tw, int th, MatrixType displayOption,
+    private boolean isWholeGenomeView(Context xContext, Context yContext) {
+        return ChromosomeHandler.isAllByAll(xContext.getChromosome())
+                && ChromosomeHandler.isAllByAll(yContext.getChromosome());
+    }
+
+    public Image getThumbnailImage(GUIMatrixZoomData zd0, GUIMatrixZoomData ctrl0, int tw, int th, MatrixType displayOption,
                                    NormalizationType observedNormalizationType, NormalizationType controlNormalizationType) {
         if (MatrixType.isPearsonType(displayOption) && hic.isPearsonsNotAvailableForFile(false)) {
             JOptionPane.showMessageDialog(this, "Pearson's matrix is not available at this resolution");

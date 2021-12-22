@@ -25,19 +25,25 @@
 package juicebox.gui;
 
 import com.jidesoft.swing.JideButton;
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.basics.ChromosomeHandler;
+import javastraw.reader.type.HiCZoom;
+import javastraw.reader.type.MatrixType;
+import javastraw.reader.type.NormalizationHandler;
 import juicebox.Context;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
-import juicebox.data.ChromosomeHandler;
-import juicebox.data.MatrixZoomData;
-import juicebox.data.basics.Chromosome;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.mapcolorui.HeatmapPanel;
 import juicebox.mapcolorui.JColorRangePanel;
 import juicebox.mapcolorui.ResolutionControl;
 import juicebox.mapcolorui.ThumbnailPanel;
 import juicebox.track.TrackLabelPanel;
 import juicebox.track.TrackPanel;
-import juicebox.windowui.*;
+import juicebox.windowui.GoToPanel;
+import juicebox.windowui.HiCChromosomeFigPanel;
+import juicebox.windowui.HiCLayout;
+import juicebox.windowui.HiCRulerPanel;
 import juicebox.windowui.layers.MiniAnnotationsLayerPanel;
 
 import javax.swing.*;
@@ -577,9 +583,17 @@ public class MainViewPanel {
      * @param handler for list of chromosomes
      */
     void setChromosomes(ChromosomeHandler handler) {
-        heatmapPanel.setChromosomeBoundaries(handler.getChromosomeBoundaries());
+        heatmapPanel.setChromosomeBoundaries(toLongs(handler.getChromosomeBoundaries()));
         chrBox1.setModel(new DefaultComboBoxModel<>(handler.getChromosomeArray()));
         chrBox2.setModel(new DefaultComboBoxModel<>(handler.getChromosomeArray()));
+    }
+
+    private long[] toLongs(int[] arr0) {
+        long[] arr = new long[arr0.length];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = arr0[i];
+        }
+        return arr;
     }
 
     private boolean isInterChromosomal() {
@@ -658,12 +672,12 @@ public class MainViewPanel {
 
         if (hic.getMatrix() != null) {
 
-            //   MatrixZoomData zd0 = initialZoom == null ? hic.getMatrix().getFirstZoomData(hic.getZoom().getUnit()) :
+            //   GUIMatrixZoomData zd0 = initialZoom == null ? hic.getMatrix().getFirstZoomData(hic.getZoom().getUnit()) :
             //           hic.getMatrix().getZoomData(initialZoom);
-            MatrixZoomData zd0 = hic.getMatrix().getFirstZoomData(hic.getZoom().getUnit());
-            MatrixZoomData zdControl = null;
+            GUIMatrixZoomData zd0 = new GUIMatrixZoomData(hic.getMatrix().getFirstZoomData(hic.getZoom().getUnit()));
+            GUIMatrixZoomData zdControl = null;
             if (hic.getControlMatrix() != null) {
-                zdControl = hic.getControlMatrix().getFirstZoomData(hic.getZoom().getUnit());
+                zdControl = new GUIMatrixZoomData(hic.getControlMatrix().getFirstZoomData(hic.getZoom().getUnit()));
             }
             try {
                 Image thumbnail = heatmapPanel.getThumbnailImage(zd0, zdControl,
@@ -871,14 +885,16 @@ public class MainViewPanel {
         return displayOptionComboBox;
     }
 
-    public void resetResolutionSlider(HiC.Unit unit) {
-        resolutionSlider.unit = unit != null ? unit : HiC.Unit.BP;
+    public void resetResolutionSlider(HiCZoom.HiCUnit unit) {
+        resolutionSlider.unit = unit != null ? unit : HiCZoom.HiCUnit.BP;
         resolutionSlider.reset();
     }
 
     public void setSelectedDisplayOption(boolean isControl, boolean isControlAlreadyLoaded) {
-        MatrixType[] options = MatrixType.getOptions(isControl || isControlAlreadyLoaded);
-
+        MatrixType[] options = MatrixType.enabledMatrixTypesNoControl;
+        if (isControl || isControlAlreadyLoaded) {
+            options = MatrixType.enabledMatrixTypesWithControl;
+        }
 
         MatrixType originalMatrixType;
         try {

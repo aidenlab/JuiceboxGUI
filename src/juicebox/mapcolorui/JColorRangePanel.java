@@ -25,10 +25,10 @@
 package juicebox.mapcolorui;
 
 import com.jidesoft.swing.JideButton;
+import javastraw.reader.type.MatrixType;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.gui.SuperAdapter;
-import juicebox.windowui.MatrixType;
 import org.broad.igv.ui.FontManager;
 
 import javax.swing.*;

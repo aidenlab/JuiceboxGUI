@@ -24,15 +24,15 @@
 
 package juicebox.mapcolorui;
 
+import javastraw.feature2D.Feature2D;
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.type.HiCZoom;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyOperationExecutor;
-import juicebox.data.basics.Chromosome;
 import juicebox.gui.SuperAdapter;
-import juicebox.track.feature.Feature2D;
 import juicebox.track.feature.Feature2DGuiContainer;
-import juicebox.windowui.HiCZoom;
 
 import javax.swing.*;
 import java.awt.*;

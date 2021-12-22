@@ -24,10 +24,10 @@
 
 package juicebox.windowui.layers;
 
+import javastraw.feature2D.Feature2DList;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
 import juicebox.track.feature.AnnotationLayer;
-import juicebox.track.feature.Feature2DList;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;

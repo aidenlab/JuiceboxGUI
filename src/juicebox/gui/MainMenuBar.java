@@ -32,7 +32,6 @@ import juicebox.assembly.IGVFeatureCopy;
 import juicebox.mapcolorui.ColorScaleHandler;
 import juicebox.mapcolorui.Feature2DHandler;
 import juicebox.state.SaveFileDialog;
-import juicebox.tools.dev.Private;
 import juicebox.windowui.*;
 import org.broad.igv.ui.util.MessageUtils;
 
@@ -42,6 +41,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * Created by muhammadsaadshamim on 8/4/15.
@@ -115,14 +115,12 @@ public class MainMenuBar extends JMenuBar {
     fileMenu.setMnemonic('F');
 
     JMenuItem newWindow = new JMenuItem("New Window");
-    newWindow.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        ProcessHelper p = new ProcessHelper();
-        try {
-          p.startNewJavaProcess();
-        } catch (IOException error) {
-          superAdapter.launchGenericMessageDialog(error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+    newWindow.addActionListener(e -> {
+      ProcessHelper p = new ProcessHelper();
+      try {
+        p.startNewJavaProcess();
+      } catch (IOException error) {
+        superAdapter.launchGenericMessageDialog(error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
       }
     });
 
@@ -132,19 +130,11 @@ public class MainMenuBar extends JMenuBar {
 
     // create control first because it is enabled by regular open
     loadControlFromList.setText("Open as Control...");
-    loadControlFromList.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.loadFromListActionPerformed(true);
-      }
-    });
+    loadControlFromList.addActionListener(e -> superAdapter.loadFromListActionPerformed(true));
     loadControlFromList.setEnabled(false);
 
     JMenuItem openItem = new JMenuItem("Open...");
-    openItem.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.loadFromListActionPerformed(false);
-      }
-    });
+    openItem.addActionListener(e -> superAdapter.loadFromListActionPerformed(false));
     fileMenu.add(openItem);
     fileMenu.add(loadControlFromList);
 
@@ -177,21 +167,11 @@ public class MainMenuBar extends JMenuBar {
     fileMenu.addSeparator();
 
     showStats = new JMenuItem("Show Dataset Metrics");
-    showStats.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        superAdapter.showDataSetMetrics(false);
-      }
-    });
+    showStats.addActionListener(actionEvent -> superAdapter.showDataSetMetrics(false));
     showStats.setEnabled(false);
 
     showControlStats = new JMenuItem("Show Control Dataset Metrics");
-    showControlStats.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        superAdapter.showDataSetMetrics(true);
-      }
-    });
+    showControlStats.addActionListener(actionEvent -> superAdapter.showDataSetMetrics(true));
     showControlStats.setEnabled(false);
 
 
@@ -202,20 +182,18 @@ public class MainMenuBar extends JMenuBar {
 
     // TODO: make this an export of the data on screen instead of a GUI for CLT
     JMenuItem dump = new JMenuItem("Export Data...");
-    dump.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent actionEvent) {
-        superAdapter.exportDataLauncher();
-      }
-    });
+    dump.addActionListener(actionEvent -> superAdapter.exportDataLauncher());
     fileMenu.add(dump);
 
     JMenuItem creditsMenu = new JMenuItem();
     creditsMenu.setText("About");
     creditsMenu.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        ImageIcon icon = new ImageIcon(getClass().getResource("/images/juicebox.png"));
-        JLabel iconLabel = new JLabel(icon);
+        URL iconURL = getClass().getResource("/images/juicebox.png");
+        if (iconURL == null) {
+          System.err.println("Null Icon");
+        }
+        JLabel iconLabel = new JLabel(new ImageIcon(iconURL));
         JPanel iconPanel = new JPanel(new GridBagLayout());
         iconPanel.add(iconLabel);
 
@@ -261,25 +239,19 @@ public class MainMenuBar extends JMenuBar {
     //---- exit ----
     JMenuItem exit = new JMenuItem();
     exit.setText("Exit");
-    exit.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.exitActionPerformed();
-      }
-    });
+    exit.addActionListener(e -> superAdapter.exitActionPerformed());
     fileMenu.add(exit);
 
     bookmarksMenu = new JMenu("Bookmarks");
     //---- Save location ----
     saveLocationList = new JMenuItem("Save Current Location");
-    saveLocationList.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        //code to add a recent location to the menu
-        String stateString = superAdapter.getLocationDescription();
-        String stateDescription = superAdapter.getDescription("location");
-        if (stateDescription != null && stateDescription.length() > 0) {
-            addRecentStateMenuEntry(stateDescription + RecentMenu.delimiter + stateString, true);
-          recentLocationMenu.setEnabled(true);
-        }
+    saveLocationList.addActionListener(e -> {
+      //code to add a recent location to the menu
+      String stateString = superAdapter.getLocationDescription();
+      String stateDescription = superAdapter.getDescription("location");
+      if (stateDescription != null && stateDescription.length() > 0) {
+        addRecentStateMenuEntry(stateDescription + RecentMenu.delimiter + stateString, true);
+        recentLocationMenu.setEnabled(true);
       }
     });
     bookmarksMenu.add(saveLocationList);
@@ -287,24 +259,21 @@ public class MainMenuBar extends JMenuBar {
     //---Save State test-----
     saveStateForReload = new JMenuItem();
     saveStateForReload.setText("Save Current State");
-    saveStateForReload.addActionListener(new ActionListener() {
-
-      public void actionPerformed(ActionEvent e) {
-        //code to add a recent location to the menu
-        try {
-          String stateDescription = superAdapter.getDescription("state");
-          if (stateDescription != null && stateDescription.length() > 0) {
-            stateDescription = previousStates.checkForDuplicateNames(stateDescription);
-            if (stateDescription == null || stateDescription.length() < 0) {
-              return;
-            }
-            previousStates.addEntry(stateDescription, true);
-            superAdapter.addNewStateToXML(stateDescription);
-            previousStates.setEnabled(true);
+    saveStateForReload.addActionListener(e -> {
+      //code to add a recent location to the menu
+      try {
+        String stateDescription = superAdapter.getDescription("state");
+        if (stateDescription != null && stateDescription.length() > 0) {
+          stateDescription = previousStates.checkForDuplicateNames(stateDescription);
+          if (stateDescription == null) {
+            return;
           }
-        } catch (Exception e1) {
-          e1.printStackTrace();
+          previousStates.addEntry(stateDescription, true);
+          superAdapter.addNewStateToXML(stateDescription);
+          previousStates.setEnabled(true);
         }
+      } catch (Exception e1) {
+        e1.printStackTrace();
       }
     });
 
@@ -330,12 +299,7 @@ public class MainMenuBar extends JMenuBar {
     //---Export States----
     exportSavedStateMenuItem = new JMenuItem();
     exportSavedStateMenuItem.setText("Export Saved States");
-    exportSavedStateMenuItem.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        new SaveFileDialog(HiCGlobals.xmlSavedStatesFile);
-      }
-    });
+    exportSavedStateMenuItem.addActionListener(e -> new SaveFileDialog(HiCGlobals.xmlSavedStatesFile));
 
     // restore recent saved states
     previousStates = new RecentMenu("Restore Previous States", recentLocationMaxItems, recentStateEntityNode, HiCGlobals.menuType.STATE) {
@@ -358,24 +322,18 @@ public class MainMenuBar extends JMenuBar {
     //---Import States----
     importMapAsFile = new JMenuItem();
     importMapAsFile.setText("Import State From File");
-    importMapAsFile.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.launchImportState(HiCGlobals.xmlSavedStatesFile);
-        importMapAsFile.setSelected(true);
-      }
+    importMapAsFile.addActionListener(e -> {
+      superAdapter.launchImportState(HiCGlobals.xmlSavedStatesFile);
+      importMapAsFile.setSelected(true);
     });
 
 
     //---Slideshow----
     slideShow = new JMenuItem();
     slideShow.setText("View Slideshow");
-    slideShow.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.launchSlideShow();
-        HiCGlobals.slideshowEnabled = true;
-      }
+    slideShow.addActionListener(e -> {
+      superAdapter.launchSlideShow();
+      HiCGlobals.slideshowEnabled = true;
     });
     //bookmarksMenu.add(slideShow);
 
@@ -387,89 +345,42 @@ public class MainMenuBar extends JMenuBar {
     //---View Menu-----
     viewMenu = new JMenu("View");
 
-    layersItem.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.setLayersPanelVisible(layersItem.isSelected());
-
-      }
-    });
+    layersItem.addActionListener(e -> superAdapter.setLayersPanelVisible(layersItem.isSelected()));
     viewMenu.add(layersItem);
     viewMenu.setEnabled(false);
 
     final JMenuItem colorItem = new JMenuItem("Change Heatmap Color");
-    colorItem.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        JColorChooser colorChooser = new JColorChooser(ColorScaleHandler.HIC_MAP_COLOR);
-        JDialog dialog = JColorChooser.createDialog(MainMenuBar.this, "Select Heatmap Color",
-                true, colorChooser, null, null);
-        dialog.setVisible(true);
-        Color color = colorChooser.getColor();
-        if (color != null) {
-          ColorScaleHandler.HIC_MAP_COLOR = color;
-          superAdapter.getMainViewPanel().resetAllColors();
-          superAdapter.refresh();
-        }
+    colorItem.addActionListener(e -> {
+      JColorChooser colorChooser = new JColorChooser(ColorScaleHandler.HIC_MAP_COLOR);
+      JDialog dialog = JColorChooser.createDialog(MainMenuBar.this, "Select Heatmap Color",
+              true, colorChooser, null, null);
+      dialog.setVisible(true);
+      Color color = colorChooser.getColor();
+      if (color != null) {
+        ColorScaleHandler.HIC_MAP_COLOR = color;
+        superAdapter.getMainViewPanel().resetAllColors();
+        superAdapter.refresh();
       }
     });
     viewMenu.add(colorItem);
 
     final JCheckBoxMenuItem darkulaMode = new JCheckBoxMenuItem("Darkula Mode");
-    darkulaMode.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        HiCGlobals.isDarkulaModeEnabled = !HiCGlobals.isDarkulaModeEnabled;
-        superAdapter.getMainViewPanel().resetAllColors();
-        //superAdapter.safeClearAllMZDCache();
-        superAdapter.refresh();
-      }
+    darkulaMode.addActionListener(e -> {
+      HiCGlobals.isDarkulaModeEnabled = !HiCGlobals.isDarkulaModeEnabled;
+      superAdapter.getMainViewPanel().resetAllColors();
+      //superAdapter.safeClearAllMZDCache();
+      superAdapter.refresh();
     });
     darkulaMode.setSelected(HiCGlobals.isDarkulaModeEnabled);
     viewMenu.add(darkulaMode);
-
-    final JCheckBoxMenuItem advancedViewsMode = new JCheckBoxMenuItem("Advanced Views Mode");
-    advancedViewsMode.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        MatrixType.toggleAdvancedViews();
-        //superAdapter.getMainViewPanel().resetAllColors();
-        //superAdapter.refresh();
-      }
-    });
-    advancedViewsMode.setSelected(MatrixType.getAdvancedViewEnabled());
-    viewMenu.add(advancedViewsMode);
-
-    JMenuItem addCustomChromosome = new JMenuItem("Make Custom Chromosome (from .bed)...");
-    addCustomChromosome.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.createCustomChromosomesFromBED();
-      }
-    });
-
-    JMenuItem addGWChromosome = new JMenuItem("Make Genomewide Chromosome");
-    addGWChromosome.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.createGenomewideChromosomeFromChromDotSizes();
-      }
-    });
-
-    if (HiCGlobals.isDevCustomChromosomesAllowedPublic) {
-      //viewMenu.add(addGWChromosome);
-      viewMenu.add(addCustomChromosome);
-    }
-
     viewMenu.addSeparator();
 
     //---Axis Layout mode-----
     final JCheckBoxMenuItem axisEndpoint = new JCheckBoxMenuItem("Axis Endpoints Only");
     axisEndpoint.setSelected(HiCRulerPanel.getShowOnlyEndPts());
-    axisEndpoint.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        HiCRulerPanel.setShowOnlyEndPts(axisEndpoint.isSelected());
-        superAdapter.repaint();
-      }
+    axisEndpoint.addActionListener(e -> {
+      HiCRulerPanel.setShowOnlyEndPts(axisEndpoint.isSelected());
+      superAdapter.repaint();
     });
     viewMenu.add(axisEndpoint);
 
@@ -478,12 +389,9 @@ public class MainMenuBar extends JMenuBar {
     // fill Rect according to the chormsome location.
     final JCheckBoxMenuItem showChromosomeFig = new JCheckBoxMenuItem("Chromosome Context");
     showChromosomeFig.setSelected(HiCRulerPanel.getShowChromosomeFigure());
-    showChromosomeFig.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.setShowChromosomeFig(showChromosomeFig.isSelected());
-        superAdapter.repaint();
-      }
+    showChromosomeFig.addActionListener(e -> {
+      superAdapter.setShowChromosomeFig(showChromosomeFig.isSelected());
+      superAdapter.repaint();
     });
     viewMenu.add(showChromosomeFig);
 
@@ -491,12 +399,9 @@ public class MainMenuBar extends JMenuBar {
     // turn grids on/off
     final JCheckBoxMenuItem showGrids = new JCheckBoxMenuItem("Gridlines");
     showGrids.setSelected(superAdapter.getShowGridLines());
-    showGrids.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.setShowGridLines(showGrids.isSelected());
-        superAdapter.repaint();
-      }
+    showGrids.addActionListener(e -> {
+      superAdapter.setShowGridLines(showGrids.isSelected());
+      superAdapter.repaint();
     });
     viewMenu.add(showGrids);
 
@@ -504,112 +409,59 @@ public class MainMenuBar extends JMenuBar {
 
     //---Export Image Menu-----
     JMenuItem saveToPDF = new JMenuItem("Export PDF Figure...");
-    saveToPDF.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.launchExportPDF();
-      }
-    });
+    saveToPDF.addActionListener(e -> superAdapter.launchExportPDF());
     viewMenu.add(saveToPDF);
 
     JMenuItem saveToSVG = new JMenuItem("Export SVG Figure...");
-    saveToSVG.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.launchExportSVG();
-      }
-    });
+    saveToSVG.addActionListener(e -> superAdapter.launchExportSVG());
     viewMenu.add(saveToSVG);
 
     devMenu = new JMenu("Dev");
     devMenu.setEnabled(false);
 
     final JMenuItem addRainbowTrack = new JMenuItem("Add a rainbow track...");
-    addRainbowTrack.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.getHiC().generateRainbowBed();
-      }
-    });
+    addRainbowTrack.addActionListener(e -> superAdapter.getHiC().generateRainbowBed());
     if (HiCGlobals.isDevAssemblyToolsAllowedPublic) {
       devMenu.add(addRainbowTrack);
     }
 
     final JCheckBoxMenuItem skipSortInPhase = new JCheckBoxMenuItem("Skip variant sorting in phase mode");
-    skipSortInPhase.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        HiCGlobals.noSortInPhasing = !HiCGlobals.noSortInPhasing;
-        superAdapter.getHeatmapPanel().repaint();
-      }
+    skipSortInPhase.addActionListener(e -> {
+      HiCGlobals.noSortInPhasing = !HiCGlobals.noSortInPhasing;
+      superAdapter.getHeatmapPanel().repaint();
     });
     skipSortInPhase.setSelected(HiCGlobals.noSortInPhasing);
     if (HiCGlobals.isDevAssemblyToolsAllowedPublic) {
       devMenu.add(skipSortInPhase);
     }
 
-    final JMenuItem addCustomNormsObs = new JMenuItem("Add Custom Norms to Observed...");
-    addCustomNormsObs.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.safeLaunchImportNormalizations(false);
-      }
-    });
-
-    final JMenuItem addCustomNormsCtrl = new JMenuItem("Add Custom Norms to Control...");
-    addCustomNormsCtrl.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.safeLaunchImportNormalizations(true);
-      }
-    });
-
     final JMenuItem addResolutionToDatasets = new JMenuItem("Add Custom Resolution...");
-    addResolutionToDatasets.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.safeLaunchCreateNewResolution();
-      }
-    });
+    addResolutionToDatasets.addActionListener(e -> superAdapter.safeLaunchCreateNewResolution());
 
-    if (HiCGlobals.isDevAssemblyToolsAllowedPublic) {
-      devMenu.add(addCustomNormsObs);
-      devMenu.add(addCustomNormsCtrl);
-      devMenu.add(addResolutionToDatasets);
-    }
+    devMenu.add(addResolutionToDatasets);
 
     final JCheckBoxMenuItem displayTiles = new JCheckBoxMenuItem("Display Tiles");
-    displayTiles.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        HiCGlobals.displayTiles = !HiCGlobals.displayTiles;
-        superAdapter.getHeatmapPanel().repaint();
-      }
+    displayTiles.addActionListener(e -> {
+      HiCGlobals.displayTiles = !HiCGlobals.displayTiles;
+      superAdapter.getHeatmapPanel().repaint();
     });
 
     final JCheckBoxMenuItem hackLinearColorScale = new JCheckBoxMenuItem("Hack linear color scale");
-    hackLinearColorScale.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        HiCGlobals.HACK_COLORSCALE_LINEAR = !HiCGlobals.HACK_COLORSCALE_LINEAR;
-        superAdapter.getHeatmapPanel().repaint();
-      }
+    hackLinearColorScale.addActionListener(e -> {
+      HiCGlobals.HACK_COLORSCALE_LINEAR = !HiCGlobals.HACK_COLORSCALE_LINEAR;
+      superAdapter.getHeatmapPanel().repaint();
     });
 
     final JCheckBoxMenuItem hackColorScale = new JCheckBoxMenuItem("Hack color scale");
-    hackColorScale.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        HiCGlobals.HACK_COLORSCALE = !HiCGlobals.HACK_COLORSCALE;
-        superAdapter.getHeatmapPanel().repaint();
-      }
+    hackColorScale.addActionListener(e -> {
+      HiCGlobals.HACK_COLORSCALE = !HiCGlobals.HACK_COLORSCALE;
+      superAdapter.getHeatmapPanel().repaint();
     });
 
     final JCheckBoxMenuItem hackColorScaleEqual = new JCheckBoxMenuItem("Hack color scale equally");
-    hackColorScaleEqual.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        HiCGlobals.HACK_COLORSCALE_EQUAL = !HiCGlobals.HACK_COLORSCALE_EQUAL;
-        superAdapter.getHeatmapPanel().repaint();
-      }
+    hackColorScaleEqual.addActionListener(e -> {
+      HiCGlobals.HACK_COLORSCALE_EQUAL = !HiCGlobals.HACK_COLORSCALE_EQUAL;
+      superAdapter.getHeatmapPanel().repaint();
     });
 
     displayTiles.setSelected(HiCGlobals.displayTiles);
@@ -621,12 +473,9 @@ public class MainMenuBar extends JMenuBar {
     }
 
     final JCheckBoxMenuItem colorFeatures = new JCheckBoxMenuItem("Recolor 1D Annotations in Assembly Mode");
-    colorFeatures.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        IGVFeatureCopy.invertColorFeaturesChk();
-        repaint();
-      }
+    colorFeatures.addActionListener(e -> {
+      IGVFeatureCopy.invertColorFeaturesChk();
+      repaint();
     });
     colorFeatures.setSelected(IGVFeatureCopy.colorFeaturesChk);
     if (HiCGlobals.isDevAssemblyToolsAllowedPublic) {
@@ -636,17 +485,14 @@ public class MainMenuBar extends JMenuBar {
     // todo MSS and Santiago - is this to be deleted?
     final JCheckBoxMenuItem useAssemblyMatrix = new JCheckBoxMenuItem("Use Assembly Chromosome Matrix");
     useAssemblyMatrix.setEnabled(!SuperAdapter.assemblyModeCurrentlyActive);
-    useAssemblyMatrix.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        MainViewPanel.invertAssemblyMatCheck();
-        superAdapter.createAssemblyChromosome();
-        AssemblyFileImporter assemblyFileImporter;
-        assemblyFileImporter = new AssemblyFileImporter(superAdapter);
-        assemblyFileImporter.importAssembly();
+    useAssemblyMatrix.addActionListener(e -> {
+      MainViewPanel.invertAssemblyMatCheck();
+      superAdapter.createAssemblyChromosome();
+      AssemblyFileImporter assemblyFileImporter;
+      assemblyFileImporter = new AssemblyFileImporter(superAdapter);
+      assemblyFileImporter.importAssembly();
 //        superAdapter.assemblyModeCurrentlyActive = true;
-        System.out.println(assemblyFileImporter.getAssemblyScaffoldHandler().toString());
-      }
+      System.out.println(assemblyFileImporter.getAssemblyScaffoldHandler().toString());
     });
 
     useAssemblyMatrix.setSelected(HiCGlobals.isAssemblyMatCheck);
@@ -655,61 +501,35 @@ public class MainMenuBar extends JMenuBar {
     }
 
 
-        renameGenome = new JMenuItem("Rename genome...");
-        renameGenome.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String curr_genome = superAdapter.getHiC().getDataset().getGenomeId();
-                String response = JOptionPane.showInputDialog("Current genome is " + curr_genome +
-                        "\nEnter another genome name or press cancel to exit");
-                if (response != null) {
-                    superAdapter.getHiC().getDataset().setGenomeId(response);
-                }
-            }
-        });
-        renameGenome.setEnabled(false);
-        fileMenu.add(renameGenome);
+    renameGenome = new JMenuItem("Rename genome...");
+    renameGenome.addActionListener(e -> {
+      String curr_genome = superAdapter.getHiC().getDataset().getGenomeId();
+      String response = JOptionPane.showInputDialog("Current genome is " + curr_genome +
+              "\nEnter another genome name or press cancel to exit");
+      if (response != null) {
+        superAdapter.getHiC().getDataset().setGenomeId(response);
+      }
+    });
+    renameGenome.setEnabled(false);
+    fileMenu.add(renameGenome);
     fileMenu.addSeparator();
 
     JMenuItem editPearsonsColorItem = new JMenuItem("Edit Pearson's Color Scale");
-    editPearsonsColorItem.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.launchPearsonColorScaleEditor();
-      }
-    });
+    editPearsonsColorItem.addActionListener(e -> superAdapter.launchPearsonColorScaleEditor());
     devMenu.add(editPearsonsColorItem);
 
     JMenuItem editPseudoCounts = new JMenuItem("Change Pseudocount");
-    editPseudoCounts.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        superAdapter.launchSetPseudoCountEditor();
-      }
-    });
+    editPseudoCounts.addActionListener(e -> superAdapter.launchSetPseudoCountEditor());
     devMenu.add(editPseudoCounts);
-
-    JMenuItem mapSubset = new JMenuItem("Select Map Subset...");
-    mapSubset.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        Private.launchMapSubsetGUI(superAdapter);
-      }
-    });
-    devMenu.add(mapSubset);
 
     final JTextField numSparse = new JTextField("" + Feature2DHandler.numberOfLoopsToFind);
     numSparse.setEnabled(true);
-    numSparse.isEditable();
     numSparse.setToolTipText("Set how many 2D annotations to plot at a time.");
 
     final JButton updateSparseOptions = new JButton("Update");
-    updateSparseOptions.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        if (numSparse.getText().length() > 0) {
-          Feature2DHandler.numberOfLoopsToFind = Integer.parseInt(numSparse.getText());
-        }
+    updateSparseOptions.addActionListener(e -> {
+      if (numSparse.getText().length() > 0) {
+        Feature2DHandler.numberOfLoopsToFind = Integer.parseInt(numSparse.getText());
       }
     });
     updateSparseOptions.setToolTipText("Set how many 2D annotations to plot at a time.");
@@ -729,108 +549,84 @@ public class MainMenuBar extends JMenuBar {
     assemblyMenu.setEnabled(false);
 
     enableAssembly = new JCheckBoxMenuItem("Enable Edits");
-    enableAssembly.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        if (enableAssembly.isSelected()) {
-          superAdapter.getHeatmapPanel().enableAssemblyEditing();
-        } else {
-          superAdapter.getHeatmapPanel().disableAssemblyEditing();
-        }
+    enableAssembly.addActionListener(e -> {
+      if (enableAssembly.isSelected()) {
+        superAdapter.getHeatmapPanel().enableAssemblyEditing();
+      } else {
+        superAdapter.getHeatmapPanel().disableAssemblyEditing();
       }
     });
 
     resetAssembly = new JMenuItem("Reset Assembly");
 
-    resetAssembly.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset?", "warning", JOptionPane.YES_NO_OPTION);
-        if (option == 0) { //The ISSUE is here
-          superAdapter.getAssemblyStateTracker().resetState();
-          superAdapter.refresh();
-        }
+    resetAssembly.addActionListener(e -> {
+      int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset?", "warning", JOptionPane.YES_NO_OPTION);
+      if (option == 0) { //The ISSUE is here
+        superAdapter.getAssemblyStateTracker().resetState();
+        superAdapter.refresh();
       }
     });
 
     exitAssembly = new JMenuItem("Exit Assembly");
-    exitAssembly.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "warning", JOptionPane.YES_NO_OPTION);
-        if (option == 0) {
-          superAdapter.exitAssemblyMode();
-        }
+    exitAssembly.addActionListener(e -> {
+      int option = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "warning", JOptionPane.YES_NO_OPTION);
+      if (option == 0) {
+        superAdapter.exitAssemblyMode();
       }
     });
 
     exportAssembly = new JMenuItem("Export Assembly");
-    exportAssembly.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        String mapName = SuperAdapter.getDatasetTitle();
-        new SaveAssemblyDialog(superAdapter.getAssemblyStateTracker().getAssemblyHandler(), mapName.substring(0, mapName.lastIndexOf("."))); //find how to get HiC filename
+    exportAssembly.addActionListener(e -> {
+      String mapName = SuperAdapter.getDatasetTitle();
+      new SaveAssemblyDialog(superAdapter.getAssemblyStateTracker().getAssemblyHandler(), mapName.substring(0, mapName.lastIndexOf("."))); //find how to get HiC filename
 
-      }
     });
 
     final JMenuItem importMapAssembly = new JMenuItem("Import Map Assembly");
-    importMapAssembly.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        if (superAdapter.getLayersPanel() == null) {
-          superAdapter.intializeLayersPanel();
-        }
-        new LoadAssemblyAnnotationsDialog(superAdapter);
+    importMapAssembly.addActionListener(e -> {
+      if (superAdapter.getLayersPanel() == null) {
+        superAdapter.intializeLayersPanel();
       }
+      new LoadAssemblyAnnotationsDialog(superAdapter);
     });
 
     importModifiedAssembly = new JMenuItem("Import Modified Assembly");
-    importModifiedAssembly.addActionListener(new ActionListener() {
-
-      //TODO: add warning if changes are present
-
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (superAdapter.getLayersPanel() == null) {
-                    superAdapter.intializeLayersPanel();
-                }
-                new LoadModifiedAssemblyAnnotationsDialog(superAdapter);
-            }
-        });
-
-        setScale = new JMenuItem("Set Scale");
-        setScale.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                double scale;
-                String newScale = MessageUtils.showInputDialog("Specify a scale", Double.toString(HiCGlobals.hicMapScale));
-                try {
-                    scale = Double.parseDouble(newScale);
-                    if (scale == 0.0) {  // scale cannot be zero
-                        scale = 1.0;
-                    }
-                    HiCGlobals.hicMapScale = scale;
-
-                    // Rescale resolution slider labels
-                    superAdapter.getMainViewPanel().getResolutionSlider().reset();
-
-                  // Rescale axis tick labels
-                  superAdapter.getMainViewPanel().getRulerPanelX().repaint();
-                  superAdapter.getMainViewPanel().getRulerPanelY().repaint();
-
-                  // Rescale and redraw assembly annotations
-                  if (superAdapter.getAssemblyStateTracker() != null) {
-                    superAdapter.getAssemblyStateTracker().resetState();
-                  }
-
-
-                } catch (NumberFormatException t) {
-                  JOptionPane.showMessageDialog(null, "Value must be an integer!");
-                }
-
+    //TODO: add warning if changes are present
+    importModifiedAssembly.addActionListener(e -> {
+      if (superAdapter.getLayersPanel() == null) {
+        superAdapter.intializeLayersPanel();
       }
+      new LoadModifiedAssemblyAnnotationsDialog(superAdapter);
+    });
+
+    setScale = new JMenuItem("Set Scale");
+    setScale.addActionListener(e -> {
+      double scale;
+      String newScale = MessageUtils.showInputDialog("Specify a scale", Double.toString(HiCGlobals.hicMapScale));
+      try {
+        scale = Double.parseDouble(newScale);
+        if (scale == 0.0) {  // scale cannot be zero
+          scale = 1.0;
+        }
+        HiCGlobals.hicMapScale = scale;
+
+        // Rescale resolution slider labels
+        superAdapter.getMainViewPanel().getResolutionSlider().reset();
+
+        // Rescale axis tick labels
+        superAdapter.getMainViewPanel().getRulerPanelX().repaint();
+        superAdapter.getMainViewPanel().getRulerPanelY().repaint();
+
+        // Rescale and redraw assembly annotations
+        if (superAdapter.getAssemblyStateTracker() != null) {
+          superAdapter.getAssemblyStateTracker().resetState();
+        }
+
+
+      } catch (NumberFormatException t) {
+        JOptionPane.showMessageDialog(null, "Value must be an integer!");
+      }
+
     });
 
     boolean enabled = superAdapter.getAssemblyStateTracker() != null && superAdapter.getAssemblyStateTracker().getAssemblyHandler() != null;

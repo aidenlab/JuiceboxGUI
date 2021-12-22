@@ -25,13 +25,14 @@
 package juicebox.windowui.layers;
 
 import com.jidesoft.swing.JideBoxLayout;
+import javastraw.reader.basics.ChromosomeHandler;
+import javastraw.tools.HiCFileTools;
 import juicebox.DirectoryManager;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
-import juicebox.data.ChromosomeHandler;
-import juicebox.data.HiCFileTools;
 import juicebox.gui.SuperAdapter;
+import juicebox.track.ResourceFinder;
 import juicebox.track.feature.AnnotationLayerHandler;
 import juicebox.windowui.JBTreeCellRenderer;
 import juicebox.windowui.LoadDialog;
@@ -43,7 +44,10 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -115,54 +119,48 @@ public class Load2DAnnotationsDialog extends JDialog implements TreeSelectionLis
 
         openButton = new JButton("Open");
         openButton.setEnabled(false);
-        openButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                safeLoadAnnotationFiles(tree.getSelectionPaths(), layersPanel, superAdapter, chromosomeHandler);
-                Load2DAnnotationsDialog.this.setVisible(false);
-            }
+        openButton.addActionListener(e -> {
+            safeLoadAnnotationFiles(tree.getSelectionPaths(), layersPanel, superAdapter, chromosomeHandler);
+            Load2DAnnotationsDialog.this.setVisible(false);
         });
 
         JButton urlButton = new JButton("URL...");
-        urlButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        urlButton.addActionListener(e -> {
 
-                String url = JOptionPane.showInputDialog("Enter URL: ");
+            String url = JOptionPane.showInputDialog("Enter URL: ");
 
-                if (url != null && url.length() > 0) {
-                    if (HiCFileTools.isDropboxURL(url)) {
-                        url = HiCFileTools.cleanUpDropboxURL(url);
-                    }
-                    url = url.trim();
-                    if (customAddedFeatures == null) {
-                        customAddedFeatures = new DefaultMutableTreeNode(
-                                new ItemInfo("Added 2D Features", ""), true);
-                        top.add(customAddedFeatures);
-                    }
+            if (url != null && url.length() > 0) {
+                if (HiCFileTools.isDropboxURL(url)) {
+                    url = HiCFileTools.cleanUpDropboxURL(url);
+                }
+                url = url.trim();
+                if (customAddedFeatures == null) {
+                    customAddedFeatures = new DefaultMutableTreeNode(
+                            new ItemInfo("Added 2D Features", ""), true);
+                    top.add(customAddedFeatures);
+                }
 
-                    if (loadedAnnotationsMap.containsKey(url)) {
-                        if (HiCGlobals.guiIsCurrentlyActive) {
-                            int dialogResult = JOptionPane.showConfirmDialog(window,
-                                    "File is already loaded. Would you like to overwrite it?", "Warning",
-                                    JOptionPane.YES_NO_OPTION);
-                            if (dialogResult == JOptionPane.YES_OPTION) {
-                                customAddedFeatures.remove(loadedAnnotationsMap.get(url));
-                                loadedAnnotationsMap.remove(url);
-                            } else {
-                                return;
-                            }
+                if (loadedAnnotationsMap.containsKey(url)) {
+                    if (HiCGlobals.guiIsCurrentlyActive) {
+                        int dialogResult = JOptionPane.showConfirmDialog(window,
+                                "File is already loaded. Would you like to overwrite it?", "Warning",
+                                JOptionPane.YES_NO_OPTION);
+                        if (dialogResult == JOptionPane.YES_OPTION) {
+                            customAddedFeatures.remove(loadedAnnotationsMap.get(url));
+                            loadedAnnotationsMap.remove(url);
+                        } else {
+                            return;
                         }
                     }
-
-                    DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(
-                            new ItemInfo(url, url), false);
-
-                    loadedAnnotationsMap.put(url, treeNode);
-                    customAddedFeatures.add(treeNode);
-                    expandTree();
-                    tree.updateUI();
                 }
+
+                DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(
+                        new ItemInfo(url, url), false);
+
+                loadedAnnotationsMap.put(url, treeNode);
+                customAddedFeatures.add(treeNode);
+                expandTree();
+                tree.updateUI();
             }
         });
         urlButton.setPreferredSize(new Dimension((int) urlButton.getPreferredSize().getWidth(),
@@ -170,12 +168,7 @@ public class Load2DAnnotationsDialog extends JDialog implements TreeSelectionLis
         //setVisible(false);
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Load2DAnnotationsDialog.this.setVisible(false);
-            }
-        });
+        cancelButton.addActionListener(e -> Load2DAnnotationsDialog.this.setVisible(false));
         cancelButton.setPreferredSize(new Dimension((int) cancelButton.getPreferredSize().getWidth(),
                 (int) openButton.getPreferredSize().getHeight()));
 
@@ -291,12 +284,7 @@ public class Load2DAnnotationsDialog extends JDialog implements TreeSelectionLis
 
     private void safeLoadAnnotationFiles(final TreePath[] paths, final LayersPanel layersPanel, final SuperAdapter superAdapter,
                                          final ChromosomeHandler chromosomeHandler) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                unsafeLoadAnnotationFiles(paths, layersPanel, superAdapter, chromosomeHandler);
-            }
-        };
+        Runnable runnable = () -> unsafeLoadAnnotationFiles(paths, layersPanel, superAdapter, chromosomeHandler);
         superAdapter.executeLongRunningTask(runnable, "load 2d annotation files");
     }
 
@@ -339,8 +327,8 @@ public class Load2DAnnotationsDialog extends JDialog implements TreeSelectionLis
 
         // Add dataset-specific 2d annotations
         DefaultMutableTreeNode subParent = new DefaultMutableTreeNode(new ItemInfo("Dataset-specific 2D Features"), true);
-        ResourceLocator[] locators = {hic.getDataset().getPeaks(), hic.getDataset().getBlocks(), hic.getDataset().getSuperLoops()};
-        String[] locatorName = {"Peaks", "Contact Domains", "ChrX Super Loops"};
+        ResourceLocator[] locators = ResourceFinder.get2DResources(hic.getDataset());
+        String[] locatorName = ResourceFinder.get2DResourceNames();
 
         boolean datasetSpecificFeatureAdded = false;
         for (int i = 0; i < 3; i++) {

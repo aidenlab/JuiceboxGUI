@@ -33,6 +33,7 @@ import juicebox.assembly.AssemblyStateTracker;
 import juicebox.assembly.PsfFileImporter;
 import juicebox.gui.SuperAdapter;
 import juicebox.mapcolorui.FeatureRenderer;
+import juicebox.track.ResourceFinder;
 import juicebox.track.feature.AnnotationLayer;
 import juicebox.track.feature.AnnotationLayerHandler;
 import juicebox.windowui.layers.LayersPanel;
@@ -385,8 +386,8 @@ public class LoadAssemblyAnnotationsDialog extends JDialog implements TreeSelect
 
         // Add dataset-specific 2d annotations
         DefaultMutableTreeNode subParent = new DefaultMutableTreeNode(new ItemInfo("Dataset-specific 2D Features"), true);
-        ResourceLocator[] locators = {hic.getDataset().getPeaks(), hic.getDataset().getBlocks(), hic.getDataset().getSuperLoops()};
-        String[] locatorName = {"Peaks", "Contact Domains", "ChrX Super Loops"};
+        ResourceLocator[] locators = ResourceFinder.get2DResources(hic.getDataset());
+        String[] locatorName = ResourceFinder.get2DResourceNames();
 
         boolean datasetSpecificFeatureAdded = false;
         for (int i = 0; i < 3; i++) {

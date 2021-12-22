@@ -24,13 +24,13 @@
 
 package juicebox.windowui;
 
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.basics.ChromosomeHandler;
 import juicebox.Context;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
-import juicebox.data.ChromosomeHandler;
-import juicebox.data.MatrixZoomData;
-import juicebox.data.basics.Chromosome;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.track.HiCGridAxis;
 
 import javax.swing.*;
@@ -196,7 +196,7 @@ public class HiCChromosomeFigPanel extends JComponent {
 
         if (chromosome == null || ChromosomeHandler.isAllByAll(chromosome)) return;
 
-        MatrixZoomData zd;
+        GUIMatrixZoomData zd;
         try {
             zd = hic.getZd();
         } catch (Exception e) {
@@ -267,8 +267,8 @@ public class HiCChromosomeFigPanel extends JComponent {
             g.drawLine(chrFigStart, h / 2, chrFigStart, h / 4 - 3);
             g.drawLine(0, 0, 0, 3);
             g.drawLine(chrFigStart, h / 4 - 3, 0, 3);
-    
-            MatrixZoomData zd;
+
+            GUIMatrixZoomData zd;
             try {
                 zd = hic.getZd();
             } catch (Exception e) {

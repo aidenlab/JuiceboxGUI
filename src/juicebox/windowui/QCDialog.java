@@ -24,11 +24,11 @@
 
 package juicebox.windowui;
 
+import javastraw.reader.Dataset;
+import javastraw.reader.expected.ExpectedValueFunction;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
-import juicebox.data.Dataset;
-import juicebox.data.ExpectedValueFunction;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -69,6 +69,7 @@ public class QCDialog extends JDialog {
         }
 
         String text = dataset.getStatistics();
+        text = StatisticsParser.parse(text, dataset);
         String textDescription = null;
         String textStatistics = null;
         String graphs = dataset.getGraphs();
@@ -290,9 +291,9 @@ public class QCDialog extends JDialog {
 
         final ExpectedValueFunction df;
         if (isControl) {
-            df = dataset.getExpectedValues(hic.getZoom(), hic.getControlNormalizationType());
+            df = dataset.getExpectedValues(hic.getZoom(), hic.getControlNormalizationType(), true);
         } else {
-            df = dataset.getExpectedValues(hic.getZoom(), hic.getObsNormalizationType());
+            df = dataset.getExpectedValues(hic.getZoom(), hic.getObsNormalizationType(), true);
         }
 
 

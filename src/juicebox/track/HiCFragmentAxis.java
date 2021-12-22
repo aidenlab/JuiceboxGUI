@@ -168,15 +168,6 @@ public class HiCFragmentAxis implements HiCGridAxis {
         return -1;
 
     }
-
-    @Override
-    public int getBinNumberForFragment(int fragment) {
-        if (fragment <= sites.length) {
-            return fragment / binSize;
-        } else {
-            throw new RuntimeException("Fragment: " + fragment + " is out of range");
-        }
-    }
     
     @Override
     public long getBinCount() {

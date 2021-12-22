@@ -24,6 +24,8 @@
 
 package juicebox.track.feature;
 
+import javastraw.feature2D.Feature2D;
+
 import java.awt.*;
 
 /**

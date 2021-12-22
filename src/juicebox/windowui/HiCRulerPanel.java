@@ -24,12 +24,13 @@
 
 package juicebox.windowui;
 
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.basics.ChromosomeHandler;
+import javastraw.reader.type.HiCZoom;
 import juicebox.Context;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
-import juicebox.data.ChromosomeHandler;
-import juicebox.data.MatrixZoomData;
-import juicebox.data.basics.Chromosome;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.track.HiCGridAxis;
 
 import javax.swing.*;
@@ -81,14 +82,14 @@ public class HiCRulerPanel extends JPanel {
     private static TickSpacing findSpacing(long maxValue, int width, boolean scaleInKB) {
 
         if (maxValue < 10) {
-            return new TickSpacing(1, HiC.Unit.BP.toString(), 1);
+            return new TickSpacing(1, HiCZoom.HiCUnit.BP.toString(), 1);
         }
 
         int maxNumberOfTickMarks = (int) Math.ceil(width / 25);
 
         // How many zeroes?
         int nZeroes = (int) Math.log10(maxValue);
-        String majorUnit = scaleInKB ? "KB" : HiC.Unit.BP.toString();
+        String majorUnit = scaleInKB ? "KB" : HiCZoom.HiCUnit.BP.toString();
         int unitMultiplier = 1;
         if (nZeroes > 9) {
             majorUnit = scaleInKB ? "TB" : "GB";
@@ -241,7 +242,7 @@ public class HiCRulerPanel extends JPanel {
 
         if (chromosome == null) return;
 
-        MatrixZoomData zd;
+        GUIMatrixZoomData zd;
         try {
             zd = hic.getZd();
         } catch (Exception e) {

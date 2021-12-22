@@ -29,10 +29,11 @@ To set up in IDEA, have the Java SDK installed
 then you'll point to it (IntelliJ has lots of documentation on this sort of thing).
 
 * Then go to `VCS` -> `checkout from version control`.
-* You'll need to do is be sure `*.sizes` is included as a file to be copied over to the class files.
-Set this up via IntelliJ `Preferences` -> `Compiler`. Add `?*.sizes` to the list of `Resource Patterns`.
-* While there, also go to `Java Compiler` and put this into additional command line options: `-Xlint:all -target 1.7`
-The former turns on all warnings, the latter gives some flexibility since some people haven't updated Java to 1.8 yet.
+* You'll need to do is be sure `*.sizes` is included as a file to be copied over to the class files. Set this up via
+  IntelliJ `Preferences` -> `Compiler`. Add `?*.sizes` to the list of `Resource Patterns`.
+* While there, also go to `Preferences` -> `Java Compiler` and put this into additional command line
+  options: `-Xlint:all -target 1.7`
+  The former turns on all warnings, the latter gives some flexibility since some people haven't updated Java to 1.8 yet.
 * Then go to `Run` -> `Edit Configurations`.
 * With the `+` sign, add `Application`.
 * You'll create two of these, one for the GUI (call it Juicebox GUI or whatever you want, really) and one for the CLT.

@@ -24,10 +24,10 @@
 
 package juicebox.track;
 
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.type.NormalizationType;
 import juicebox.HiC;
-import juicebox.data.basics.Chromosome;
 import juicebox.gui.SuperAdapter;
-import juicebox.windowui.NormalizationType;
 import org.broad.igv.bbfile.BBFileReader;
 import org.broad.igv.bigwig.BigWigDataSource;
 import org.broad.igv.feature.genome.Genome;

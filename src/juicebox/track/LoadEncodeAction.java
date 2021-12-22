@@ -24,9 +24,9 @@
 
 package juicebox.track;
 
+import javastraw.reader.Dataset;
 import juicebox.HiC;
 import juicebox.MainWindow;
-import juicebox.data.Dataset;
 import juicebox.encode.EncodeFileBrowser;
 import juicebox.encode.EncodeFileRecord;
 import org.broad.igv.track.AttributeManager;
@@ -65,7 +65,7 @@ public class LoadEncodeAction extends AbstractAction {
     private final HiC hic;
     private String genome;
     private HashSet<ResourceLocator> loadedLocators;
-    private Runnable updateLayerPanelRunnable = null;
+    private final Runnable updateLayerPanelRunnable;
 
     public LoadEncodeAction(String s, MainWindow mainWindow, HiC hic, Runnable updateLayerPanelRunnable) {
         super(s);
@@ -73,7 +73,6 @@ public class LoadEncodeAction extends AbstractAction {
         this.hic = hic;
         this.genome = null;
         this.updateLayerPanelRunnable = updateLayerPanelRunnable;
-
     }
 
     public void checkEncodeBoxes(String track) {
@@ -128,13 +127,10 @@ public class LoadEncodeAction extends AbstractAction {
 
     private void safeLoadENCODETracks(final List<EncodeFileRecord> records, final String[] visibleAttributes) {
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                unsafeLoadENCODETracks(records, visibleAttributes);
-                if (updateLayerPanelRunnable != null) {
-                    updateLayerPanelRunnable.run();
-                }
+        Runnable runnable = () -> {
+            unsafeLoadENCODETracks(records, visibleAttributes);
+            if (updateLayerPanelRunnable != null) {
+                updateLayerPanelRunnable.run();
             }
         };
         mainWindow.executeLongRunningTask(runnable, "safe load encode tracks");

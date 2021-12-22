@@ -24,14 +24,14 @@
 
 package juicebox.track;
 
+import javastraw.feature2D.Feature2D;
+import javastraw.tools.HiCFileTools;
 import juicebox.Context;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
-import juicebox.data.HiCFileTools;
-import juicebox.data.MatrixZoomData;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
 import juicebox.mapcolorui.FeatureRenderer;
-import juicebox.track.feature.Feature2D;
 import org.broad.igv.util.Pair;
 
 import javax.swing.*;
@@ -310,7 +310,7 @@ public class TrackPanel extends JPanel {
             List<Feature2D> highlights = hic.getHighlightedFeatures();
             if (highlights.size() > 0) {
                 g.setColor(FeatureRenderer.HIGHLIGHT_COLOR);
-                MatrixZoomData zd = hic.getZd();
+                GUIMatrixZoomData zd = hic.getZd();
                 HiCGridAxis xAxis = zd.getXGridAxis();
                 HiCGridAxis yAxis = zd.getYGridAxis();
                 double binOriginX = hic.getXContext().getBinOrigin();

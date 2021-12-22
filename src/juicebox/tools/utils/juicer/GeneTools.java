@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2020 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -24,21 +24,17 @@
 
 package juicebox.tools.utils.juicer;
 
-import juicebox.data.ChromosomeHandler;
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.basics.ChromosomeHandler;
+import juicebox.data.GeneFileParser;
 import juicebox.data.GeneLocation;
-import juicebox.data.anchor.MotifAnchor;
-import juicebox.data.anchor.MotifAnchorParser;
-import juicebox.data.basics.Chromosome;
-import juicebox.data.feature.GenomeWideList;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,13 +58,13 @@ public class GeneTools {
         if (genomeID.equals("hg19") || genomeID.equals("hg38") || genomeID.equals("mm9") || genomeID.equals("mm10")) {
             String newURL = "http://hicfiles.s3.amazonaws.com/internal/" + genomeID + "_refGene.txt";
             try {
-                return MotifAnchorParser.downloadFromUrl(new URL(newURL), "genes");
+                return GeneFileParser.downloadFromUrl(new URL(newURL), "genes");
             } catch (IOException e) {
                 System.err.println("Unable to download file from online; attempting to use direct file path");
             }
         } else {
             try {
-                return MotifAnchorParser.uncompressFromGzip(genomeID, "genes");
+                return GeneFileParser.uncompressFromGzip(genomeID, "genes");
             } catch (IOException e) {
                 System.err.println("Unable to unzip file; attempting to use direct file path");
             }
@@ -97,45 +93,5 @@ public class GeneTools {
             }
         }
         return geneLocationHashMap;
-    }
-
-    public static GenomeWideList<MotifAnchor> parseGenome(String genomeID, ChromosomeHandler handler) {
-        BufferedReader reader = getStreamToGeneFile(genomeID);
-        List<MotifAnchor> allGenes = extractAllGenes(reader, handler);
-        return new GenomeWideList<>(handler, allGenes);
-    }
-
-    private static List<MotifAnchor> extractAllGenes(BufferedReader reader, ChromosomeHandler handler) {
-        List<MotifAnchor> genes = new ArrayList<>();
-
-        String nextLine;
-        try {
-            while ((nextLine = reader.readLine()) != null) {
-                String[] values = nextLine.split("\\s+");
-                if (values.length == 4 || values.length == 16) {  // 16 is refGene official format
-                    Chromosome chr = handler.getChromosomeFromName(values[2]);
-                    // refGene contains contigs as well, ignore these genes
-                    if (chr != null) {
-                        int chrIndex = chr.getIndex();
-                        // transcript start; for 4 column format, just position-1
-                        int txStart = (values.length == 4) ? Integer.parseInt(values[3].trim()) - 1 : Integer.parseInt(values[4].trim());
-                        // transcript end; for 4 column format, just position+1
-                        int txEnd = (values.length == 4) ? Integer.parseInt(values[3].trim()) + 1 : Integer.parseInt(values[5].trim());
-                        String name = (values.length==4) ? values[1].trim() : values[12].trim();
-                        MotifAnchor gene = new MotifAnchor(chr.getName(), txStart, txEnd, name);
-                        genes.add(gene);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Gene database not properly formatted");
-            System.exit(50);
-        }
-        if (genes.size() == 0) {
-            System.err.println("Gene database not properly formatted");
-            System.exit(51);
-        }
-
-        return genes;
     }
 }

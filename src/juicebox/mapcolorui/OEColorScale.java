@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -24,8 +24,8 @@
 
 package juicebox.mapcolorui;
 
+import javastraw.reader.type.MatrixType;
 import juicebox.HiCGlobals;
-import juicebox.windowui.MatrixType;
 import org.broad.igv.renderer.ColorScale;
 
 import java.awt.*;
@@ -48,20 +48,13 @@ class OEColorScale implements ColorScale {
     }
 
     private void resetThreshold() {
-        if(type == MatrixType.DIFF) {
-            threshold = defaultMaxOEVal;
-        }
-        else {
-            threshold = Math.log(defaultMaxOEVal);
-        }
+        threshold = Math.log(defaultMaxOEVal);
     }
 
     public Color getColor(float score) {
 
         double newValue;
-        if (MatrixType.isSubtactType(type)) {
-            newValue = score;
-        } else if (HiCGlobals.HACK_COLORSCALE_LINEAR) {
+        if (HiCGlobals.HACK_COLORSCALE_LINEAR) {
             if (score < 1) {
                 newValue = 1 - (1 / score);
             } else {
@@ -123,7 +116,7 @@ class OEColorScale implements ColorScale {
     }
 
     public double getMax() {
-        if (MatrixType.isSubtactType(type) || HiCGlobals.HACK_COLORSCALE || HiCGlobals.HACK_COLORSCALE_LINEAR) {
+        if (HiCGlobals.HACK_COLORSCALE || HiCGlobals.HACK_COLORSCALE_LINEAR) {
             return 2 * threshold;
         } else {
             return 2 * Math.exp(threshold);
@@ -131,7 +124,7 @@ class OEColorScale implements ColorScale {
     }
 
     public float getThreshold() {
-        if (MatrixType.isSubtactType(type) || HiCGlobals.HACK_COLORSCALE || HiCGlobals.HACK_COLORSCALE_LINEAR) {
+        if (HiCGlobals.HACK_COLORSCALE || HiCGlobals.HACK_COLORSCALE_LINEAR) {
             return (float) threshold;
         } else {
             return (float) Math.exp(threshold);
@@ -139,7 +132,7 @@ class OEColorScale implements ColorScale {
     }
 
     public void setThreshold(double max) {
-        if (MatrixType.isSubtactType(type) || HiCGlobals.HACK_COLORSCALE || HiCGlobals.HACK_COLORSCALE_LINEAR) {
+        if (HiCGlobals.HACK_COLORSCALE || HiCGlobals.HACK_COLORSCALE_LINEAR) {
             threshold = max;
         } else {
             threshold = Math.log(max);

@@ -24,13 +24,13 @@
 
 package juicebox.mapcolorui;
 
+import javastraw.reader.expected.ExpectedValueFunction;
+import javastraw.reader.type.MatrixType;
+import javastraw.reader.type.NormalizationType;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
-import juicebox.data.ExpectedValueFunction;
-import juicebox.data.MatrixZoomData;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
-import juicebox.windowui.MatrixType;
-import juicebox.windowui.NormalizationType;
 import org.broad.igv.util.ObjectCache;
 
 import javax.swing.*;
@@ -50,7 +50,7 @@ public class HiCMapTileManager {
         tileCache.clear();
     }
 
-    public GeneralTileManager.ImageTile getImageTile(MatrixZoomData zd, MatrixZoomData controlZd, int tileRow, int tileColumn, MatrixType displayOption,
+    public GeneralTileManager.ImageTile getImageTile(GUIMatrixZoomData zd, GUIMatrixZoomData controlZd, int tileRow, int tileColumn, MatrixType displayOption,
                                                      NormalizationType obsNormalizationType, NormalizationType ctrlNormalizationType,
                                                      HiC hic, JComponent parent) {
 
@@ -83,7 +83,7 @@ public class HiCMapTileManager {
     }
 
     private BufferedImage renderDataWithCPU(JComponent parent, int bx0, int by0, int imageWidth, int imageHeight,
-                                            MatrixZoomData zd, MatrixZoomData controlZd, MatrixType displayOption,
+                                            GUIMatrixZoomData zd, GUIMatrixZoomData controlZd, MatrixType displayOption,
                                             NormalizationType obsNormalizationType, NormalizationType ctrlNormalizationType,
                                             ExpectedValueFunction expectedValues, ExpectedValueFunction expectedControlValues) {
         BufferedImage image = (BufferedImage) parent.createImage(imageWidth, imageHeight);

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2020 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -29,6 +29,7 @@
 
 package juicebox;
 
+import javastraw.reader.type.HiCZoom;
 import org.broad.igv.util.StringUtils;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ class CommandExecutor {
     public String execute(String command) {
 
         List<String> commandString = StringUtils.breakQuotedString(command, ' ');
-        List<String> args = getArgs(commandString.toArray(new String[commandString.size()]));
+        List<String> args = getArgs(commandString.toArray(new String[0]));
 
         String result = "OK";
         System.err.println("Executing: " + command);
@@ -68,7 +69,7 @@ class CommandExecutor {
                         String chrXName = args.get(1);
                         String chrYName = args.get(2);
                         String unitName = args.get(3);
-                        HiC.Unit unit = HiC.valueOfUnit(unitName);
+                        HiCZoom.HiCUnit unit = HiC.valueOfUnit(unitName);
                         int binSize = Integer.parseInt(args.get(4));
                         double xOrigin = Double.parseDouble(args.get(5));
                         double yOrigin = Double.parseDouble(args.get(6));
@@ -84,7 +85,7 @@ class CommandExecutor {
             }
 
         } catch (Exception e) {
-            System.err.println(e.getLocalizedMessage());
+            System.err.println("CE Error: " + e.getLocalizedMessage());
             result = "Error: " + e.getMessage();
         }
         return result;

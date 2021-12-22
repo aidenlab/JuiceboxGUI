@@ -24,15 +24,14 @@
 
 package juicebox.mapcolorui;
 
+import javastraw.matrices.BasicMatrix;
+import javastraw.reader.block.Block;
+import javastraw.reader.block.ContactRecord;
+import javastraw.reader.expected.ExpectedValueFunction;
+import javastraw.reader.type.MatrixType;
+import javastraw.reader.type.NormalizationType;
 import juicebox.HiCGlobals;
-import juicebox.data.Block;
-import juicebox.data.ContactRecord;
-import juicebox.data.ExpectedValueFunction;
-import juicebox.data.MatrixZoomData;
-import juicebox.gui.SuperAdapter;
-import juicebox.matrix.BasicMatrix;
-import juicebox.windowui.MatrixType;
-import juicebox.windowui.NormalizationType;
+import juicebox.data.GUIMatrixZoomData;
 import org.broad.igv.renderer.ColorScale;
 
 import java.awt.*;
@@ -55,13 +54,13 @@ public class HeatmapRenderer {
         this.colorScaleHandler = colorScaleHandler;
     }
 
-    public static String getColorScaleCacheKey(MatrixZoomData zd, MatrixType displayOption, NormalizationType obsNorm, NormalizationType ctrlNorm) {
+    public static String getColorScaleCacheKey(GUIMatrixZoomData zd, MatrixType displayOption, NormalizationType obsNorm, NormalizationType ctrlNorm) {
         return zd.getColorScaleKey(displayOption, obsNorm, ctrlNorm);
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
     public boolean render(int originX, int originY, int width, int height,
-                          final MatrixZoomData zd, final MatrixZoomData controlZD,
+                          final GUIMatrixZoomData zd, final GUIMatrixZoomData controlZD,
                           final MatrixType displayOption,
                           final NormalizationType observedNormalizationType, final NormalizationType controlNormalizationType,
                           final ExpectedValueFunction df, final ExpectedValueFunction controlDF,
@@ -100,21 +99,7 @@ public class HeatmapRenderer {
         float pseudoCountObs = PSEUDO_COUNT;
         float pseudoCountCtrl = PSEUDO_COUNT;
 
-        if (displayOption == MatrixType.NORM2) {
-            renderNorm2(zd, isWholeGenome, observedNormalizationType, key, displayOption,
-                    originX, originY, width, height);
-        } else if (displayOption == MatrixType.NORM2CTRL) {
-            renderNorm2(controlZD, isWholeGenome, controlNormalizationType, controlKey, displayOption,
-                    originX, originY, width, height);
-        } else if (displayOption == MatrixType.NORM2OBSVSCTRL) {
-            if (controlDF == null) {
-                System.err.println("Control DF is NULL");
-                return false;
-            }
-            renderNorm2VS(zd, controlZD, isWholeGenome, observedNormalizationType,
-                    controlNormalizationType, key, displayOption,
-                    originX, originY, width, height);
-        } else if (displayOption == MatrixType.PEARSON) {
+        if (displayOption == MatrixType.PEARSON) {
             renderPearson(zd, df, key, originX, originY, width, height);
         } else if (displayOption == MatrixType.PEARSONCTRL) {
             if (controlDF == null) {
@@ -162,7 +147,7 @@ public class HeatmapRenderer {
 
             renderLogObservedBaseExpectedMap(chr1, ctrlBlocks, controlDF, controlZD, cs,
                     sameChr, originX, originY, width, height);
-        } else if (displayOption == MatrixType.LOGEOVS || displayOption == MatrixType.OCMEVS ||
+        } else if (displayOption == MatrixType.LOGEOVS ||
                 displayOption == MatrixType.VS || displayOption == MatrixType.LOGVS ||
                 displayOption == MatrixType.OEVSV2 || displayOption == MatrixType.OEVS ||
                 displayOption == MatrixType.OEVSP1V2 || displayOption == MatrixType.OEVSP1 ||
@@ -176,9 +161,6 @@ public class HeatmapRenderer {
 
             if (displayOption == MatrixType.LOGEOVS) {
                 renderLogObsOverExpVSMap(chr1, blocks, ctrlBlocks, df, controlDF,
-                        zd, controlZD, cs, sameChr, originX, originY, width, height);
-            } else if (displayOption == MatrixType.OCMEVS) { //
-                renderLogObsMinusExpVSMap(chr1, blocks, ctrlBlocks, df, controlDF,
                         zd, controlZD, cs, sameChr, originX, originY, width, height);
             } else if (displayOption == MatrixType.VS) {
                 renderSimpleVSMap(blocks, ctrlBlocks, zd, controlZD, originX, originY, width, height, cs, sameChr);
@@ -260,28 +242,6 @@ public class HeatmapRenderer {
             renderLogRatioWithExpMap(blocks, ctrlBlocks, zd, controlZD, chr1, df, controlDF,
                     originX, originY, width, height,
                     cs, sameChr, controlNormalizationType);
-        } else if (displayOption == MatrixType.OERATIOMINUS) {
-            List<Block> blocks = getTheBlocks(zd, x, y, maxX, maxY, observedNormalizationType, isImportant);
-            List<Block> ctrlBlocks = getTheBlocks(controlZD, x, y, maxX, maxY, controlNormalizationType, isImportant);
-            if (blocks == null || ctrlBlocks == null || controlZD == null) return false;
-            if (sameChr && (df == null || controlDF == null)) return false;
-
-            ColorScale cs = colorScaleHandler.getColorScale(key, displayOption, isWholeGenome, blocks, 1f);
-
-            renderOERatioMinus(blocks, ctrlBlocks, zd, controlZD, df, controlDF, chr1,
-                    0, 0, originX, originY, width, height,
-                    cs, sameChr, controlNormalizationType);
-
-        } else if (displayOption == MatrixType.OERATIOMINUSP1) {
-            List<Block> blocks = getTheBlocks(zd, x, y, maxX, maxY, observedNormalizationType, isImportant);
-            List<Block> ctrlBlocks = getTheBlocks(controlZD, x, y, maxX, maxY, controlNormalizationType, isImportant);
-            if (blocks == null || ctrlBlocks == null || controlZD == null) return false;
-            if (sameChr && (df == null || controlDF == null)) return false;
-            ColorScale cs = colorScaleHandler.getColorScale(key, displayOption, isWholeGenome, blocks, 1f);
-
-            renderOERatioMinus(blocks, ctrlBlocks, zd, controlZD, df, controlDF, chr1,
-                    pseudoCountObs, pseudoCountCtrl, originX, originY, width, height,
-                    cs, sameChr, controlNormalizationType);
         } else if (displayOption == MatrixType.RATIOV2 || displayOption == MatrixType.RATIO) {
             List<Block> blocks = getTheBlocks(zd, x, y, maxX, maxY, observedNormalizationType, isImportant);
             List<Block> ctrlBlocks = getTheBlocks(controlZD, x, y, maxX, maxY, controlNormalizationType, isImportant);
@@ -329,15 +289,6 @@ public class HeatmapRenderer {
             renderRatioWithExpMap(blocks, ctrlBlocks, zd, controlZD, chr1, df, controlDF,
                     pseudoCountObs, pseudoCountCtrl, originX, originY, width, height,
                     cs, sameChr, controlNormalizationType);
-        } else if (displayOption == MatrixType.DIFF) {
-            List<Block> blocks = getTheBlocks(zd, x, y, maxX, maxY, observedNormalizationType, isImportant);
-            List<Block> ctrlBlocks = getTheBlocks(controlZD, x, y, maxX, maxY, controlNormalizationType, isImportant);
-            if (blocks == null || ctrlBlocks == null || controlZD == null) return false;
-
-            ColorScale cs = colorScaleHandler.getColorScale(key, displayOption, isWholeGenome, blocks, 1f);
-
-            renderDiffMap(blocks, ctrlBlocks, zd, controlZD, originX, originY, width, height,
-                    cs, sameChr, controlNormalizationType);
         } else if (displayOption == MatrixType.LOG) {
             List<Block> blocks = getTheBlocks(zd, x, y, maxX, maxY, observedNormalizationType, isImportant);
             if (blocks == null) return false;
@@ -360,7 +311,7 @@ public class HeatmapRenderer {
     }
 
     private void renderLogRatioWithExpMap(List<Block> blocks, List<Block> ctrlBlocks,
-                                          MatrixZoomData zd, MatrixZoomData controlZD, int chr1,
+                                          GUIMatrixZoomData zd, GUIMatrixZoomData controlZD, int chr1,
                                           ExpectedValueFunction df, ExpectedValueFunction controlDF,
                                           int originX, int originY, int width, int height,
                                           ColorScale cs, boolean sameChr, NormalizationType controlNormalizationType) {
@@ -419,7 +370,7 @@ public class HeatmapRenderer {
         }
     }
 
-    private Map<String, Block> convertBlockListToMap(List<Block> ctrlBlocks, MatrixZoomData controlZD) {
+    private Map<String, Block> convertBlockListToMap(List<Block> ctrlBlocks, GUIMatrixZoomData controlZD) {
         Map<String, Block> controlBlocks = new HashMap<>();
         for (Block b : ctrlBlocks) {
             controlBlocks.put(controlZD.getNormLessBlockKey(b), b);
@@ -428,7 +379,7 @@ public class HeatmapRenderer {
     }
 
     private void renderLogRatioWithAvgMap(List<Block> blocks, List<Block> ctrlBlocks,
-                                          MatrixZoomData zd, MatrixZoomData controlZD,
+                                          GUIMatrixZoomData zd, GUIMatrixZoomData controlZD,
                                           int originX, int originY, int width, int height,
                                           ColorScale cs, boolean sameChr, NormalizationType controlNormalizationType) {
         float averageCount = (float) zd.getAverageCount();
@@ -454,39 +405,8 @@ public class HeatmapRenderer {
         }
     }
 
-    private void renderDiffMap(List<Block> blocks, List<Block> ctrlBlocks,
-                               MatrixZoomData zd, MatrixZoomData controlZD,
-                               int originX, int originY, int width, int height, ColorScale cs,
-                               boolean sameChr, NormalizationType controlNormalizationType) {
-        float averageCount = (float) zd.getAverageCount();
-        float ctrlAverageCount = controlZD == null ? 1 : (float) controlZD.getAverageCount();
-        float averageAcrossMapAndControl = (averageCount / 2f + ctrlAverageCount / 2f);
-
-        Map<String, Block> controlBlocks = convertBlockListToMap(ctrlBlocks, controlZD);
-
-        for (Block b : blocks) {
-            Collection<ContactRecord> recs = b.getContactRecords();
-
-            Map<String, ContactRecord> controlRecords = linkRecords(zd, controlNormalizationType, controlBlocks, b);
-
-            if (recs != null) {
-                for (ContactRecord rec : recs) {
-                    ContactRecord ctrlRecord = controlRecords.get(rec.getKey(controlNormalizationType));
-                    if (ctrlRecord != null) {
-                        float num = rec.getCounts() / averageCount;
-                        float den = ctrlRecord.getCounts() / ctrlAverageCount;
-                        float score = (num - den) * averageAcrossMapAndControl;
-                        if (Float.isNaN(score) || Float.isInfinite(score)) continue;
-                        setColor(cs.getColor(score));
-                        intraPainting2(originX, originY, width, height, sameChr, rec);
-                    }
-                }
-            }
-        }
-    }
-
     private void renderRatioWithExpMap(List<Block> blocks, List<Block> ctrlBlocks,
-                                       MatrixZoomData zd, MatrixZoomData controlZD,
+                                       GUIMatrixZoomData zd, GUIMatrixZoomData controlZD,
                                        int chr1, ExpectedValueFunction df, ExpectedValueFunction controlDF,
                                        float pseudoCountObs, float pseudoCountCtrl,
                                        int originX, int originY, int width, int height,
@@ -513,7 +433,7 @@ public class HeatmapRenderer {
     }
 
     private void renderRatioWithAvgMap(List<Block> blocks, List<Block> ctrlBlocks,
-                                       MatrixZoomData zd, MatrixZoomData controlZD,
+                                       GUIMatrixZoomData zd, GUIMatrixZoomData controlZD,
                                        float pseudoCountObs, float pseudoCountCtrl,
                                        int originX, int originY, int width, int height,
                                        ColorScale cs, boolean sameChr, NormalizationType controlNormalizationType) {
@@ -540,75 +460,7 @@ public class HeatmapRenderer {
         }
     }
 
-    private void renderOERatioMinus(List<Block> blocks, List<Block> ctrlBlocks,
-                                    MatrixZoomData zd, MatrixZoomData controlZD,
-                                    ExpectedValueFunction df, ExpectedValueFunction controlDF, int chr1,
-                                    float pseudoCountObs, float pseudoCountCtrl, int originX, int originY,
-                                    int width, int height, ColorScale cs, boolean sameChr,
-                                    NormalizationType controlNormalizationType) {
-        Map<String, Block> controlBlocks = convertBlockListToMap(ctrlBlocks, controlZD);
-
-        float averageCount = (float) zd.getAverageCount();
-        float ctrlAverageCount = controlZD == null ? 1 : (float) controlZD.getAverageCount();
-
-        if (sameChr) {
-            for (Block b : blocks) {
-                Collection<ContactRecord> recs = b.getContactRecords();
-                if (recs != null) {
-
-                    Map<String, ContactRecord> controlRecords = linkRecords(zd, controlNormalizationType, controlBlocks, b);
-
-                    for (ContactRecord rec : recs) {
-                        ContactRecord ctrlRecord = controlRecords.get(rec.getKey(controlNormalizationType));
-                        if (ctrlRecord != null) {
-                            float num = rec.getCounts() + pseudoCountObs;
-                            float den = ctrlRecord.getCounts() + pseudoCountCtrl;
-
-                            float obsExpected = getExpectedValue(df, chr1, rec) + pseudoCountObs;
-                            float ctrlExpected = getExpectedValue(controlDF, chr1, rec) + pseudoCountCtrl;
-
-                            float score = (num / obsExpected) - (den / ctrlExpected);
-                            if (Float.isNaN(score) || Float.isInfinite(score)) continue;
-
-                            setColor(cs.getColor(score));
-
-                            intraPainting(originX, originY, width, height, rec);
-                        }
-                    }
-                }
-            }
-        } else {
-            for (Block b : blocks) {
-                Collection<ContactRecord> recs = b.getContactRecords();
-                if (recs != null) {
-
-                    Map<String, ContactRecord> controlRecords = linkRecords(zd, controlNormalizationType, controlBlocks, b);
-
-                    float obsExpected = (averageCount > 0 ? averageCount : 1);
-                    float ctrlExpected = (ctrlAverageCount > 0 ? ctrlAverageCount : 1);
-                    obsExpected += pseudoCountObs;
-                    ctrlExpected += pseudoCountCtrl;
-
-                    for (ContactRecord rec : recs) {
-                        ContactRecord ctrlRecord = controlRecords.get(rec.getKey(controlNormalizationType));
-                        if (ctrlRecord != null) {
-                            float num = rec.getCounts() + pseudoCountObs;
-                            float den = ctrlRecord.getCounts() + pseudoCountCtrl;
-
-                            float score = (num / obsExpected) - (den / ctrlExpected);
-                            if (Float.isNaN(score) || Float.isInfinite(score)) continue;
-
-                            setColor(cs.getColor(score));
-
-                            aboveDiagonalPainting(originX, originY, width, height, rec);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private Map<String, ContactRecord> linkRecords(MatrixZoomData zd, NormalizationType controlNormalizationType, Map<String, Block> controlBlocks, Block b) {
+    private Map<String, ContactRecord> linkRecords(GUIMatrixZoomData zd, NormalizationType controlNormalizationType, Map<String, Block> controlBlocks, Block b) {
         Map<String, ContactRecord> controlRecords = new HashMap<>();
         Block cb = controlBlocks.get(zd.getNormLessBlockKey(b));
         if (cb != null) {
@@ -620,7 +472,7 @@ public class HeatmapRenderer {
     }
 
     private void renderOERatioMap(List<Block> blocks, List<Block> ctrlBlocks,
-                                  MatrixZoomData zd, MatrixZoomData controlZD,
+                                  GUIMatrixZoomData zd, GUIMatrixZoomData controlZD,
                                   ExpectedValueFunction df, ExpectedValueFunction controlDF,
                                   int originX, int originY, int width, int height,
                                   float pseudoCountObs, float pseudoCountCtrl, ColorScale cs, boolean sameChr,
@@ -686,7 +538,7 @@ public class HeatmapRenderer {
         }
     }
 
-    private void renderNewBaseEMap(int chr1, List<Block> blocks, ExpectedValueFunction df, MatrixZoomData zd,
+    private void renderNewBaseEMap(int chr1, List<Block> blocks, ExpectedValueFunction df, GUIMatrixZoomData zd,
                                    ColorScale cs, boolean sameChr, int originX, int originY, int width, int height) {
         if (sameChr) {
             if (df != null) {
@@ -726,7 +578,7 @@ public class HeatmapRenderer {
         }
     }
 
-    private void renderExpectedMap(MatrixZoomData zd, ExpectedValueFunction df,
+    private void renderExpectedMap(GUIMatrixZoomData zd, ExpectedValueFunction df,
                                    boolean sameChr, ColorScale cs, int originX, int originY,
                                    int width, int height, int chr1) {
         if (sameChr) {
@@ -753,56 +605,9 @@ public class HeatmapRenderer {
         }
     }
 
-    private void renderLogObsMinusExpVSMap(int chr1, List<Block> blocks, List<Block> ctrlBlocks,
-                                           ExpectedValueFunction df, ExpectedValueFunction controlDF,
-                                           MatrixZoomData zd, MatrixZoomData controlZD, ColorScale cs,
-                                           boolean sameChr, int originX, int originY, int width, int height) {
-        if (zd != null && df != null) {
-            for (Block b : blocks) {
-                Collection<ContactRecord> recs = b.getContactRecords();
-                if (recs != null) {
-                    for (ContactRecord rec : recs) {
-
-                        float score = rec.getCounts();
-                        if (Float.isNaN(score) || Float.isInfinite(score)) continue;
-
-                        float expected = getExpectedValue(df, chr1, rec);
-                        score = rec.getCounts() - expected;
-                        setColor(cs.getColor(score));
-
-                        aboveDiagonalPainting(originX, originY, width, height, rec);
-                    }
-                }
-            }
-        }
-        if (sameChr && controlZD != null && controlDF != null) {
-            for (Block b : ctrlBlocks) {
-                Collection<ContactRecord> recs = b.getContactRecords();
-                if (recs != null) {
-                    for (ContactRecord rec : recs) {
-
-                        float score = rec.getCounts();
-                        if (Float.isNaN(score) || Float.isInfinite(score)) continue;
-
-                        int binX = rec.getBinX();
-                        int binY = rec.getBinY();
-
-                        if (binX != binY) {
-                            float expected = getExpectedValue(controlDF, chr1, rec);
-                            score = rec.getCounts() - expected;
-
-                            setColor(cs.getColor(score));
-                            belowDiagonalPainting(originX, originY, width, height, rec);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private void renderLogObsOverExpVSMap(int chr1, List<Block> blocks, List<Block> ctrlBlocks,
                                           ExpectedValueFunction df, ExpectedValueFunction controlDF,
-                                          MatrixZoomData zd, MatrixZoomData controlZD, ColorScale cs,
+                                          GUIMatrixZoomData zd, GUIMatrixZoomData controlZD, ColorScale cs,
                                           boolean sameChr, int originX, int originY, int width, int height) {
         if (zd != null && df != null) {
             for (Block b : blocks) {
@@ -842,7 +647,7 @@ public class HeatmapRenderer {
     }
 
     private void renderSimpleLogVSMap(List<Block> blocks, List<Block> ctrlBlocks,
-                                      MatrixZoomData zd, MatrixZoomData controlZD,
+                                      GUIMatrixZoomData zd, GUIMatrixZoomData controlZD,
                                       int originX, int originY, int width, int height, ColorScale cs, boolean sameChr) {
 
         float averageCount = (float) zd.getAverageCount();
@@ -885,7 +690,7 @@ public class HeatmapRenderer {
 
 
     private void renderSimpleVSMap(List<Block> blocks, List<Block> ctrlBlocks,
-                                   MatrixZoomData zd, MatrixZoomData controlZD,
+                                   GUIMatrixZoomData zd, GUIMatrixZoomData controlZD,
                                    int originX, int originY, int width, int height, ColorScale cs, boolean sameChr) {
         float averageCount = (float) zd.getAverageCount();
         float ctrlAverageCount = (float) controlZD.getAverageCount();
@@ -927,7 +732,7 @@ public class HeatmapRenderer {
     }
 
     private void renderLogObservedBaseExpectedMap(int chromosome, List<Block> blocks, ExpectedValueFunction df,
-                                                  MatrixZoomData zd, ColorScale cs, boolean sameChr,
+                                                  GUIMatrixZoomData zd, ColorScale cs, boolean sameChr,
                                                   int originX, int originY, int width, int height) {
         if (sameChr) {
             if (df != null) {
@@ -969,7 +774,7 @@ public class HeatmapRenderer {
 
     private void renderObservedOverExpectedVSMap(int chromosome, List<Block> blocks, List<Block> ctrlBlocks,
                                                  ExpectedValueFunction df, ExpectedValueFunction controlDF,
-                                                 MatrixZoomData zd, MatrixZoomData controlZD, ColorScale cs,
+                                                 GUIMatrixZoomData zd, GUIMatrixZoomData controlZD, ColorScale cs,
                                                  boolean sameChr, int originX, int originY, int width, int height,
                                                  float pseudoCountObs, float pseudoCountCtrl) {
         if (zd != null && blocks != null && df != null) {
@@ -1025,7 +830,7 @@ public class HeatmapRenderer {
     }
 
     private void renderObservedOverExpectedMap(int chromosome, List<Block> blocks, ExpectedValueFunction df,
-                                               MatrixZoomData zd, ColorScale cs, boolean sameChr,
+                                               GUIMatrixZoomData zd, ColorScale cs, boolean sameChr,
                                                int originX, int originY, int width, int height, float pseudoCount) {
         if (sameChr) {
             if (df != null) {
@@ -1092,7 +897,7 @@ public class HeatmapRenderer {
         }
     }
 
-    private void renderPearsonVS(MatrixZoomData zd, MatrixZoomData controlZD,
+    private void renderPearsonVS(GUIMatrixZoomData zd, GUIMatrixZoomData controlZD,
                                  ExpectedValueFunction df, ExpectedValueFunction controlDF,
                                  String key, int originX, int originY,
                                  int width, int height) {
@@ -1107,7 +912,7 @@ public class HeatmapRenderer {
         renderDenseMatrix(bm1, bm2, originX, originY, width, height, pearsonColorScale, key, null);
     }
 
-    private void renderPearson(MatrixZoomData zd, ExpectedValueFunction df,
+    private void renderPearson(GUIMatrixZoomData zd, ExpectedValueFunction df,
                                String key, int originX, int originY, int width, int height) {
         BasicMatrix bm = zd.getPearsons(df);
         PearsonColorScale pearsonColorScale = colorScaleHandler.getPearsonColorScale();
@@ -1117,32 +922,7 @@ public class HeatmapRenderer {
         renderDenseMatrix(bm, null, originX, originY, width, height, pearsonColorScale, key, null);
     }
 
-    private void renderNorm2VS(MatrixZoomData zd, MatrixZoomData controlZD,
-                               boolean isWholeGenome, NormalizationType observedNormalizationType,
-                               NormalizationType controlNormalizationType, String key,
-                               MatrixType displayOption, int originX, int originY, int width, int height) {
-        BasicMatrix bm1 = zd.getNormSquared(observedNormalizationType);
-        BasicMatrix bm2 = controlZD.getNormSquared(controlNormalizationType);
-
-        double percentile = isWholeGenome ? 99 : 95;
-        float max = colorScaleHandler.computePercentile(bm1, bm2, percentile);
-
-        ColorScale cs = colorScaleHandler.getColorScale(key, displayOption, isWholeGenome, null, max);
-
-        renderDenseMatrix(bm1, bm2, originX, originY, width, height, null, key, cs);
-    }
-
-    private void renderNorm2(MatrixZoomData zd, boolean isWholeGenome,
-                             NormalizationType normType, String key, MatrixType displayOption,
-                             int originX, int originY, int width, int height) {
-        BasicMatrix bm = zd.getNormSquared(normType);
-        double percentile = isWholeGenome ? 99 : 95;
-        float max = colorScaleHandler.computePercentile(bm, percentile);
-        ColorScale cs = colorScaleHandler.getColorScale(key, displayOption, isWholeGenome, null, max);
-        renderDenseMatrix(bm, null, originX, originY, width, height, null, key, cs);
-    }
-
-    private List<Block> getTheBlocks(MatrixZoomData zd, int x, int y, int maxX, int maxY, NormalizationType normType, boolean isImportant) {
+    private List<Block> getTheBlocks(GUIMatrixZoomData zd, int x, int y, int maxX, int maxY, NormalizationType normType, boolean isImportant) {
         if (zd != null) {
             try {
                 return zd.getNormalizedBlocksOverlapping(x, y, maxX, maxY, normType, isImportant, false);
@@ -1190,10 +970,6 @@ public class HeatmapRenderer {
                 }
             }
         }
-    }
-
-    public void updateColorSliderFromColorScale(SuperAdapter superAdapter, MatrixType displayOption, String cacheKey) {
-        colorScaleHandler.updateColorSliderFromColorScale(superAdapter, displayOption, cacheKey);
     }
 
     private void interPainting(int originX, int originY, int width, int height, ContactRecord rec) {

@@ -24,11 +24,11 @@
 
 package juicebox.mapcolorui;
 
-import juicebox.data.HiCFileTools;
-import juicebox.data.MatrixZoomData;
+import javastraw.feature2D.Feature2D;
+import javastraw.tools.HiCFileTools;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.track.HiCGridAxis;
 import juicebox.track.feature.AnnotationLayerHandler;
-import juicebox.track.feature.Feature2D;
 
 import java.awt.*;
 import java.util.List;
@@ -40,7 +40,7 @@ public class FeatureRenderer {
 
     public static final Color HIGHLIGHT_COLOR = Color.BLACK;
 
-    public static void render(Graphics2D g2, AnnotationLayerHandler annotationHandler, List<Feature2D> loops, MatrixZoomData zd,
+    public static void render(Graphics2D g2, AnnotationLayerHandler annotationHandler, List<Feature2D> loops, GUIMatrixZoomData zd,
                               double binOriginX, double binOriginY, double scaleFactor,
                               List<Feature2D> highlightedFeatures, boolean showFeatureHighlight,
                               int maxWidth, int maxHeight) {
@@ -72,9 +72,13 @@ public class FeatureRenderer {
                 }
 
                 if (feature2DHandler.getIsTransparent()) {
-                    g2.setColor(feature.getTranslucentColor());
+                    g2.setColor(translucentColorFrom(feature));
                 } else {
-                    g2.setColor(feature.getColor());
+                    if (feature.getStatus()) {
+                        g2.setColor(HIGHLIGHT_COLOR);
+                    } else {
+                        g2.setColor(feature.getColor());
+                    }
                 }
 
                 Rectangle rect = feature2DHandler.getRectangleFromFeature(xAxis, yAxis, feature, binOriginX, binOriginY, scaleFactor);
@@ -98,7 +102,7 @@ public class FeatureRenderer {
         }
 
         if (highlightedFeatures != null && highlightedFeatures.size() != 0 && showFeatureHighlight) {
-            g2.setColor(highlightedFeatures.get(0).getColor());
+            g2.setColor(HIGHLIGHT_COLOR);
 
             for (Feature2D highlightedFeature : highlightedFeatures) {
                 int binStart1 = xAxis.getBinNumberForGenomicPosition(highlightedFeature.getStart1());
@@ -106,7 +110,6 @@ public class FeatureRenderer {
                 int binStart2 = yAxis.getBinNumberForGenomicPosition(highlightedFeature.getStart2());
                 int binEnd2 = yAxis.getBinNumberForGenomicPosition(highlightedFeature.getEnd2());
 
-                g2.setColor(HIGHLIGHT_COLOR);
                 if (HiCFileTools.equivalentChromosome(highlightedFeature.getChr1(), zd.getChr1())) {
                     int x = (int) ((binStart1 - binOriginX) * scaleFactor);
                     int h = (int) Math.max(1, scaleFactor * (binEnd1 - binStart1));
@@ -123,6 +126,11 @@ public class FeatureRenderer {
                 }
             }
         }
+    }
+
+    public static Color translucentColorFrom(Feature2D feature) {
+        Color c0 = feature.getColor();
+        return new Color(c0.getRed(), c0.getGreen(), c0.getBlue(), 50);
     }
 
     private static void plotSimple(Graphics2D g2, int x, int y, int w, int h) {

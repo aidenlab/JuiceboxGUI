@@ -24,18 +24,16 @@
 
 package juicebox.state;
 
+import javastraw.feature2D.Feature2DList;
+import javastraw.reader.Dataset;
+import javastraw.reader.type.HiCZoom;
 import juicebox.Context;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
-import juicebox.data.Dataset;
 import juicebox.gui.SuperAdapter;
-import juicebox.track.HiCCoverageDataSource;
-import juicebox.track.HiCDataSource;
-import juicebox.track.HiCDataTrack;
-import juicebox.track.HiCTrack;
+import juicebox.track.*;
 import juicebox.track.feature.AnnotationLayerHandler;
-import juicebox.track.feature.Feature2DList;
-import juicebox.windowui.HiCZoom;
+import org.broad.igv.util.ResourceLocator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,8 +103,10 @@ public class XMLFileHandling {
         }
         if (visibleLoops != null && !visibleLoops.isEmpty()) {
             try {
-                textToWrite += "$$" + dataset.getPeaks().toString() + "$$" +
-                        dataset.getBlocks().toString() + "$$" + dataset.getSuperLoops().toString();
+                ResourceLocator[] locators = ResourceFinder.get2DResources(hic.getDataset());
+
+                textToWrite += "$$" + locators[0].toString() + "$$" +
+                        locators[1].toString() + "$$" + locators[2].toString();
             } catch (Exception ignored) {
 
             }

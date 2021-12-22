@@ -25,12 +25,14 @@
 
 package juicebox.windowui;
 
+import javastraw.reader.expected.ExpectedValueFunction;
+import javastraw.reader.norm.NormalizationVector;
+import javastraw.reader.type.MatrixType;
+import javastraw.reader.type.NormalizationHandler;
 import juicebox.DirectoryManager;
 import juicebox.HiC;
 import juicebox.MainWindow;
-import juicebox.data.ExpectedValueFunction;
-import juicebox.data.MatrixZoomData;
-import juicebox.data.NormalizationVector;
+import juicebox.data.GUIMatrixZoomData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,7 +54,7 @@ public class DumpDialog extends JFileChooser {
         super();
         int result = showSaveDialog(mainWindow);
         if (result == JFileChooser.APPROVE_OPTION) {
-            MatrixZoomData zd;
+            GUIMatrixZoomData zd;
             try {
                 zd = hic.getZd();
             } catch (Exception e) {
@@ -65,15 +67,15 @@ public class DumpDialog extends JFileChooser {
                     ExpectedValueFunction df = null;
                     MatrixType matrixType = hic.getDisplayOption();
                     if (MatrixType.isExpectedValueType(matrixType)) {
-                        df = hic.getDataset().getExpectedValues(zd.getZoom(), hic.getObsNormalizationType());
+                        df = hic.getDataset().getExpectedValues(zd.getZoom(), hic.getObsNormalizationType(), true);
                         if (df == null) {
                             JOptionPane.showMessageDialog(this, box.getSelectedItem() + " not available", "Error",
                                     JOptionPane.ERROR_MESSAGE);
                             return;
                         }
                     }
-                    zd.dump(new PrintWriter(getSelectedFile()), null, hic.getObsNormalizationType(), matrixType,
-                            true, hic.getCurrentRegionWindowGenomicPositions(), df, false);
+                    zd.dump(new PrintWriter(getSelectedFile()), hic.getObsNormalizationType(), matrixType,
+                            hic.getCurrentRegionWindowGenomicPositions(), df);
 
                 } else if (box.getSelectedItem().equals("Norm vector")) {
 
@@ -94,7 +96,7 @@ public class DumpDialog extends JFileChooser {
                 } else if (box.getSelectedItem().toString().contains("Expected")) {
 
                     final ExpectedValueFunction df = hic.getDataset().getExpectedValues(zd.getZoom(),
-                            hic.getObsNormalizationType());
+                            hic.getObsNormalizationType(), true);
                     if (df == null) {
                         JOptionPane.showMessageDialog(this, box.getSelectedItem() + " not available", "Error",
                                 JOptionPane.ERROR_MESSAGE);

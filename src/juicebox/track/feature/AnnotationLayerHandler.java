@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -24,10 +24,12 @@
 
 package juicebox.track.feature;
 
+import javastraw.feature2D.Feature2D;
+import javastraw.feature2D.Feature2DList;
+import javastraw.reader.basics.ChromosomeHandler;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
-import juicebox.data.ChromosomeHandler;
-import juicebox.data.MatrixZoomData;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
 import juicebox.mapcolorui.Feature2DHandler;
 import juicebox.mapcolorui.FeatureRenderer;
@@ -389,7 +391,7 @@ public class AnnotationLayerHandler {
 	//helper for getannotatemenu
 	private long geneXPos(HiC hic, int x, int displacement) {
 		try {
-			final MatrixZoomData zd = hic.getZd();
+            final GUIMatrixZoomData zd = hic.getZd();
 			if (zd == null) return -1;
 			HiCGridAxis xGridAxis = zd.getXGridAxis();
 			int binX = getXBin(hic, x) + displacement;
@@ -402,7 +404,7 @@ public class AnnotationLayerHandler {
 	//helper for getannotatemenu
 	private long geneYPos(HiC hic, int y, int displacement) {
 		try {
-			final MatrixZoomData zd = hic.getZd();
+            final GUIMatrixZoomData zd = hic.getZd();
 			if (zd == null) return -1;
 			HiCGridAxis yGridAxis = zd.getYGridAxis();
 			int binY = getYBin(hic, y) + displacement;
@@ -444,7 +446,7 @@ public class AnnotationLayerHandler {
         this.annotationLayer = annotationLayer;
     }
 
-    public List<Feature2D> getNearbyFeatures(MatrixZoomData zd, int chr1Idx, int chr2Idx, int centerX, int centerY,
+    public List<Feature2D> getNearbyFeatures(GUIMatrixZoomData zd, int chr1Idx, int chr2Idx, int centerX, int centerY,
                                              int numberOfLoopsToFind, double binOriginX,
                                              double binOriginY, double scaleFactor) {
         return annotationLayer.getNearbyFeatures(zd, chr1Idx, chr2Idx, centerX, centerY, numberOfLoopsToFind,
@@ -520,17 +522,17 @@ public class AnnotationLayerHandler {
         }
     }
 
-    private List<Feature2D> selectSingleRegion(int chr1Idx, int chr2Idx, int unscaledX, int unscaledY, MatrixZoomData zd, HiC hic) {
-		List<Feature2D> selectedFeatures = new ArrayList<>();
-	
-		final HiCGridAxis xAxis = zd.getXGridAxis();
-		final HiCGridAxis yAxis = zd.getYGridAxis();
-		final double binOriginX = hic.getXContext().getBinOrigin();
-		final double binOriginY = hic.getYContext().getBinOrigin();
-		final double scale = hic.getScaleFactor();
-	
-		long x = (long) (((unscaledX / scale) + binOriginX) * xAxis.getBinSize());
-		long y = (long) (((unscaledY / scale) + binOriginY) * yAxis.getBinSize());
+    private List<Feature2D> selectSingleRegion(int chr1Idx, int chr2Idx, int unscaledX, int unscaledY, GUIMatrixZoomData zd, HiC hic) {
+        List<Feature2D> selectedFeatures = new ArrayList<>();
+
+        final HiCGridAxis xAxis = zd.getXGridAxis();
+        final HiCGridAxis yAxis = zd.getYGridAxis();
+        final double binOriginX = hic.getXContext().getBinOrigin();
+        final double binOriginY = hic.getYContext().getBinOrigin();
+        final double scale = hic.getScaleFactor();
+
+        long x = (long) (((unscaledX / scale) + binOriginX) * xAxis.getBinSize());
+        long y = (long) (((unscaledY / scale) + binOriginY) * yAxis.getBinSize());
 	
 		Feature2DList features = this.getAnnotationLayer().getFeatureHandler().getAllVisibleLoops();
 		List<Feature2D> contigs = features.get(chr1Idx, chr2Idx);
@@ -542,13 +544,13 @@ public class AnnotationLayerHandler {
 		return selectedFeatures;
 	}
 
-    public void removeFromList(MatrixZoomData zd, int chr1Idx, int chr2Idx, int centerX, int centerY, int numberOfLoopsToFind,
+    public void removeFromList(GUIMatrixZoomData zd, int chr1Idx, int chr2Idx, int centerX, int centerY, int numberOfLoopsToFind,
                                double binOriginX, double binOriginY, double scaleFactor, Feature2D feature) {
         annotationLayer.removeFromList(zd, chr1Idx, chr2Idx, centerX, centerY, numberOfLoopsToFind,
                 binOriginX, binOriginY, scaleFactor, feature);
     }
 
-    public boolean hasLoop(MatrixZoomData zd, int chr1Idx, int chr2Idx, int centerX, int centerY, int numberOfLoopsToFind,
+    public boolean hasLoop(GUIMatrixZoomData zd, int chr1Idx, int chr2Idx, int centerX, int centerY, int numberOfLoopsToFind,
                            double binOriginX, double binOriginY, double scaleFactor, Feature2D feature) {
         return annotationLayer.hasLoop(zd, chr1Idx, chr2Idx, centerX, centerY, numberOfLoopsToFind,
                 binOriginX, binOriginY, scaleFactor, feature);
@@ -802,7 +804,7 @@ public class AnnotationLayerHandler {
     }
 
     public List<Feature2DGuiContainer> convertToFeaturePairs(AnnotationLayerHandler handler,
-                                                             List<Feature2D> loops, MatrixZoomData zd, double binOriginX, double binOriginY, double scaleFactor) {
+                                                             List<Feature2D> loops, GUIMatrixZoomData zd, double binOriginX, double binOriginY, double scaleFactor) {
         return annotationLayer.getFeatureHandler().convertFeaturesToFeaturePairs(handler, loops, zd, binOriginX, binOriginY, scaleFactor);
     }
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2020 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -27,7 +27,6 @@ package juicebox.track;
 import juicebox.Context;
 import juicebox.HiC;
 import juicebox.assembly.OneDimAssemblyTrackLifter;
-import juicebox.data.censoring.OneDimTrackCensoring;
 import juicebox.gui.SuperAdapter;
 import org.broad.igv.renderer.DataRange;
 import org.broad.igv.track.WindowFunction;
@@ -35,12 +34,9 @@ import org.broad.igv.util.ResourceLocator;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 
 /**
  * @author jrobinso
@@ -80,12 +76,7 @@ public class HiCDataTrack extends HiCTrack {
         double startBin = context.getBinOrigin();
         double endBin = startBin + (width / hic.getScaleFactor());
 
-        // only show parts of things
-        if (hic.getChromosomeHandler().isCustomChromosome(context.getChromosome())) {
-            data = OneDimTrackCensoring.getFilteredData(dataSource, hic, context.getChromosome(), (int) startBin, (int) endBin + 1,
-                    gridAxis, hic.getScaleFactor(), windowFunction);
-            // fix this case w ordering modifications
-        } else if (SuperAdapter.assemblyModeCurrentlyActive) {
+        if (SuperAdapter.assemblyModeCurrentlyActive) {
             data = OneDimAssemblyTrackLifter.liftDataArray(dataSource, hic, context.getChromosome(), (int) startBin, (int) endBin + 1, gridAxis, hic.getScaleFactor(), windowFunction);
         } else {
             data = dataSource.getData(context.getChromosome(), (int) startBin, (int) endBin + 1,
@@ -218,28 +209,25 @@ public class HiCDataTrack extends HiCTrack {
         double bin = (binOrigin + (x / scaleFactor));
 
         HiCDataPoint target = new HiCDataAdapter.DataAccumulator(bin);
-        int idx = Arrays.binarySearch(data, target, new Comparator<HiCDataPoint>() {
-            @Override
-            public int compare(HiCDataPoint weightedSum, HiCDataPoint weightedSum1) {
-                final double binNumber = weightedSum.getBinNumber();
-                final double binNumber1 = weightedSum1.getBinNumber();
+        int idx = Arrays.binarySearch(data, target, (weightedSum, weightedSum1) -> {
+            final double binNumber = weightedSum.getBinNumber();
+            final double binNumber1 = weightedSum1.getBinNumber();
 
-                int bin = (int) binNumber;
-                int bin1 = (int) binNumber1;
-                if (bin == bin1) {
-                    double rem = binNumber - bin;
-                    double rem1 = binNumber1 - bin;
-                    if (Math.abs(rem - rem1) < substepSize) {
-                        return 0;
-                    } else {
-                        if (rem > rem1) return 1;
-                        else return -1;
-                    }
+            int bin12 = (int) binNumber;
+            int bin1 = (int) binNumber1;
+            if (bin12 == bin1) {
+                double rem = binNumber - bin12;
+                double rem1 = binNumber1 - bin12;
+                if (Math.abs(rem - rem1) < substepSize) {
+                    return 0;
                 } else {
-                    return bin - bin1;
+                    if (rem > rem1) return 1;
+                    else return -1;
                 }
-
+            } else {
+                return bin12 - bin1;
             }
+
         });
 
 
@@ -269,14 +257,11 @@ public class HiCDataTrack extends HiCTrack {
         menu.addSeparator();
 
         JMenuItem menuItem = new JMenuItem("Configure track...");
-        menuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                final TrackConfigDialog trackConfigDialog = new TrackConfigDialog(superAdapter.getMainWindow(), HiCDataTrack.this);
-                trackConfigDialog.setVisible(true);
-                if (trackConfigDialog.isNotCanceled()) {
-                    superAdapter.updateTrackPanel();
-                }
+        menuItem.addActionListener(e -> {
+            final TrackConfigDialog trackConfigDialog = new TrackConfigDialog(superAdapter.getMainWindow(), HiCDataTrack.this);
+            trackConfigDialog.setVisible(true);
+            if (trackConfigDialog.isNotCanceled()) {
+                superAdapter.updateTrackPanel();
             }
         });
         menu.add(menuItem);

@@ -25,12 +25,13 @@
 package juicebox.windowui;
 
 import com.jidesoft.swing.JideButton;
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.basics.ChromosomeHandler;
+import javastraw.reader.type.HiCZoom;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.assembly.Scaffold;
-import juicebox.data.ChromosomeHandler;
 import juicebox.data.GeneLocation;
-import juicebox.data.basics.Chromosome;
 import juicebox.gui.SuperAdapter;
 import juicebox.tools.utils.juicer.GeneTools;
 import juicebox.track.HiCTrack;
@@ -196,7 +197,7 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
 
         //Read resolution:
         int outBinSize = 0;
-        HiC.Unit resolutionUnits = HiC.Unit.BP;
+        HiCZoom.HiCUnit resolutionUnits = HiCZoom.HiCUnit.BP;
         int estimatedOutBinSize = Math.max(topChrPositions[3], leftChrPositions[3]);
 
         if (topChrTokens.length > 3 || (topDashChrTokens.length == 1 && topChrTokens.length > 2)) {
@@ -204,7 +205,7 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
                 int[] resolutionParameters = extractResolutionParametersFromTokens(topChrTokens, topDashChrTokens, positionChrTop);
                 outBinSize = resolutionParameters[0];
                 if (resolutionParameters[1] < 0) {
-                    resolutionUnits = HiC.Unit.FRAG;
+                    resolutionUnits = HiCZoom.HiCUnit.FRAG;
                 }
             } catch (Exception e) {
                 return;
@@ -214,7 +215,7 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
                 int[] resolutionParameters = extractResolutionParametersFromTokens(leftChrTokens, leftDashChrTokens, positionChrLeft);
                 outBinSize = resolutionParameters[0];
                 if (resolutionParameters[1] < 0) {
-                    resolutionUnits = HiC.Unit.FRAG;
+                    resolutionUnits = HiCZoom.HiCUnit.FRAG;
                 }
             } catch (Exception e) {
                 return;
@@ -419,7 +420,7 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
             }
         }
         try {
-            hic.setLocation(chr1Name, chr2Name, HiC.Unit.BP, hic.getZd().getBinSize(),
+            hic.setLocation(chr1Name, chr2Name, HiCZoom.HiCUnit.BP, hic.getZd().getBinSize(),
                     location1, location2, hic.getScaleFactor(),
                     HiC.ZoomCallType.STANDARD, "Assembly Goto", true);
             superAdapter.setNormalizationDisplayState();
@@ -454,7 +455,7 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
             geneZoomResolution = Collections.min(bpResolutions);
         }
 
-        hic.setLocation(location1.getChromosome().getName(), location2.getChromosome().getName(), HiC.Unit.BP, geneZoomResolution,
+        hic.setLocation(location1.getChromosome().getName(), location2.getChromosome().getName(), HiCZoom.HiCUnit.BP, geneZoomResolution,
                 location1.getCenterPosition(), location2.getCenterPosition(), hic.getScaleFactor(),
                 HiC.ZoomCallType.STANDARD, "Gene Goto", true);
 

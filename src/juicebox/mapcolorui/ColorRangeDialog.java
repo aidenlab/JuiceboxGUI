@@ -24,8 +24,8 @@
 
 package juicebox.mapcolorui;
 
+import javastraw.reader.type.MatrixType;
 import juicebox.gui.SuperAdapter;
-import juicebox.windowui.MatrixType;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

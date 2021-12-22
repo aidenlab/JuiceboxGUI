@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -34,18 +34,15 @@ public class HiCFixedGridAxis implements HiCGridAxis {
     private final long binCount;
     private final int binSize;
     private final int igvZoom;
-    private final int[] sites;
     private final double log2 = Math.log(2.0D);
     
-    public HiCFixedGridAxis(long binCount, int binSize, int[] sites) {
-        
+    public HiCFixedGridAxis(long binCount, int binSize) {
+
         this.binCount = binCount;
         this.binSize = binSize;
-        this.sites = sites;
-        
+
         // Compute an approximate igv zoom level
         igvZoom = Math.max(0, (int) (Math.log(binCount / 700) / log2));
-        
     }
 
     @Override
@@ -76,16 +73,6 @@ public class HiCFixedGridAxis implements HiCGridAxis {
     @Override
     public int getBinNumberForGenomicPosition(long genomicPosition) {
         return (int) (genomicPosition / ((double) binSize));
-    }
-
-    @Override
-    public int getBinNumberForFragment(int fragment) {
-
-        if (fragment < sites.length && fragment >= 0) {
-            int genomicPosition = sites[fragment];
-            return getBinNumberForGenomicPosition(genomicPosition);
-        }
-        throw new RuntimeException("Fragment: " + fragment + " is out of range");
     }
     
     @Override

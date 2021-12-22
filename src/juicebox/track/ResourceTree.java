@@ -24,10 +24,10 @@
 
 package juicebox.track;
 
+import javastraw.reader.type.NormalizationType;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.gui.SuperAdapter;
-import juicebox.windowui.NormalizationType;
 import org.broad.igv.ui.color.ColorUtilities;
 import org.broad.igv.ui.util.FileDialogUtils;
 import org.broad.igv.ui.util.LinkCheckBox;
@@ -440,7 +440,7 @@ public class ResourceTree {
         treeNode.setAllowsChildren(false);
         leafResources.add(resource);
 
-        locator = hic.getDataset().getSubcompartments();
+        locator = ResourceFinder.getSubcompartments(hic.getDataset());
         if (locator != null) {
             resource = new CheckableResource(SUBCOMPARTMENTS, false, locator);
 

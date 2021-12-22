@@ -25,33 +25,33 @@
 package juicebox.mapcolorui;
 
 import com.jidesoft.swing.JidePopupMenu;
+import javastraw.feature2D.Feature2D;
+import javastraw.reader.Matrix;
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.expected.ExpectedValueFunction;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyOperationExecutor;
 import juicebox.assembly.AssemblyScaffoldHandler;
 import juicebox.assembly.Scaffold;
-import juicebox.data.ChromosomeHandler;
-import juicebox.data.ExpectedValueFunction;
-import juicebox.data.Matrix;
-import juicebox.data.MatrixZoomData;
-import juicebox.data.basics.Chromosome;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
 import juicebox.track.HiCFragmentAxis;
 import juicebox.track.HiCGridAxis;
 import juicebox.track.feature.AnnotationLayer;
 import juicebox.track.feature.AnnotationLayerHandler;
-import juicebox.track.feature.Feature2D;
 import juicebox.track.feature.Feature2DGuiContainer;
 import juicebox.windowui.EditFeatureAttributesDialog;
-import juicebox.windowui.MatrixType;
 import org.broad.igv.util.Pair;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,9 +60,6 @@ import java.util.List;
 import static java.awt.Toolkit.getDefaultToolkit;
 
 public class HeatmapMouseHandler extends MouseAdapter {
-
-    public static final int clickDelay = 500;
-    private static final int clickLong = 400;
     private final List<Feature2D> highlightedFeatures = new ArrayList<>();
     private final List<Integer> selectedSuperscaffolds = new ArrayList<>();
     private final NumberFormat formatter = NumberFormat.getInstance();
@@ -156,23 +153,17 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
 
         final JMenuItem miUndoZoom = new JMenuItem("Undo Zoom");
-        miUndoZoom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                hic.setCursorPoint(new Point(xMousePos, yMousePos));
-                hic.undoZoomAction();
-            }
+        miUndoZoom.addActionListener(e -> {
+            hic.setCursorPoint(new Point(xMousePos, yMousePos));
+            hic.undoZoomAction();
         });
         miUndoZoom.setEnabled(hic.getZoomActionTracker().validateUndoZoom());
         menu.add(miUndoZoom);
 
         final JMenuItem miRedoZoom = new JMenuItem("Redo Zoom");
-        miRedoZoom.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                hic.setCursorPoint(new Point(xMousePos, yMousePos));
-                hic.redoZoomAction();
-            }
+        miRedoZoom.addActionListener(e -> {
+            hic.setCursorPoint(new Point(xMousePos, yMousePos));
+            hic.redoZoomAction();
         });
         miRedoZoom.setEnabled(hic.getZoomActionTracker().validateRedoZoom());
         menu.add(miRedoZoom);
@@ -182,207 +173,130 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
         final JCheckBoxMenuItem mi = new JCheckBoxMenuItem("Enable straight edge");
         mi.setSelected(straightEdgeEnabled);
-        mi.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (mi.isSelected()) {
-                    straightEdgeEnabled = true;
-                    diagonalEdgeEnabled = false;
-                    parent.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-                } else {
-                    straightEdgeEnabled = false;
-                    hic.setCursorPoint(null);
-                    parent.setCursor(Cursor.getDefaultCursor());
-                    parent.repaint();
-                    superAdapter.repaintTrackPanels();
-                }
+        mi.addActionListener(e -> {
+            if (mi.isSelected()) {
+                straightEdgeEnabled = true;
+                diagonalEdgeEnabled = false;
+                parent.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+            } else {
+                straightEdgeEnabled = false;
+                hic.setCursorPoint(null);
+                parent.setCursor(Cursor.getDefaultCursor());
+                parent.repaint();
+                superAdapter.repaintTrackPanels();
             }
         });
         menu.add(mi);
 
         final JCheckBoxMenuItem miv2 = new JCheckBoxMenuItem("Enable diagonal edge");
         miv2.setSelected(diagonalEdgeEnabled);
-        miv2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (miv2.isSelected()) {
-                    straightEdgeEnabled = false;
-                    diagonalEdgeEnabled = true;
-                    parent.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
-                } else {
-                    diagonalEdgeEnabled = false;
-                    hic.setDiagonalCursorPoint(null);
-                    parent.setCursor(Cursor.getDefaultCursor());
-                    parent.repaint();
-                    superAdapter.repaintTrackPanels();
-                }
-
+        miv2.addActionListener(e -> {
+            if (miv2.isSelected()) {
+                straightEdgeEnabled = false;
+                diagonalEdgeEnabled = true;
+                parent.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+            } else {
+                diagonalEdgeEnabled = false;
+                hic.setDiagonalCursorPoint(null);
+                parent.setCursor(Cursor.getDefaultCursor());
+                parent.repaint();
+                superAdapter.repaintTrackPanels();
             }
+
         });
         menu.add(miv2);
 
         // internally, single sync = what we previously called sync
         final JMenuItem mi3 = new JMenuItem("Broadcast Single Sync");
-        mi3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                hic.broadcastLocation();
-            }
-        });
+        mi3.addActionListener(e -> hic.broadcastLocation());
 
         // internally, continuous sync = what we used to call linked
         final JCheckBoxMenuItem mi4 = new JCheckBoxMenuItem("Broadcast Continuous Sync");
-        mi4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                final boolean isLinked = mi4.isSelected();
-                if (isLinked) {
-                    HiCGlobals.wasLinkedBeforeMousePress = false;
-                    hic.broadcastLocation();
-                }
-                hic.setLinkedMode(isLinked);
+        mi4.addActionListener(e -> {
+            final boolean isLinked = mi4.isSelected();
+            if (isLinked) {
+                HiCGlobals.wasLinkedBeforeMousePress = false;
+                hic.broadcastLocation();
             }
+            hic.setLinkedMode(isLinked);
         });
 
         final JCheckBoxMenuItem mi5 = new JCheckBoxMenuItem("Freeze hover text");
         mi5.setSelected(!superAdapter.isTooltipAllowedToUpdated());
-        mi5.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.toggleToolTipUpdates(!superAdapter.isTooltipAllowedToUpdated());
-            }
-        });
+        mi5.addActionListener(e -> superAdapter.toggleToolTipUpdates(!superAdapter.isTooltipAllowedToUpdated()));
 
         final JMenuItem mi6 = new JMenuItem("Copy hover text to clipboard");
-        mi6.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                StringSelection stringSelection = new StringSelection(superAdapter.getToolTip());
-                Clipboard clpbrd = getDefaultToolkit().getSystemClipboard();
-                clpbrd.setContents(stringSelection, null);
-            }
+        mi6.addActionListener(e -> {
+            StringSelection stringSelection = new StringSelection(superAdapter.getToolTip());
+            Clipboard clpbrd = getDefaultToolkit().getSystemClipboard();
+            clpbrd.setContents(stringSelection, null);
         });
 
         final JMenuItem mi7 = new JMenuItem("Copy top position to clipboard");
-        mi7.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                StringSelection stringSelection = new StringSelection(hic.getXPosition());
-                superAdapter.setPositionChrTop(hic.getXPosition().concat(":").concat(String.valueOf(hic.getXContext().getZoom().getBinSize())));
-                superAdapter.setPositionChrLeft(hic.getYPosition().concat(":").concat(String.valueOf(hic.getYContext().getZoom().getBinSize())));
-                Clipboard clpbrd = getDefaultToolkit().getSystemClipboard();
-                clpbrd.setContents(stringSelection, null);
-            }
+        mi7.addActionListener(e -> {
+            StringSelection stringSelection = new StringSelection(hic.getXPosition());
+            superAdapter.setPositionChrTop(hic.getXPosition().concat(":").concat(String.valueOf(hic.getXContext().getZoom().getBinSize())));
+            superAdapter.setPositionChrLeft(hic.getYPosition().concat(":").concat(String.valueOf(hic.getYContext().getZoom().getBinSize())));
+            Clipboard clpbrd = getDefaultToolkit().getSystemClipboard();
+            clpbrd.setContents(stringSelection, null);
         });
 
         // TODO - can we remove this second option and just have a copy position to clipboard? Is this used?
         final JMenuItem mi8 = new JMenuItem("Copy left position to clipboard");
-        mi8.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                StringSelection stringSelection = new StringSelection(hic.getYPosition());
-                superAdapter.setPositionChrTop(hic.getXPosition().concat(":").concat(String.valueOf(hic.getXContext().getZoom().getBinSize())));
-                superAdapter.setPositionChrLeft(hic.getYPosition().concat(":").concat(String.valueOf(hic.getYContext().getZoom().getBinSize())));
-                Clipboard clpbrd = getDefaultToolkit().getSystemClipboard();
-                clpbrd.setContents(stringSelection, null);
-            }
+        mi8.addActionListener(e -> {
+            StringSelection stringSelection = new StringSelection(hic.getYPosition());
+            superAdapter.setPositionChrTop(hic.getXPosition().concat(":").concat(String.valueOf(hic.getXContext().getZoom().getBinSize())));
+            superAdapter.setPositionChrLeft(hic.getYPosition().concat(":").concat(String.valueOf(hic.getYContext().getZoom().getBinSize())));
+            Clipboard clpbrd = getDefaultToolkit().getSystemClipboard();
+            clpbrd.setContents(stringSelection, null);
         });
 
         final JCheckBoxMenuItem mi85Highlight = new JCheckBoxMenuItem("Highlight");
-        mi85Highlight.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //highlightedFeatures.clear();
-                addHighlightedFeature(currentFeature.getFeature2D());
-            }
+        mi85Highlight.addActionListener(e -> {
+            //highlightedFeatures.clear();
+            addHighlightedFeature(currentFeature.getFeature2D());
         });
 
         final JCheckBoxMenuItem mi86Toggle = new JCheckBoxMenuItem("Toggle Highlight Visibility");
-        mi86Toggle.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                featureOptionMenuEnabled = false;
-                showFeatureHighlight = !showFeatureHighlight;
-                hic.setShowFeatureHighlight(showFeatureHighlight);
-                parent.repaint();
-            }
+        mi86Toggle.addActionListener(e -> {
+            featureOptionMenuEnabled = false;
+            showFeatureHighlight = !showFeatureHighlight;
+            hic.setShowFeatureHighlight(showFeatureHighlight);
+            parent.repaint();
         });
 
         final JMenuItem mi87Remove = new JMenuItem("Remove Highlight");
-        mi87Remove.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                parent.removeHighlightedFeature();
-            }
-        });
-
-        final JMenuItem mi9_c = new JMenuItem("Export data centered on pixel");
-        mi9_c.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    hic.exportDataCenteredAboutRegion(xMousePos, yMousePos);
-                } catch (Exception ee) {
-                    ee.printStackTrace();
-                }
-            }
-        });
-
-        final JCheckBoxMenuItem mi9_h = new JCheckBoxMenuItem("Generate Horizontal 1D Track");
-        mi9_h.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                hic.generateTrackFromLocation(yMousePos, true);
-            }
-        });
-
-        final JCheckBoxMenuItem mi9_v = new JCheckBoxMenuItem("Generate Vertical 1D Track");
-        mi9_v.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                hic.generateTrackFromLocation(xMousePos, false);
-            }
-        });
-
+        mi87Remove.addActionListener(e -> parent.removeHighlightedFeature());
 
         final JMenuItem mi10_1 = new JMenuItem("Change Color");
-        mi10_1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                featureOptionMenuEnabled = false;
-                Pair<Rectangle, Feature2D> featureCopy =
-                        new Pair<>(currentFeature.getRectangle(), currentFeature.getFeature2D());
-                parent.launchColorSelectionMenu(featureCopy);
-            }
+        mi10_1.addActionListener(e -> {
+            featureOptionMenuEnabled = false;
+            Pair<Rectangle, Feature2D> featureCopy =
+                    new Pair<>(currentFeature.getRectangle(), currentFeature.getFeature2D());
+            parent.launchColorSelectionMenu(featureCopy);
         });
 
         final JMenuItem mi10_2 = new JMenuItem("Change Attributes");
-        mi10_2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                featureOptionMenuEnabled = false;
-                new EditFeatureAttributesDialog(parent.getMainWindow(), currentFeature.getFeature2D(),
-                        superAdapter.getActiveLayerHandler().getAnnotationLayer());
-            }
+        mi10_2.addActionListener(e -> {
+            featureOptionMenuEnabled = false;
+            new EditFeatureAttributesDialog(parent.getMainWindow(), currentFeature.getFeature2D(),
+                    superAdapter.getActiveLayerHandler().getAnnotationLayer());
         });
 
         final JMenuItem mi10_3 = new JMenuItem("Delete");
-        mi10_3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                featureOptionMenuEnabled = false;
-                Feature2D feature = currentFeature.getFeature2D();
-                int chr1Idx = hic.getXContext().getChromosome().getIndex();
-                int chr2Idx = hic.getYContext().getChromosome().getIndex();
-                try {
-                    superAdapter.getActiveLayerHandler().removeFromList(hic.getZd(), chr1Idx, chr2Idx, 0, 0,
-                            Feature2DHandler.numberOfLoopsToFind, hic.getXContext().getBinOrigin(),
-                            hic.getYContext().getBinOrigin(), hic.getScaleFactor(), feature);
-                } catch (Exception ee) {
-                    System.err.println("Could not remove custom annotation");
-                }
-                superAdapter.refresh();
+        mi10_3.addActionListener(e -> {
+            featureOptionMenuEnabled = false;
+            Feature2D feature = currentFeature.getFeature2D();
+            int chr1Idx = hic.getXContext().getChromosome().getIndex();
+            int chr2Idx = hic.getYContext().getChromosome().getIndex();
+            try {
+                superAdapter.getActiveLayerHandler().removeFromList(hic.getZd(), chr1Idx, chr2Idx, 0, 0,
+                        Feature2DHandler.numberOfLoopsToFind, hic.getXContext().getBinOrigin(),
+                        hic.getYContext().getBinOrigin(), hic.getScaleFactor(), feature);
+            } catch (Exception ee) {
+                System.err.println("Could not remove custom annotation");
             }
+            superAdapter.refresh();
         });
 
 
@@ -400,13 +314,6 @@ public class HeatmapMouseHandler extends MouseAdapter {
             menu.add(mi6);
             menu.add(mi7);
             menu.add(mi8);
-            if (!ChromosomeHandler.isAllByAll(hic.getXContext().getChromosome())
-                    && MatrixType.isObservedOrControl(hic.getDisplayOption())) {
-                menu.addSeparator();
-                menu.add(mi9_h);
-                menu.add(mi9_v);
-                menu.add(mi9_c);
-            }
 
             boolean menuSeparatorNotAdded = true;
 
@@ -473,7 +380,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
     private void updateSelectedFeatures(boolean status) {
         for (Feature2D feature2D : selectedFeatures) {
-            feature2D.setSetIsSelectedColorUpdate(status);
+            feature2D.setStatus(status);
         }
     }
 
@@ -493,7 +400,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
         return valueString;
     }
 
-    private double getExpectedValue(int c1, int c2, int binX, int binY, MatrixZoomData zd,
+    private double getExpectedValue(int c1, int c2, int binX, int binY, GUIMatrixZoomData zd,
                                     ExpectedValueFunction df) {
         double ev = 0;
         if (c1 == c2) {
@@ -595,7 +502,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
         }
     }
 
-    public void addAllFeatures(AnnotationLayerHandler handler, List<Feature2D> loops, MatrixZoomData zd,
+    public void addAllFeatures(AnnotationLayerHandler handler, List<Feature2D> loops, GUIMatrixZoomData zd,
                                double binOriginX, double binOriginY, double scaleFactor,
                                boolean activelyEditingAssembly) {
         allFeaturePairs.addAll(handler.convertToFeaturePairs(handler, loops, zd, binOriginX, binOriginY, scaleFactor));
@@ -649,7 +556,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                         firstAnnotation = false;
                         String text = "There are unsaved hand annotations from your previous session! \n" +
                                 "Go to 'Annotations > Hand Annotations > Load Last' to restore.";
-                        System.err.println(text);
+                        System.err.println("Unsaved edit error: " + text);
                         JOptionPane.showMessageDialog(superAdapter.getMainWindow(), text);
                     }
 
@@ -911,12 +818,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
                 restoreDefaultVariables();
             } else if ((dragMode == DragMode.ZOOM || dragMode == DragMode.SELECT) && zoomRectangle != null) {
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        unsafeDragging();
-                    }
-                };
+                Runnable runnable = () -> unsafeDragging();
                 superAdapter.executeLongRunningTask(runnable, "Mouse Drag");
             } else if (dragMode == DragMode.ANNOTATE) {
                 // New annotation is added (not single click) and new feature from custom annotation
@@ -1019,7 +921,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
         double hBins = (int) (zoomRectangle.height / scaleFactor1);
 
         try {
-            final MatrixZoomData currentZD = hic.getZd();
+            final GUIMatrixZoomData currentZD = hic.getZd();
             long xBP0 = currentZD.getXGridAxis().getGenomicStart(binX);
 
             long yBP0 = currentZD.getYGridAxis().getGenomicEnd(binY);
@@ -1493,7 +1395,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
     }
 
     private Point calculateSelectionPoint(int unscaledX, int unscaledY) {
-        final MatrixZoomData zd;
+        final GUIMatrixZoomData zd;
         try {
             zd = hic.getZd();
         } catch (Exception err) {
@@ -1521,7 +1423,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
         if (activelyEditingAssembly) {
             for (Feature2DGuiContainer loop : allFeaturePairs) {
                 if (loop.getFeature2D().getFeatureType() == Feature2D.FeatureType.SUPERSCAFFOLD) {
-                    if (loop.getFeature2D().containsPoint(mousePoint)) {
+                    if (Feature2DUtils.containsPoint(loop.getFeature2D(), mousePoint)) {
                         return loop;
                     }
                 }
@@ -1533,7 +1435,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
     private String toolTipText(int x, int y) {
         // Update popup text
-        final MatrixZoomData zd;
+        final GUIMatrixZoomData zd;
         HiCGridAxis xGridAxis, yGridAxis;
         try {
             zd = hic.getZd();
@@ -1688,7 +1590,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                     txt.append("<br><span style='font-family: arial; font-size: 12pt;'>O/E            = NaN</span>");
                 }
 
-                MatrixZoomData controlZD = hic.getControlZd();
+                GUIMatrixZoomData controlZD = hic.getControlZd();
                 if (controlZD != null) {
                     float controlValue = hic.getNormalizedControlValue(binX, binY);
                     txt.append("<br><br><span style='font-family: arial; font-size: 12pt;'>");
@@ -1759,7 +1661,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                         if (loop.getRectangle().contains(x, y)) {
                             // TODO - why is this code duplicated in this file?
                             txt.append("<br><br><span style='font-family: arial; font-size: 12pt;'>");
-                            txt.append(loop.getFeature2D().tooltipText());
+                            txt.append(Feature2DUtils.generate(loop.getFeature2D()));
                             txt.append("</span>");
                         }
                     }
@@ -1771,7 +1673,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                     if (loop.getRectangle().contains(x, y)) {
                         // TODO - why is this code duplicated in this file?
                         txt.append("<br><br><span style='font-family: arial; font-size: 12pt;'>");
-                        txt.append(loop.getFeature2D().tooltipText());
+                        txt.append(Feature2DUtils.generate(loop.getFeature2D()));
                         txt.append("</span>");
                         int layerNum = superAdapter.getAllLayers().indexOf(loop.getAnnotationLayerHandler());
                         int loopPriority = numLayers - layerNum;
@@ -1798,13 +1700,13 @@ public class HeatmapMouseHandler extends MouseAdapter {
     private void appendWithSpan(StringBuilder txt, List<Feature2D> selectedFeatures) {
         int numFeatures = selectedFeatures.size();
         for (int i = 0; i < Math.min(numFeatures, 3); i++) {
-            appendSectionWithSpan(txt, selectedFeatures.get(i).tooltipText());
+            appendSectionWithSpan(txt, Feature2DUtils.generate(selectedFeatures.get(i)));
         }
         if (numFeatures == 3) {
-            appendSectionWithSpan(txt, selectedFeatures.get(2).tooltipText());
+            appendSectionWithSpan(txt, Feature2DUtils.generate(selectedFeatures.get(2)));
         } else if (numFeatures > 3) {
             appendSectionWithSpan(txt, "...");
-            appendSectionWithSpan(txt, selectedFeatures.get(numFeatures - 1).tooltipText());
+            appendSectionWithSpan(txt, Feature2DUtils.generate(selectedFeatures.get(numFeatures - 1)));
         }
     }
 
@@ -1840,41 +1742,35 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
         // get maximum number of bins on the X and Y axes
         Matrix matrix = hic.getMatrix();
-        MatrixZoomData matrixZoomData = matrix.getZoomData(hic.getZoom());
-        final long binCountX = matrixZoomData.getXGridAxis().getBinCount();
-        final long binCountY = matrixZoomData.getYGridAxis().getBinCount();
+        GUIMatrixZoomData GUIMatrixZoomData = new GUIMatrixZoomData(matrix.getZoomData(hic.getZoom()));
+        final long binCountX = GUIMatrixZoomData.getXGridAxis().getBinCount();
+        final long binCountY = GUIMatrixZoomData.getYGridAxis().getBinCount();
 
         if (clickedBinX > clickedBinY) {
 
             final JMenuItem jumpToDiagonalLeft = new JMenuItem('\u25C0' + "  Jump To Diagonal");
             jumpToDiagonalLeft.setSelected(straightEdgeEnabled);
-            jumpToDiagonalLeft.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    double postJumpBinOriginX = preJumpBinOriginX - (clickedBinX - clickedBinY);
-                    hic.moveBy(clickedBinY - clickedBinX, 0);
-                    if (postJumpBinOriginX < 0) {
-                        heatmapMouseBot.mouseMove((int) (defaultPointerDestinationX + postJumpBinOriginX * hic.getScaleFactor()), defaultPointerDestinationY);
-                        return;
-                    }
-                    heatmapMouseBot.mouseMove(defaultPointerDestinationX, defaultPointerDestinationY);
+            jumpToDiagonalLeft.addActionListener(e -> {
+                double postJumpBinOriginX = preJumpBinOriginX - (clickedBinX - clickedBinY);
+                hic.moveBy(clickedBinY - clickedBinX, 0);
+                if (postJumpBinOriginX < 0) {
+                    heatmapMouseBot.mouseMove((int) (defaultPointerDestinationX + postJumpBinOriginX * hic.getScaleFactor()), defaultPointerDestinationY);
+                    return;
                 }
+                heatmapMouseBot.mouseMove(defaultPointerDestinationX, defaultPointerDestinationY);
             });
             menu.add(jumpToDiagonalLeft);
 
             final JMenuItem jumpToDiagonalDown = new JMenuItem('\u25BC' + "  Jump To Diagonal");
             jumpToDiagonalDown.setSelected(straightEdgeEnabled);
-            jumpToDiagonalDown.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    double postJumpBinOriginY = preJumpBinOriginY + (clickedBinX - clickedBinY);
-                    hic.moveBy(0, clickedBinX - clickedBinY);
-                    if (postJumpBinOriginY + parent.getHeight() / hic.getScaleFactor() > binCountY) {
-                        heatmapMouseBot.mouseMove(defaultPointerDestinationX, (int) (defaultPointerDestinationY + (postJumpBinOriginY + parent.getHeight() / hic.getScaleFactor() - binCountY)));
-                        return;
-                    }
-                    heatmapMouseBot.mouseMove(defaultPointerDestinationX, defaultPointerDestinationY);
+            jumpToDiagonalDown.addActionListener(e -> {
+                double postJumpBinOriginY = preJumpBinOriginY + (clickedBinX - clickedBinY);
+                hic.moveBy(0, clickedBinX - clickedBinY);
+                if (postJumpBinOriginY + parent.getHeight() / hic.getScaleFactor() > binCountY) {
+                    heatmapMouseBot.mouseMove(defaultPointerDestinationX, (int) (defaultPointerDestinationY + (postJumpBinOriginY + parent.getHeight() / hic.getScaleFactor() - binCountY)));
+                    return;
                 }
+                heatmapMouseBot.mouseMove(defaultPointerDestinationX, defaultPointerDestinationY);
             });
             menu.add(jumpToDiagonalDown);
 
@@ -1882,33 +1778,27 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
             final JMenuItem jumpToDiagonalUp = new JMenuItem('\u25B2' + "  Jump To Diagonal");
             jumpToDiagonalUp.setSelected(straightEdgeEnabled);
-            jumpToDiagonalUp.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    double postJumpBinOriginY = preJumpBinOriginY - (clickedBinY - clickedBinX);
-                    hic.moveBy(0, clickedBinX - clickedBinY);
-                    if (postJumpBinOriginY < 0) {
-                        heatmapMouseBot.mouseMove(defaultPointerDestinationX, (int) (defaultPointerDestinationY + postJumpBinOriginY * hic.getScaleFactor()));
-                        return;
-                    }
-                    heatmapMouseBot.mouseMove(defaultPointerDestinationX, defaultPointerDestinationY);
+            jumpToDiagonalUp.addActionListener(e -> {
+                double postJumpBinOriginY = preJumpBinOriginY - (clickedBinY - clickedBinX);
+                hic.moveBy(0, clickedBinX - clickedBinY);
+                if (postJumpBinOriginY < 0) {
+                    heatmapMouseBot.mouseMove(defaultPointerDestinationX, (int) (defaultPointerDestinationY + postJumpBinOriginY * hic.getScaleFactor()));
+                    return;
                 }
+                heatmapMouseBot.mouseMove(defaultPointerDestinationX, defaultPointerDestinationY);
             });
             menu.add(jumpToDiagonalUp);
 
             final JMenuItem jumpToDiagonalRight = new JMenuItem('\u25B6' + "  Jump To Diagonal");
             jumpToDiagonalRight.setSelected(straightEdgeEnabled);
-            jumpToDiagonalRight.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    double postJumpBinOriginX = preJumpBinOriginX + (clickedBinY - clickedBinX);
-                    hic.moveBy(clickedBinY - clickedBinX, 0);
-                    if (postJumpBinOriginX + parent.getWidth() / hic.getScaleFactor() > binCountX) {
-                        heatmapMouseBot.mouseMove((int) (defaultPointerDestinationX + (postJumpBinOriginX + parent.getWidth() / hic.getScaleFactor() - binCountX)), defaultPointerDestinationY);
-                        return;
-                    }
-                    heatmapMouseBot.mouseMove(defaultPointerDestinationX, defaultPointerDestinationY);
+            jumpToDiagonalRight.addActionListener(e -> {
+                double postJumpBinOriginX = preJumpBinOriginX + (clickedBinY - clickedBinX);
+                hic.moveBy(clickedBinY - clickedBinX, 0);
+                if (postJumpBinOriginX + parent.getWidth() / hic.getScaleFactor() > binCountX) {
+                    heatmapMouseBot.mouseMove((int) (defaultPointerDestinationX + (postJumpBinOriginX + parent.getWidth() / hic.getScaleFactor() - binCountX)), defaultPointerDestinationY);
+                    return;
                 }
+                heatmapMouseBot.mouseMove(defaultPointerDestinationX, defaultPointerDestinationY);
             });
             menu.add(jumpToDiagonalRight);
         }
@@ -1919,97 +1809,69 @@ public class HeatmapMouseHandler extends MouseAdapter {
         if (HiCGlobals.phasing) {
             final JMenuItem phaseMergeItems = new JMenuItem("Merge phased blocks");
             phaseMergeItems.setEnabled(selectedSuperscaffolds.size() > 1);
-            phaseMergeItems.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    AssemblyOperationExecutor.phaseMerge(superAdapter, selectedSuperscaffolds);
-                    // Cleanup
-                    parent.removeSelection();
-                }
+            phaseMergeItems.addActionListener(e -> {
+                AssemblyOperationExecutor.phaseMerge(superAdapter, selectedSuperscaffolds);
+                // Cleanup
+                parent.removeSelection();
             });
             menu.add(phaseMergeItems);
         } else {
             final JMenuItem miMoveToTop = new JMenuItem("Move to top");
             miMoveToTop.setEnabled(!selectedFeatures.isEmpty());
-            miMoveToTop.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    AssemblyOperationExecutor.moveSelection(superAdapter,
-                            selectedFeatures,
-                            null);
-                    parent.removeSelection();
-                }
+            miMoveToTop.addActionListener(e -> {
+                AssemblyOperationExecutor.moveSelection(superAdapter,
+                        selectedFeatures,
+                        null);
+                parent.removeSelection();
             });
             menu.add(miMoveToTop);
 
             final JMenuItem miMoveToDebris = new JMenuItem("Move to debris");
             miMoveToDebris.setEnabled(!selectedFeatures.isEmpty());
-            miMoveToDebris.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    parent.moveSelectionToEnd();
-                }
-            });
+            miMoveToDebris.addActionListener(e -> parent.moveSelectionToEnd());
             menu.add(miMoveToDebris);
 
             final JMenuItem miMoveToDebrisAndDisperse = new JMenuItem("Move to debris and add boundaries");
             miMoveToDebrisAndDisperse.setEnabled(selectedFeatures != null && !selectedFeatures.isEmpty());
-            miMoveToDebrisAndDisperse.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    moveSelectionToEndAndDisperse();
-                }
-            });
+            miMoveToDebrisAndDisperse.addActionListener(e -> moveSelectionToEndAndDisperse());
             menu.add(miMoveToDebrisAndDisperse);
 
             final JMenuItem groupItems = new JMenuItem("Remove chr boundaries");
             groupItems.setEnabled(selectedFeatures.size() > 1);
-            groupItems.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    AssemblyOperationExecutor.multiMerge(superAdapter, selectedFeatures);
+            groupItems.addActionListener(e -> {
+                AssemblyOperationExecutor.multiMerge(superAdapter, selectedFeatures);
 
-                    // Cleanup
-                    parent.removeSelection();
-                }
+                // Cleanup
+                parent.removeSelection();
             });
             menu.add(groupItems);
 
 
             final JMenuItem splitItems = new JMenuItem("Add chr boundaries");
             splitItems.setEnabled(!selectedFeatures.isEmpty());
-            splitItems.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    AssemblyOperationExecutor.multiSplit(superAdapter, selectedFeatures);
+            splitItems.addActionListener(e -> {
+                AssemblyOperationExecutor.multiSplit(superAdapter, selectedFeatures);
 
-                    // Cleanup
-                    parent.removeSelection();
-                }
+                // Cleanup
+                parent.removeSelection();
             });
             menu.add(splitItems);
         }
 
         final JMenuItem miUndo = new JMenuItem("Undo");
-        miUndo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.getAssemblyStateTracker().undo();
-                parent.removeSelection();
-                superAdapter.refresh();
-            }
+        miUndo.addActionListener(e -> {
+            superAdapter.getAssemblyStateTracker().undo();
+            parent.removeSelection();
+            superAdapter.refresh();
         });
         miUndo.setEnabled(superAdapter.getAssemblyStateTracker().checkUndo());
         menu.add(miUndo);
 
         final JMenuItem miRedo = new JMenuItem("Redo");
-        miRedo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.getAssemblyStateTracker().redo();
-                parent.removeSelection();
-                superAdapter.refresh();
-            }
+        miRedo.addActionListener(e -> {
+            superAdapter.getAssemblyStateTracker().redo();
+            parent.removeSelection();
+            superAdapter.refresh();
         });
         miRedo.setEnabled(superAdapter.getAssemblyStateTracker().checkRedo());
         menu.add(miRedo);

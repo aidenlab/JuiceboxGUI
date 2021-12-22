@@ -25,12 +25,9 @@
 package juicebox.mapcolorui;
 
 import juicebox.HiCGlobals;
-import juicebox.data.ChromosomeHandler;
-import juicebox.data.CustomMatrixZoomData;
-import juicebox.data.MatrixZoomData;
+import juicebox.data.GUIMatrixZoomData;
 
 import java.awt.*;
-import java.util.List;
 
 public class BoundingBoxRenderer {
 
@@ -41,7 +38,7 @@ public class BoundingBoxRenderer {
         parent = heatmapPanel;
     }
 
-    public void drawAllByAllGrid(Graphics2D g, MatrixZoomData zd, boolean showGridLines,
+    public void drawAllByAllGrid(Graphics2D g, GUIMatrixZoomData zd, boolean showGridLines,
                                  double binOriginX, double binOriginY, double scaleFactor) {
         if (HiCGlobals.isDarkulaModeEnabled) {
             g.setColor(Color.LIGHT_GRAY);
@@ -87,7 +84,7 @@ public class BoundingBoxRenderer {
         g.fillRect(maxHeight, maxWidth, pHeight, pWidth);
     }
 
-    private int getGridLineWidthLimit(MatrixZoomData zd, long maxPosition, double scaleFactor) {
+    private int getGridLineWidthLimit(GUIMatrixZoomData zd, long maxPosition, double scaleFactor) {
         if (parent.getWidth() < 50 || scaleFactor < 1e-10) {
             return 0;
         }
@@ -95,7 +92,7 @@ public class BoundingBoxRenderer {
         return (int) (xBin * scaleFactor);
     }
 
-    private int getGridLineHeightLimit(MatrixZoomData zd, long maxPosition, double scaleFactor) {
+    private int getGridLineHeightLimit(GUIMatrixZoomData zd, long maxPosition, double scaleFactor) {
         if (parent.getHeight() < 50 || scaleFactor < 1e-10) {
             return 0;
         }
@@ -105,40 +102,5 @@ public class BoundingBoxRenderer {
 
     public void setChromosomeBoundaries(long[] chromosomeBoundaries) {
         this.chromosomeBoundaries = chromosomeBoundaries;
-    }
-
-    public void drawRegularGrid(Graphics2D g, MatrixZoomData zd, boolean showGridLines, ChromosomeHandler handler,
-                                double binOriginX, double binOriginY, double scaleFactor) {
-        if (showGridLines) {
-            if (HiCGlobals.isDarkulaModeEnabled) {
-                g.setColor(Color.LIGHT_GRAY);
-            } else {
-                g.setColor(Color.DARK_GRAY);
-            }
-            if (handler != null && zd != null) {
-                if (handler.isCustomChromosome(zd.getChr1())) {
-                    if (zd instanceof CustomMatrixZoomData) {
-                        java.util.List<Long> xBins = ((CustomMatrixZoomData) zd).getBoundariesOfCustomChromosomeX();
-                        //int maxSize = xBins.get(xBins.size() - 1);
-                        int maxSize = (int) ((zd.getYGridAxis().getBinCount() - binOriginY) * scaleFactor);
-                        for (long xBin : xBins) {
-                            int x = (int) ((xBin - binOriginX) * scaleFactor);
-                            g.drawLine(x, 0, x, maxSize);
-                        }
-                    }
-                }
-                if (handler.isCustomChromosome(zd.getChr2())) {
-                    if (zd instanceof CustomMatrixZoomData) {
-                        List<Long> yBins = ((CustomMatrixZoomData) zd).getBoundariesOfCustomChromosomeY();
-                        //int maxSize = yBins.get(yBins.size() - 1);
-                        int maxSize = (int) ((zd.getXGridAxis().getBinCount() - binOriginX) * scaleFactor);
-                        for (long yBin : yBins) {
-                            int y = (int) ((yBin - binOriginY) * scaleFactor);
-                            g.drawLine(0, y, maxSize, y);
-                        }
-                    }
-                }
-            }
-        }
     }
 }

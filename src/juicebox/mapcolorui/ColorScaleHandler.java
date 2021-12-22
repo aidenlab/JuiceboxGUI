@@ -24,12 +24,12 @@
 
 package juicebox.mapcolorui;
 
+import javastraw.matrices.BasicMatrix;
+import javastraw.reader.block.Block;
+import javastraw.reader.block.ContactRecord;
+import javastraw.reader.type.MatrixType;
 import juicebox.HiCGlobals;
-import juicebox.data.Block;
-import juicebox.data.ContactRecord;
 import juicebox.gui.SuperAdapter;
-import juicebox.matrix.BasicMatrix;
-import juicebox.windowui.MatrixType;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.broad.igv.renderer.ColorScale;
 import org.broad.igv.renderer.ContinuousColorScale;

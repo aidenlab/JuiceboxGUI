@@ -24,10 +24,10 @@
 
 package juicebox.assembly;
 
+import javastraw.feature2D.Feature2D;
+import javastraw.feature2D.Feature2DList;
 import juicebox.HiCGlobals;
 import juicebox.mapcolorui.Feature2DHandler;
-import juicebox.track.feature.Feature2D;
-import juicebox.track.feature.Feature2DList;
 
 import java.awt.*;
 import java.util.List;
@@ -665,10 +665,7 @@ public class AssemblyScaffoldHandler {
         idListToMerge.addAll(altIdListToMerge);
         Collections.sort(idListToMerge);
 
-        boolean altGoesFirst = false;
-        if (altIdListToMerge.contains(idListToMerge.get(0))) {
-            altGoesFirst = true;
-        }
+        boolean altGoesFirst = altIdListToMerge.contains(idListToMerge.get(0));
 
         if (!HiCGlobals.noSortInPhasing)
             Collections.sort(newSuperscaffold);

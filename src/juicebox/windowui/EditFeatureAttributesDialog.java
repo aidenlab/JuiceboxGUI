@@ -28,9 +28,9 @@ package juicebox.windowui;
  * Created by Marie on 6/25/15.
  */
 
+import javastraw.feature2D.Feature2D;
 import juicebox.MainWindow;
 import juicebox.track.feature.AnnotationLayer;
-import juicebox.track.feature.Feature2D;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

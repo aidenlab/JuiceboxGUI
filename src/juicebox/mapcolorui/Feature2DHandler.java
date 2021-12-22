@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2020 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -25,12 +25,16 @@
 package juicebox.mapcolorui;
 
 import gnu.trove.procedure.TIntProcedure;
-import juicebox.data.ChromosomeHandler;
-import juicebox.data.MatrixZoomData;
-import juicebox.data.basics.Chromosome;
+import javastraw.feature2D.Feature2D;
+import javastraw.feature2D.Feature2DList;
+import javastraw.feature2D.Feature2DParser;
+import javastraw.reader.basics.Chromosome;
+import javastraw.reader.basics.ChromosomeHandler;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
 import juicebox.track.HiCGridAxis;
-import juicebox.track.feature.*;
+import juicebox.track.feature.AnnotationLayerHandler;
+import juicebox.track.feature.Feature2DGuiContainer;
 import net.sf.jsi.SpatialIndex;
 import net.sf.jsi.rtree.RTree;
 
@@ -89,7 +93,7 @@ public class Feature2DHandler {
         return new Rectangle(x, y, w, h);
     }
 
-    public List<Feature2DGuiContainer> convertFeaturesToFeaturePairs(AnnotationLayerHandler handler, List<Feature2D> features, MatrixZoomData zd,
+    public List<Feature2DGuiContainer> convertFeaturesToFeaturePairs(AnnotationLayerHandler handler, List<Feature2D> features, GUIMatrixZoomData zd,
                                                                      double binOriginX, double binOriginY, double scale) {
         final List<Feature2DGuiContainer> featurePairs = new ArrayList<>();
 
@@ -123,19 +127,16 @@ public class Feature2DHandler {
     protected void remakeRTree() {
         featureRtrees.clear();
 
-        loopList.processLists(new FeatureFunction() {
-            @Override
-            public void process(String key, List<Feature2D> features) {
+        loopList.processLists((key, features) -> {
 
-                SpatialIndex si = new RTree();
-                si.init(null);
-                for (int i = 0; i < features.size(); i++) {
-                    Feature2D feature = features.get(i);
-                    si.add(new net.sf.jsi.Rectangle((float) feature.getStart1(), (float) feature.getStart2(),
-                            (float) feature.getEnd1(), (float) feature.getEnd2()), i);
-                }
-                featureRtrees.put(key, si);
+            SpatialIndex si = new RTree();
+            si.init(null);
+            for (int i = 0; i < features.size(); i++) {
+                Feature2D feature = features.get(i);
+                si.add(new net.sf.jsi.Rectangle((float) feature.getStart1(), (float) feature.getStart2(),
+                        (float) feature.getEnd1(), (float) feature.getEnd2()), i);
             }
+            featureRtrees.put(key, si);
         });
         //}
     }
@@ -193,7 +194,7 @@ public class Feature2DHandler {
         return visibleLoopList;
     }
 
-    public List<Feature2D> getNearbyFeatures(MatrixZoomData zd, int chrIdx1, int chrIdx2, int x, int y, int n,
+    public List<Feature2D> getNearbyFeatures(GUIMatrixZoomData zd, int chrIdx1, int chrIdx2, int x, int y, int n,
                                              final double binOriginX, final double binOriginY, final double scale) {
         final List<Feature2D> foundFeatures = new ArrayList<>();
         final String key = Feature2DList.getKey(chrIdx1, chrIdx2);

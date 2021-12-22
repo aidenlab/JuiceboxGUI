@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2020 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -26,9 +26,9 @@ package juicebox.track;
 
 import juicebox.Context;
 import juicebox.HiC;
-import juicebox.data.MatrixZoomData;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
-import juicebox.tools.utils.common.ArrayTools;
+import juicebox.tools.ArrayTools;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.broad.igv.renderer.GraphicUtils;
 import org.broad.igv.renderer.Renderer;
@@ -139,7 +139,7 @@ public class EigenvectorTrack extends HiCTrack {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MatrixZoomData zd = getAppropriateZD();
+                GUIMatrixZoomData zd = getAppropriateZD();
                 if (zd == null) return;
 
                 int chrIdx = orientation == TrackPanel.Orientation.X ? zd.getChr1Idx() : zd.getChr2Idx();
@@ -179,7 +179,7 @@ public class EigenvectorTrack extends HiCTrack {
         int y = orientation == TrackPanel.Orientation.X ? rect.y : rect.x;
         int x = orientation == TrackPanel.Orientation.X ? rect.x : rect.y;
 
-        MatrixZoomData zd = getAppropriateZD();
+        GUIMatrixZoomData zd = getAppropriateZD();
         if (zd == null) return;
 
         int zoomBinSize = hic.getZoom().getBinSize();
@@ -240,7 +240,7 @@ public class EigenvectorTrack extends HiCTrack {
 
     }
 
-    private MatrixZoomData getAppropriateZD() {
+    private GUIMatrixZoomData getAppropriateZD() {
         try {
             if (isControl) {
                 return hic.getControlZd();

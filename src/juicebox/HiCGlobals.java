@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
  */
 public class HiCGlobals {
 
-    public static final String versionNum = "2.13.07";
+    public static final String versionNum = "3.00.00";
     public static final String juiceboxTitle = "[Juicebox " + versionNum + "] Hi-C Map ";
 
     // MainWindow variables
@@ -67,7 +67,7 @@ public class HiCGlobals {
     public static int MAX_EIGENVECTOR_ZOOM = 250000;
     // implement Map scaling with this global variable
     public static double hicMapScale = 1;
-    // whether MatrixZoomData should cache or not
+    // whether GUIMatrixZoomData should cache or not
     public static boolean useCache = true;
     public static boolean guiIsCurrentlyActive = false;
     public static boolean allowDynamicBlockIndex = true;

@@ -24,12 +24,12 @@
 
 package juicebox.mapcolorui;
 
+import javastraw.reader.type.MatrixType;
+import javastraw.reader.type.NormalizationType;
 import juicebox.HiC;
 import juicebox.HiCGlobals;
-import juicebox.data.MatrixZoomData;
+import juicebox.data.GUIMatrixZoomData;
 import juicebox.gui.SuperAdapter;
-import juicebox.windowui.MatrixType;
-import juicebox.windowui.NormalizationType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +44,7 @@ public class GeneralTileManager {
     }
 
     public boolean renderHiCTiles(HeatmapRenderer renderer, double binOriginX, double binOriginY, double bRight, double bBottom,
-                                  MatrixZoomData zd, MatrixZoomData controlZd,
+                                  GUIMatrixZoomData zd, GUIMatrixZoomData controlZd,
                                   double scaleFactor, Rectangle bounds, HiC hic, JComponent parent, SuperAdapter superAdapter) {
 
         boolean allTilesNull = true;
@@ -66,8 +66,8 @@ public class GeneralTileManager {
                     tile = mapTileManager.getImageTile(zd, controlZd, tileRow, tileColumn, displayOption,
                             observedNormalizationType, controlNormalizationType, hic, parent);
                 } catch (Exception e) {
-                    System.err.println(e.getMessage());
-
+                    System.err.println("Null tile: " + e.getMessage());
+                    e.printStackTrace();
                 }
 
                 if (tile != null) {
@@ -156,8 +156,7 @@ public class GeneralTileManager {
     }
 
 
-
-    private void bypassTileAndDirectlyDrawOnGraphics(HeatmapRenderer renderer, MatrixZoomData zd, int tileRow, int tileColumn,
+    private void bypassTileAndDirectlyDrawOnGraphics(HeatmapRenderer renderer, GUIMatrixZoomData zd, int tileRow, int tileColumn,
                                                      MatrixType displayOption, NormalizationType observedNormalizationType,
                                                      NormalizationType controlNormalizationType,
                                                      int xDest0, int yDest0, int xDest1, int yDest1, int xSrc0,
