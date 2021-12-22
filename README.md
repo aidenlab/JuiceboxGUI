@@ -29,34 +29,19 @@ To set up in IDEA, have the Java SDK installed
 then you'll point to it (IntelliJ has lots of documentation on this sort of thing).
 
 * Then go to `VCS` -> `checkout from version control`.
-* You'll need to do is be sure `*.sizes` is included as a file to be copied over to the class files. Set this up via
-  IntelliJ `Preferences` -> `Compiler`. Add `?*.sizes` to the list of `Resource Patterns`.
-* While there, also go to `Preferences` -> `Java Compiler` and put this into additional command line
-  options: `-Xlint:all -target 1.7`
-  The former turns on all warnings, the latter gives some flexibility since some people haven't updated Java to 1.8 yet.
 * Then go to `Run` -> `Edit Configurations`.
 * With the `+` sign, add `Application`.
-* You'll create two of these, one for the GUI (call it Juicebox GUI or whatever you want, really) and one for the CLT.
 * Set the main class by clicking the little `...` button next to the text box for main class
 
         MainWindow.java is the main method class for the visualization/GUI portion of the software.
-        HiCTools.java is the main method class for the analysis/CLT portion.
 
-* For the GUI under VM Options:
+* For the GUI under VM Options: `-Xmx2g`
 
-        -Xmx2000m
-        -Djnlp.loadMenu="https://hicfiles.tc4ga.com/juicebox.properties"
-
-* For the CLT use
-
-        -Xmx2000m
-
-* Note that the `Xmx2000m` flag sets the maximum memory heap size to 2GB.
-Depending on your computer you might want more or less.
-Some tools will break if there's not enough memory and the file is too large,
-but don't worry about that for development; 2GB should be fine.
+* Note that the `Xmx2g` flag sets the maximum memory heap size to 2GB. Depending on your computer you might want more or
+  less. Some tools will break if there's not enough memory and the file is too large, but don't worry about that for
+  development; 2GB should be fine.
 * One last note: be sure to `Commit and Push` when you commit files, it's hidden in the dropdown menu button in the
-commit window.
+  commit window.
 
 ----------------------------------
 Hardware and Software Requirements
