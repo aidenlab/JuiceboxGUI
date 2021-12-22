@@ -89,28 +89,30 @@ A block represents a square sub-matrix of a contact map.
 
 ***Note: Blocks are indivdually compressed with ZLib***
 
-|Field	|Description|	Type|	Value|
-|------|------------|------|-------|
-|nRecords	|Number or contact records in this block|	int	|
-|binXOffset | X offset for the contact records in this block.  The binX value below is relative to this offset.||
-|binYOffset | Y offset for the contact records in this block.  The binX value below is relative to this offset.
-|useFloat | Flag indicating the ```value``` field in contact records for this block are recorded with data type ```float```.  If == 1 a ```float``` is used, otherwise type is ```short```| byte |
-|matrixRepresentation | Representation of matrix used for the contact records.  If == 1 the representation is a ```list of rows```, if == 2 ```dense```. | byte |
-|blockData| The block matrix data.  See descriptions below, also  in the notes section.
+| Field                   | Description                                                                                                                                                                    |    Type |    Value |
+|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|--------|
+| nRecords                | Number or contact records in this block                                                                                                                                        |    int     |        |
+| binXOffset           | X offset for the contact records in this block. The binX value below is relative to this offset.                                                                              ||       |     |
+| binYOffset           | Y offset for the contact records in this block. The binX value below is relative to this offset.                                                                              |       |        |
+| useFloat             | Flag indicating the ```value``` field in contact records for this block are recorded with data type ```float```. If == 1 a ```float``` is used, otherwise type is ```short``` | byte  |        |
+| matrixRepresentation | Representation of matrix used for the contact records. If == 1 the representation is a ```list of rows```, if == 2 ```dense```.                                               | byte  |        |
+| blockData            | The block matrix data. See descriptions below, also  in the notes section.                                                                                                    |       |        |
 
 ##### Block data - list of rows
 
-|Field	|Description|	Type|	Value|
-|------|------------|------|-------|
-|rowCount | Number or rows | short ||
-||
-|*rows (n = rowCount)*
-|rowNumber | Matrix row number, first row is ```0``` | short ||
-|recordCount | Number of records for this row. Row is sparse, zeroes are not recorded. | short ||
-||
-|*contact records (n = cellCount)*||
-|binX	|X axis index|	short||
-|value	|Value (counts or score). The data type is determined by the ```useFloat``` flag above.|	float : short||	
+| Field                                | Description                                                                            |    Type          |    Value |
+|-----------------------------------|----------------------------------------------------------------------------------------|----------------|--------|
+| rowCount                          | Number or rows                                                                         | short          ||     |
+||                                   |                                                                                        |                |     |
+| *rows (n =
+rowCount)*             |                                                                                        |                |        |
+| rowNumber                         | Matrix row number, first row is ```0```                                                | short          ||     |
+| recordCount                       | Number of records for this row. Row is sparse, zeroes are not recorded.                | short          ||     |
+||                                   |                                                                                        |                |     |
+| *contact records (n =
+cellCount)* ||                                                                                        |                |     |
+| binX                                 | X axis index                                                                           |    short         ||     |
+| value                                | Value (counts or score). The data type is determined by the ```useFloat``` flag above. |    float : short ||	     |
 
 ##### Block data - dense
 |Field	|Description|	Type|	Value|

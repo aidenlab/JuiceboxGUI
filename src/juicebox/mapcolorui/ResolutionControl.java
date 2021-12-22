@@ -37,8 +37,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
@@ -147,11 +145,9 @@ public class ResolutionControl extends JPanel {
             private void processClick() {
                 unit = (unit == HiCZoom.HiCUnit.FRAG ? HiCZoom.HiCUnit.BP : HiCZoom.HiCUnit.FRAG);
                 resolutionLabel.setText(getUnitLabel());
-                Runnable runnable = new Runnable() {
-                    public void run() {
-                        reset();
-                        superAdapter.refresh(); // necessary to correct BP/FRAG switching all red box
-                    }
+                Runnable runnable = () -> {
+                    reset();
+                    superAdapter.refresh(); // necessary to correct BP/FRAG switching all red box
                 };
                 superAdapter.executeLongRunningTask(runnable, "Resolution switched");
             }
@@ -176,12 +172,7 @@ public class ResolutionControl extends JPanel {
         lockOpenIcon = new ImageIcon(getClass().getResource("/images/lock_open.png"));
         resolutionLocked = false;
         lockButton.setIcon(lockOpenIcon);
-        lockButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                toggleLockButton();
-            }
-        });
+        lockButton.addActionListener(e -> toggleLockButton());
         sliderPanel.add(lockButton);
 
 
@@ -204,11 +195,7 @@ public class ResolutionControl extends JPanel {
                 if (hic == null || hic.getMatrix() == null || zd == null || resolutionSlider.getValueIsAdjusting())
                     return;
                 final ChangeEvent eF = e;
-                Runnable runnable = new Runnable() {
-                    public void run() {
-                        unsafeStateChanged(eF, zd);
-                    }
-                };
+                Runnable runnable = () -> unsafeStateChanged(eF, zd);
                 superAdapter.executeLongRunningTask(runnable, "Resolution slider change");
             }
 
@@ -336,11 +323,6 @@ public class ResolutionControl extends JPanel {
         if (unit == HiCZoom.HiCUnit.FRAG) {
             return binSize + " f";
         }
-
-        // TODO delete the bpLabelMap? We dont need a hard-coded map if the labels change based on hicMapScale
-//        if (bpLabelMap.containsKey(binSize)) {
-//            return bpLabelMap.get(binSize);
-//        }
 
         String label;
         int adjustedBinSize = (int) (binSize * HiCGlobals.hicMapScale);

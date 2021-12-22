@@ -74,22 +74,19 @@ public class SaveImageDialog extends JFileChooser {
                         return;
                 }
 
-                mainWindow.executeLongRunningTask(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            int w = Integer.parseInt(width.getText());
-                            int h = Integer.parseInt(height.getText());
-                            if (HiCGlobals.printVerboseComments) System.out.println("Exporting another figure");
-                            if (outputFile.getPath().endsWith(".svg") || outputFile.getPath().endsWith(".SVG")) {
-                                exportAsSVG(outputFile, mainWindow, hic, hiCPanel, w, h);
-                            } else {
-                                exportAsPDF(outputFile, mainWindow, hic, hiCPanel, w, h);
-                            }
-                        } catch (NumberFormatException error) {
-                            JOptionPane.showMessageDialog(mainWindow, "Width and Height must be integers", "Error",
-                                    JOptionPane.ERROR_MESSAGE);
+                mainWindow.executeLongRunningTask(() -> {
+                    try {
+                        int w = Integer.parseInt(width.getText());
+                        int h = Integer.parseInt(height.getText());
+                        if (HiCGlobals.printVerboseComments) System.out.println("Exporting another figure");
+                        if (outputFile.getPath().endsWith(".svg") || outputFile.getPath().endsWith(".SVG")) {
+                            exportAsSVG(outputFile, mainWindow, hic, hiCPanel, w, h);
+                        } else {
+                            exportAsPDF(outputFile, mainWindow, hic, hiCPanel, w, h);
                         }
+                    } catch (NumberFormatException error) {
+                        JOptionPane.showMessageDialog(mainWindow, "Width and Height must be integers", "Error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }, "Exporting Figure", "Exporting...");
             }
@@ -173,11 +170,7 @@ public class SaveImageDialog extends JFileChooser {
             mainWindow.setVisible(true);
             mainWindow.setVisible(false);
 
-            final Runnable painter = new Runnable() {
-                public void run() {
-                    hiCPanel.paintImmediately(0, 0, w, h);
-                }
-            };
+            final Runnable painter = () -> hiCPanel.paintImmediately(0, 0, w, h);
 
             Thread thread = new Thread(painter) {
                 public void run() {

@@ -158,8 +158,7 @@ public class OneDimAssemblyTrackLifter {
         final double scaleFactor = hic.getScaleFactor();
         AssemblyScaffoldHandler aFragHandler = AssemblyHeatmapHandler.getSuperAdapter().getAssemblyStateTracker().getAssemblyHandler();
 
-        final int binSize = zoom.getBinSize();
-        long actualBinSize = binSize;
+        long actualBinSize = zoom.getBinSize();
         if (chromosome.getIndex() == 0) {
             actualBinSize *= 1000;
         }

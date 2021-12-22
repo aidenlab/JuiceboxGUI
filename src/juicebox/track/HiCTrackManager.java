@@ -47,9 +47,6 @@ import java.util.*;
  */
 public class HiCTrackManager {
 
-    //static String path = "http://www.broadinstitute.org/igvdata/hic/tracksMenu.xml";
-    //static String path = "/Users/jrobinso/Documents/IGV/hg19_encode.xml";
-
     private final List<HiCTrack> loadedTracks = new ArrayList<>();
     private final Map<NormalizationType, HiCTrack> coverageTracks = new HashMap<>();
     private final Map<NormalizationType, HiCTrack> controlCoverageTracks = new HashMap<>();

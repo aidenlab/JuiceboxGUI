@@ -153,11 +153,7 @@ class HeatmapClickListener extends MouseAdapter implements ActionListener {
         SuperAdapter superAdapter = heatmapPanel.getSuperAdapter();
 
         if (hic.isWholeGenome()) {
-            Runnable runnable = new Runnable() {
-                public void run() {
-                    unsafeMouseClickSubActionA(lastMouseEvent);
-                }
-            };
+            Runnable runnable = () -> unsafeMouseClickSubActionA(lastMouseEvent);
             mainWindow.executeLongRunningTask(runnable, "Mouse Click Set Chr");
         } else {
             if (!lastMouseEvent.isShiftDown()) {
@@ -245,11 +241,7 @@ class HeatmapClickListener extends MouseAdapter implements ActionListener {
                         newScaleFactor, true, HiC.ZoomCallType.STANDARD, true, hic.isResolutionLocked() ? 1 : 0, true);
 
             } else {
-                Runnable runnable = new Runnable() {
-                    public void run() {
-                        unsafeMouseClickSubActionB(centerBinX, centerBinY, newZoom);
-                    }
-                };
+                Runnable runnable = () -> unsafeMouseClickSubActionB(centerBinX, centerBinY, newZoom);
                 mainWindow.executeLongRunningTask(runnable, "Mouse Click Zoom");
             }
         } catch (Exception e) {

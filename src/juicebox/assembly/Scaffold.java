@@ -40,17 +40,14 @@ import java.util.Objects;
  */
 public class Scaffold extends Feature1D implements Comparable<Scaffold> {
 
-    public static final Comparator<Scaffold> originalStateComparator = new Comparator<Scaffold>() {
-
-        public int compare(Scaffold o1, Scaffold o2) {
+    public static final Comparator<Scaffold> originalStateComparator = (o1, o2) -> {
 
 //            System.out.println("I am in originalstatscomparator");
 
-            if (o1.getOriginalStart() == o2.getOriginalStart()) {
-                return -Long.compare(o1.length, o2.length);
-            }
-            return Long.compare(o1.getOriginalStart(), o2.getOriginalStart());
+        if (o1.getOriginalStart() == o2.getOriginalStart()) {
+            return -Long.compare(o1.length, o2.length);
         }
+        return Long.compare(o1.getOriginalStart(), o2.getOriginalStart());
     };
     public final String chrName = "assembly";
     //constants

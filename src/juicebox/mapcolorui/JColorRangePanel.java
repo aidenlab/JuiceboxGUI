@@ -33,11 +33,7 @@ import org.broad.igv.ui.FontManager;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.TextAttribute;
@@ -142,27 +138,25 @@ public class JColorRangePanel extends JPanel {
         colorRangeSlider.setPreferredSize(new Dimension(200, 52));
         colorRangeSlider.setMinimumSize(new Dimension(36, 52));
 
-        colorRangeSlider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                double min = colorRangeSlider.getLowerValue() / colorRangeScaleFactor;
-                double max = colorRangeSlider.getUpperValue() / colorRangeScaleFactor;
+        colorRangeSlider.addChangeListener(e -> {
+            double min = colorRangeSlider.getLowerValue() / colorRangeScaleFactor;
+            double max = colorRangeSlider.getUpperValue() / colorRangeScaleFactor;
 
-                HiC hic = superAdapter.getHiC();
+            HiC hic = superAdapter.getHiC();
 
-                String key = "";
-                try {
-                    if (hic != null && hic.getZd() != null && hic.getDisplayOption() != null) {
-                        key = HeatmapRenderer.getColorScaleCacheKey(hic.getZd(), hic.getDisplayOption(), hic.getObsNormalizationType(), hic.getControlNormalizationType());
-                    }
-                } catch (Exception e2) {
-                    if (HiCGlobals.printVerboseComments) {
-                        e2.printStackTrace();
-                    }
+            String key = "";
+            try {
+                if (hic != null && hic.getZd() != null && hic.getDisplayOption() != null) {
+                    key = HeatmapRenderer.getColorScaleCacheKey(hic.getZd(), hic.getDisplayOption(), hic.getObsNormalizationType(), hic.getControlNormalizationType());
                 }
-
-                heatmapPanel.setNewDisplayRange(hic.getDisplayOption(), min, max, key);
-                colorRangeSliderUpdateToolTip(hic.getDisplayOption());
+            } catch (Exception e2) {
+                if (HiCGlobals.printVerboseComments) {
+                    e2.printStackTrace();
+                }
             }
+
+            heatmapPanel.setNewDisplayRange(hic.getDisplayOption(), min, max, key);
+            colorRangeSliderUpdateToolTip(hic.getDisplayOption());
         });
         sliderPanel.add(colorRangeSlider);
         JPanel plusMinusPanel = new JPanel();
@@ -170,39 +164,33 @@ public class JColorRangePanel extends JPanel {
 
         plusButton = new JideButton();
         plusButton.setIcon(new ImageIcon(getClass().getResource("/images/zoom-plus.png")));
-        plusButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        plusButton.addActionListener(e -> {
 
-                HiC hic = superAdapter.getHiC();
-                double newMax = (colorRangeSlider.getMaximum() / colorRangeScaleFactor) * 2;
-                double newHigh = colorRangeSlider.getUpperValue() / colorRangeScaleFactor;
-                double newLow = colorRangeSlider.getLowerValue() / colorRangeScaleFactor;
+            HiC hic = superAdapter.getHiC();
+            double newMax = (colorRangeSlider.getMaximum() / colorRangeScaleFactor) * 2;
+            double newHigh = colorRangeSlider.getUpperValue() / colorRangeScaleFactor;
+            double newLow = colorRangeSlider.getLowerValue() / colorRangeScaleFactor;
 
-                if (MatrixType.isOEColorScaleType(hic.getDisplayOption())) {
-                    updateRatioColorSlider(hic, newMax, newHigh);
-                } else {
-                    updateColorSlider(hic, newLow, newHigh, newMax);
-                }
+            if (MatrixType.isOEColorScaleType(hic.getDisplayOption())) {
+                updateRatioColorSlider(hic, newMax, newHigh);
+            } else {
+                updateColorSlider(hic, newLow, newHigh, newMax);
             }
         });
 
         minusButton = new JideButton();
         minusButton.setIcon(new ImageIcon(getClass().getResource("/images/zoom-minus.png")));
-        minusButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //Set limit to maximum range:
-                HiC hic = superAdapter.getHiC();
-                double newMax = (colorRangeSlider.getMaximum() / colorRangeScaleFactor) / 2;
-                double newHigh = Math.min(newMax, colorRangeSlider.getUpperValue() / colorRangeScaleFactor);
-                double newLow = Math.min(newMax - 1, colorRangeSlider.getLowerValue() / colorRangeScaleFactor);
+        minusButton.addActionListener(e -> {
+            //Set limit to maximum range:
+            HiC hic = superAdapter.getHiC();
+            double newMax = (colorRangeSlider.getMaximum() / colorRangeScaleFactor) / 2;
+            double newHigh = Math.min(newMax, colorRangeSlider.getUpperValue() / colorRangeScaleFactor);
+            double newLow = Math.min(newMax - 1, colorRangeSlider.getLowerValue() / colorRangeScaleFactor);
 
-                if (MatrixType.isOEColorScaleType(hic.getDisplayOption())) {
-                    updateRatioColorSlider(hic, newMax, newHigh);
-                } else {
-                    updateColorSlider(hic, newLow, newHigh, newMax);
-                }
+            if (MatrixType.isOEColorScaleType(hic.getDisplayOption())) {
+                updateRatioColorSlider(hic, newMax, newHigh);
+            } else {
+                updateColorSlider(hic, newLow, newHigh, newMax);
             }
         });
 

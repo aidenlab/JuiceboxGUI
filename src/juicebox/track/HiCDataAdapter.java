@@ -156,7 +156,7 @@ public abstract class HiCDataAdapter implements HiCDataSource {
       }
 
       loadedDataInterval = new LoadedDataInterval(zoom, (int) scaleFactor, axisType, windowFunction,
-          chr.getName(), startBin, endBin, data);
+              chr.getName(), startBin, endBin, data);
       return data; // should only return number of points in aggregate scaffold
     }
   }
@@ -221,9 +221,6 @@ public abstract class HiCDataAdapter implements HiCDataSource {
     }
 
     void addScore(LocusScore ls) {
-//            if (ls.getStart() >= genomicEnd || ls.getEnd() < genomicStart) return;
-//            double weight = ((double) (Math.min(genomicEnd, ls.getEnd()) - Math.max(genomicStart, ls.getStart()))) /
-//                    (genomicEnd - genomicStart);
       double weight = 1;
       final float score = ls.getScore();
       weightedSum += weight * score;
@@ -236,7 +233,7 @@ public abstract class HiCDataAdapter implements HiCDataSource {
   }
 
 
-  class LoadedDataInterval {
+  static class LoadedDataInterval {
 
     final String zoom;
     final int scaleFactor;

@@ -255,8 +255,6 @@ public class LoadDialog extends JDialog implements TreeSelectionListener, Action
         TreeSet<String> keys = new TreeSet<>(properties.stringPropertyNames());
         HashMap<String, DefaultMutableTreeNode> hashMap = new HashMap<>();
         hashMap.put(((ItemInfo) top.getUserObject()).uid, top);
-        //HashMap<String, DefaultMutableTreeNode> tempHash = new HashMap<String, DefaultMutableTreeNode>();
-        //tempHash.put(((ItemInfo) top.getUserObject()).uid, top);
 
         for (String key : keys) {
             String value = properties.getProperty(key);
@@ -377,7 +375,7 @@ public class LoadDialog extends JDialog implements TreeSelectionListener, Action
     }
 
 
-    private class ItemInfo {
+    private static class ItemInfo {
         final String uid;
         final String itemName;
         final String parentKey;

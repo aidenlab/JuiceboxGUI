@@ -62,7 +62,7 @@ public class AssemblyFileExporter {
             if (scaffold.getName().equals("unattempted:::debris")) {
                 continue;
             }
-            assemblyWriter.print(">" + scaffold.toString() + "\n"); // Use print to account for OS difference in control characters
+            assemblyWriter.print(">" + scaffold + "\n"); // Use print to account for OS difference in control characters
             last = scaffold.getIndexId();
         }
 

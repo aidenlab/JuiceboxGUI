@@ -30,8 +30,6 @@ import juicebox.gui.SuperAdapter;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by muhammadsaadshamim on 1/25/17.
@@ -73,45 +71,39 @@ public class PearsonColorScaleEditor extends JDialog {
         box.add(textNegMin);
 
         JButton updateButton = new JButton("Update Values");
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Color mainBackgroundColor = HiCGlobals.isDarkulaModeEnabled ? Color.DARK_GRAY : Color.WHITE;
-                textPosMax.setBackground(mainBackgroundColor);
-                textPosMin.setBackground(mainBackgroundColor);
-                textNegMax.setBackground(mainBackgroundColor);
-                textNegMin.setBackground(mainBackgroundColor);
+        updateButton.addActionListener(e -> {
+            Color mainBackgroundColor = HiCGlobals.isDarkulaModeEnabled ? Color.DARK_GRAY : Color.WHITE;
+            textPosMax.setBackground(mainBackgroundColor);
+            textPosMin.setBackground(mainBackgroundColor);
+            textNegMax.setBackground(mainBackgroundColor);
+            textNegMin.setBackground(mainBackgroundColor);
 
 
-                float maxA = Float.parseFloat(textPosMax.getText());
-                float minA = Float.parseFloat(textPosMin.getText());
-                float maxB = Float.parseFloat(textNegMax.getText());
-                float minB = Float.parseFloat(textNegMin.getText());
+            float maxA = Float.parseFloat(textPosMax.getText());
+            float minA = Float.parseFloat(textPosMin.getText());
+            float maxB = Float.parseFloat(textNegMax.getText());
+            float minB = Float.parseFloat(textNegMin.getText());
 
-                if (minA < 0) {
-                    textPosMin.setBackground(Color.RED);
-                } else if (minA >= maxA) {
-                    textPosMax.setBackground(Color.RED);
-                    textPosMin.setBackground(Color.RED);
-                } else if (maxB > 0) {
-                    textNegMax.setBackground(Color.RED);
-                } else if (minB >= maxB) {
-                    textNegMax.setBackground(Color.RED);
-                    textNegMin.setBackground(Color.RED);
-                } else {
-                    pearsonColorScale.setMinMax(key, minB, maxB, minA, maxA);
-                    superAdapter.refresh();
-                }
+            if (minA < 0) {
+                textPosMin.setBackground(Color.RED);
+            } else if (minA >= maxA) {
+                textPosMax.setBackground(Color.RED);
+                textPosMin.setBackground(Color.RED);
+            } else if (maxB > 0) {
+                textNegMax.setBackground(Color.RED);
+            } else if (minB >= maxB) {
+                textNegMax.setBackground(Color.RED);
+                textNegMin.setBackground(Color.RED);
+            } else {
+                pearsonColorScale.setMinMax(key, minB, maxB, minA, maxA);
+                superAdapter.refresh();
             }
         });
         JButton resetButton = new JButton("Reset Values");
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pearsonColorScale.resetValues(key);
-                superAdapter.refresh();
-                PearsonColorScaleEditor.this.dispose();
-            }
+        resetButton.addActionListener(e -> {
+            pearsonColorScale.resetValues(key);
+            superAdapter.refresh();
+            PearsonColorScaleEditor.this.dispose();
         });
 
         JPanel buttonPanel = new JPanel();

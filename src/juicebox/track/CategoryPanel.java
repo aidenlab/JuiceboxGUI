@@ -30,20 +30,12 @@ import org.broad.igv.util.ResourceLocator;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
-//import javax.swing.border.Border;
-//import javax.swing.border.LineBorder;
-//import java.awt.geom.Path2D;
-//import java.awt.geom.Rectangle2D;
-//import java.awt.geom.RoundRectangle2D;
 
 /**
  * @author Jim Robinson
@@ -88,12 +80,9 @@ class CategoryPanel extends JPanel {
         }
         this.add(listPanel);
 
-        toggleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                expanded = !expanded;
-                listPanel.setVisible(expanded);
-            }
+        toggleButton.addActionListener(actionEvent -> {
+            expanded = !expanded;
+            listPanel.setVisible(expanded);
         });
         labelBar.addMouseListener(new MouseAdapter() {
             @Override

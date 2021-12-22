@@ -705,13 +705,8 @@ public class HiC {
                                                    final ZoomCallType zoomCallType, String message,
                                                    final boolean allowLocationBroadcast) {
         final boolean[] returnVal = new boolean[1];
-        superAdapter.executeLongRunningTask(new Runnable() {
-            @Override
-            public void run() {
-                returnVal[0] = unsafeActuallySetZoomAndLocation(chrXName, chrYName, newZoom, genomeX, genomeY, scaleFactor,
-                        resetZoom, zoomCallType, allowLocationBroadcast, isResolutionLocked() ? 1 : 0, true);
-            }
-        }, message);
+        superAdapter.executeLongRunningTask(() -> returnVal[0] = unsafeActuallySetZoomAndLocation(chrXName, chrYName, newZoom, genomeX, genomeY, scaleFactor,
+                resetZoom, zoomCallType, allowLocationBroadcast, isResolutionLocked() ? 1 : 0, true), message);
         return returnVal[0];
     }
 
@@ -894,11 +889,6 @@ public class HiC {
     public String getLocationDescription() {
         String xChr = xContext.getChromosome().getName();
         String yChr = yContext.getChromosome().getName();
-
-//        if (!xChr.toLowerCase().equals("assembly") && !(xChr.toLowerCase().contains("chr"))) xChr = "chr" + xChr;
-//        if (!yChr.toLowerCase().equals("assembly") && !(yChr.toLowerCase().contains("chr"))) yChr = "chr" + yChr;
-
-
         return "setlocation " + xChr + " " + yChr + " " + currentZoom.getUnit().toString() + " " + currentZoom.getBinSize() + " " +
                 xContext.getBinOrigin() + " " + yContext.getBinOrigin() + " " + getScaleFactor();
     }
@@ -907,9 +897,6 @@ public class HiC {
 
         String xChr = xContext.getChromosome().getName();
         String yChr = yContext.getChromosome().getName();
-
-//        if (!xChr.toLowerCase().equals("assembly") && !(xChr.toLowerCase().contains("chr"))) xChr = "chr" + xChr;
-//        if (!yChr.toLowerCase().equals("assembly") && !(yChr.toLowerCase().contains("chr"))) yChr = "chr" + yChr;
 
 
         return xChr + "@" + (long) (xContext.getBinOrigin() * currentZoom.getBinSize()) + "_" +
@@ -938,24 +925,19 @@ public class HiC {
     }
 
     private void safeGenerateRainbowBed(final Chromosome chromosome, final File outputBedFile) {
-        superAdapter.getMainWindow().executeLongRunningTask(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    PrintWriter printWriter = new PrintWriter(outputBedFile);
-                    unsafeGenerateRainbowBed(chromosome, printWriter);
-                    printWriter.close();
-                    if (outputBedFile.exists() && outputBedFile.length() > 0) {
-                        // TODO this still doesn't add to the resource tree / load annotation dialog box
-                        //superAdapter.getTrackLoadAction();
-                        //getResourceTree().add1DCustomTrack(outputWigFile);
-                        HiC.this.unsafeLoadTrack(outputBedFile.getAbsolutePath());
-                        LoadAction loadAction = superAdapter.getTrackLoadAction();
-                        loadAction.checkBoxesForReload(outputBedFile.getName());
-                    }
-                } catch (Exception e) {
-                    System.err.println("Unable to generate rainbow track");
+        superAdapter.getMainWindow().executeLongRunningTask(() -> {
+            try {
+                PrintWriter printWriter = new PrintWriter(outputBedFile);
+                unsafeGenerateRainbowBed(chromosome, printWriter);
+                printWriter.close();
+                if (outputBedFile.exists() && outputBedFile.length() > 0) {
+                    // TODO this still doesn't add to the resource tree / load annotation dialog box
+                    HiC.this.unsafeLoadTrack(outputBedFile.getAbsolutePath());
+                    LoadAction loadAction = superAdapter.getTrackLoadAction();
+                    loadAction.checkBoxesForReload(outputBedFile.getName());
                 }
+            } catch (Exception e) {
+                System.err.println("Unable to generate rainbow track");
             }
         }, "Saving rainbow bed file.");
 
@@ -1099,7 +1081,7 @@ public class HiC {
                 for (NormalizationType t : controlDataset.getNormalizationTypes()) {
                     tmp.add(t.getDescription());
                 }
-                return tmp.toArray(new String[tmp.size()]);
+                return tmp.toArray(new String[0]);
             }
         } else {
             if (dataset.getVersion() < HiCGlobals.minVersion) {
@@ -1110,7 +1092,7 @@ public class HiC {
                 for (NormalizationType t : dataset.getNormalizationTypes()) {
                     tmp.add(t.getDescription());
                 }
-                return tmp.toArray(new String[tmp.size()]);
+                return tmp.toArray(new String[0]);
             }
         }
     }

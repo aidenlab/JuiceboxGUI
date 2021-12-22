@@ -394,7 +394,7 @@ public class Load2DAnnotationsDialog extends JDialog implements TreeSelectionLis
         }
     }
 
-    private class ItemInfo {
+    private static class ItemInfo {
         final String itemName;
         final String itemURL;
 

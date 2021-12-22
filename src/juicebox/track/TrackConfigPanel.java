@@ -33,8 +33,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 
 /**
@@ -155,15 +153,12 @@ public class TrackConfigPanel extends JPanel {
         posColorChooser = new ColorChooserPanel();
         posColorChooser.setToolTipText("Change color for positive values");
         posColorChooser.setSelectedColor(track.getPosColor());
-        posColorChooser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Color color = posColorChooser.getSelectedColor();
-                if (color != null) {
-                    track.setPosColor(color);
-                    superAdapter.updateTrackPanel();
-                    superAdapter.repaintTrackPanels();
-                }
+        posColorChooser.addActionListener(e -> {
+            Color color = posColorChooser.getSelectedColor();
+            if (color != null) {
+                track.setPosColor(color);
+                superAdapter.updateTrackPanel();
+                superAdapter.repaintTrackPanels();
             }
         });
         add(posColorChooser);
@@ -172,42 +167,23 @@ public class TrackConfigPanel extends JPanel {
         altColorChooser = new ColorChooserPanel();
         altColorChooser.setToolTipText("Change color for negative values");
         altColorChooser.setSelectedColor(track.getNegColor());
-        altColorChooser.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Color color = altColorChooser.getSelectedColor();
-                if (color != null) {
-                    track.setNegColor(color);
-                    superAdapter.updateTrackPanel();
-                    superAdapter.repaintTrackPanels();
-                }
+        altColorChooser.addActionListener(e -> {
+            Color color = altColorChooser.getSelectedColor();
+            if (color != null) {
+                track.setNegColor(color);
+                superAdapter.updateTrackPanel();
+                superAdapter.repaintTrackPanels();
             }
         });
         add(altColorChooser);
 
         add(new JLabel("Min:"));
         minYField = new JTextField("", 3);
-        /*minYField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                minYFieldFocusLost(e);
-                superAdapter.updateTrackPanel();
-                superAdapter.repaintTrackPanels();
-            }
-        });*/
         add(minYField);
         minYField.getDocument().addDocumentListener(dataActionDocument(minYField, superAdapter));
 
         add(new JLabel("Max:"));
         maxYField = new JTextField("", 3);
-        /*maxYField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                maxYFieldFocusLost(e);
-                superAdapter.updateTrackPanel();
-                superAdapter.repaintTrackPanels();
-            }
-        });*/
         add(maxYField);
         maxYField.getDocument().addDocumentListener(dataActionDocument(maxYField, superAdapter));
 
@@ -216,12 +192,7 @@ public class TrackConfigPanel extends JPanel {
         logScaleCB.setToolTipText("Set logarithmic scaling");
         logScaleCB.setEnabled(false);
         add(logScaleCB);
-        logScaleCB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performDataAction(superAdapter);
-            }
-        });
+        logScaleCB.addActionListener(e -> performDataAction(superAdapter));
 
 
         add(new JLabel("DRF"));
@@ -234,26 +205,20 @@ public class TrackConfigPanel extends JPanel {
         dataReductionGroup.add(maxRB);
         add(meanRB);
         add(maxRB);
-        meanRB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (track instanceof HiCDataTrack) {
-                    WindowFunction wf = maxRB.isSelected() ? WindowFunction.max : WindowFunction.mean;
-                    ((HiCDataTrack) track).setWindowFunction(wf);
-                    superAdapter.updateTrackPanel();
-                    superAdapter.repaintTrackPanels();
-                }
+        meanRB.addActionListener(e -> {
+            if (track instanceof HiCDataTrack) {
+                WindowFunction wf = maxRB.isSelected() ? WindowFunction.max : WindowFunction.mean;
+                ((HiCDataTrack) track).setWindowFunction(wf);
+                superAdapter.updateTrackPanel();
+                superAdapter.repaintTrackPanels();
             }
         });
-        maxRB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (track instanceof HiCDataTrack) {
-                    WindowFunction wf = maxRB.isSelected() ? WindowFunction.max : WindowFunction.mean;
-                    ((HiCDataTrack) track).setWindowFunction(wf);
-                    superAdapter.updateTrackPanel();
-                    superAdapter.repaintTrackPanels();
-                }
+        maxRB.addActionListener(e -> {
+            if (track instanceof HiCDataTrack) {
+                WindowFunction wf = maxRB.isSelected() ? WindowFunction.max : WindowFunction.mean;
+                ((HiCDataTrack) track).setWindowFunction(wf);
+                superAdapter.updateTrackPanel();
+                superAdapter.repaintTrackPanels();
             }
         });
     }

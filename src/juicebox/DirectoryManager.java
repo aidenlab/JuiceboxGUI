@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2020 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -106,7 +106,7 @@ public class DirectoryManager {
 
             // The HIC directory either doesn't exist or isn't writeable.  This situation can arise with Windows Vista
             // and Windows 7 due to a Java bug (http://bugs.sun.com/view_bug.do?bug_id=4787931)
-            if (HIC_DIRECTORY == null || !HIC_DIRECTORY.exists() || !canWrite(HIC_DIRECTORY)) {
+            if (HIC_DIRECTORY == null || !HIC_DIRECTORY.exists() || canWrite(HIC_DIRECTORY)) {
                 if (Globals.isHeadless() || Globals.isSuppressMessages()) {
                     System.err.println("Cannot write to hic directory: " + HIC_DIRECTORY.getAbsolutePath());
                     HIC_DIRECTORY = (new File(".")).getParentFile();
@@ -132,7 +132,7 @@ public class DirectoryManager {
 
             if (HIC_DIRECTORY == null || !HIC_DIRECTORY.canRead()) {
                 throw new DataLoadException("Cannot read from user directory", HIC_DIRECTORY.getAbsolutePath());
-            } else if (!canWrite(HIC_DIRECTORY)) {
+            } else if (canWrite(HIC_DIRECTORY)) {
                 throw new DataLoadException("Cannot write to user directory", HIC_DIRECTORY.getAbsolutePath());
             }
 
@@ -177,9 +177,9 @@ public class DirectoryManager {
                 }
                 testFile.deleteOnExit();
                 testFile.createNewFile();
-                return testFile.exists();
+                return !testFile.exists();
             } catch (IOException e) {
-                return false;
+                return true;
             } finally {
                 assert testFile != null;
                 if (testFile.exists()) {
@@ -187,7 +187,7 @@ public class DirectoryManager {
                 }
             }
         } else {
-            return directory.canWrite();
+            return !directory.canWrite();
         }
 
     }

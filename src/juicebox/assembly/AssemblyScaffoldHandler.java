@@ -680,7 +680,7 @@ public class AssemblyScaffoldHandler {
 
         for (int i = 0; i < listOfSuperscaffolds.size(); i++) {
             List<Integer> superscaffold = listOfSuperscaffolds.get(i);
-            if (!idListToMerge.contains(Integer.valueOf(i))) {
+            if (!idListToMerge.contains(i)) {
                 newSuperscaffolds.add(superscaffold);
             } else if (i == idListToMerge.get(0)) {
                 if (!altGoesFirst) {
@@ -740,13 +740,12 @@ public class AssemblyScaffoldHandler {
 
 
     private void multiSplitSuperscaffolds(int id1, int id2, int super1, int super2) {
-        List<List<Integer>> newSuperscaffolds = new ArrayList<>();
         int startPoint = listOfSuperscaffolds.get(super1).indexOf(id1);
         int endPoint = listOfSuperscaffolds.get(super2).indexOf(id2);
         int jstart, jend;
         boolean addEndScaff = false;
 
-        newSuperscaffolds.addAll(listOfSuperscaffolds.subList(0, super1));
+        List<List<Integer>> newSuperscaffolds = new ArrayList<>(listOfSuperscaffolds.subList(0, super1));
 
         for (int i = super1; i <= super2; i++) {
             jstart = 0;
@@ -767,7 +766,7 @@ public class AssemblyScaffoldHandler {
 
             // Add each inner scaffold to its own superscaffold group
             for (int j = jstart; j <= jend; j++) {
-                newSuperscaffolds.add(Arrays.asList(listOfSuperscaffolds.get(i).get(j)));
+                newSuperscaffolds.add(Collections.singletonList(listOfSuperscaffolds.get(i).get(j)));
             }
 
             // If did not end at last scaffold in last superscaffold selected

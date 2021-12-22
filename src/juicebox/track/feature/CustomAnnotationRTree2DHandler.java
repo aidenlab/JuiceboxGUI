@@ -91,7 +91,6 @@ class CustomAnnotationRTree2DHandler extends Feature2DHandler {
     }
 
     public Feature2D extractSingleFeature() {
-        //noinspection LoopStatementThatDoesntLoop
         return loopList.extractSingleFeature();
     }
 

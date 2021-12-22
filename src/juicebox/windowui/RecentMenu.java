@@ -38,8 +38,6 @@ import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -94,31 +92,29 @@ public abstract class RecentMenu extends JMenu {
         //---- Clear Recent ----
         JMenuItem clearMapList = new JMenuItem();
         clearMapList.setText("Clear ");
-        clearMapList.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                //Clear all items from preferences:
-                for (int i = 0; i < m_maxItems; i++) {
-                    prefs.remove(m_entry + i);
-                }
-                //clear the existing items
-                removeAll();
-                m_items = new ArrayList<>();
-                setEnabled(false);
+        clearMapList.addActionListener(e -> {
+            //Clear all items from preferences:
+            for (int i = 0; i < m_maxItems; i++) {
+                prefs.remove(m_entry + i);
+            }
+            //clear the existing items
+            removeAll();
+            m_items = new ArrayList<>();
+            setEnabled(false);
 
-                //Clean state data:
-                if (myType == HiCGlobals.menuType.STATE) {
-                    try {
-                        BufferedWriter bWriter = new BufferedWriter(new FileWriter(HiCGlobals.stateFile, false));
-                        BufferedWriter buffWriter = new BufferedWriter(new FileWriter(JuiceboxStatesXML, false));
+            //Clean state data:
+            if (myType == HiCGlobals.menuType.STATE) {
+                try {
+                    BufferedWriter bWriter = new BufferedWriter(new FileWriter(HiCGlobals.stateFile, false));
+                    BufferedWriter buffWriter = new BufferedWriter(new FileWriter(JuiceboxStatesXML, false));
 
-                        HiCGlobals.savedStatesList.clear();
-                        XMLFileWriter.overwriteXMLFile();
+                    HiCGlobals.savedStatesList.clear();
+                    XMLFileWriter.overwriteXMLFile();
 
-                        buffWriter.close();
-                        bWriter.close();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                    buffWriter.close();
+                    bWriter.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
             }
         });
@@ -167,11 +163,7 @@ public abstract class RecentMenu extends JMenu {
                 menuItem.setToolTipText(temp[0]);
                 menuItem.setActionCommand(m_item);
                 //menuItem.setActionMap();
-                menuItem.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        onSelectPosition(actionEvent.getActionCommand());
-                    }
-                });
+                menuItem.addActionListener(actionEvent -> onSelectPosition(actionEvent.getActionCommand()));
                 this.add(menuItem);
             }
 
@@ -238,11 +230,7 @@ public abstract class RecentMenu extends JMenu {
                     menuItem.setToolTipText(m_item);
                     menuItem.setActionCommand(m_item);
                     //menuItem.setActionMap();
-                    menuItem.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent actionEvent) {
-                            onSelectPosition(actionEvent.getActionCommand());
-                        }
-                    });
+                    menuItem.addActionListener(actionEvent -> onSelectPosition(actionEvent.getActionCommand()));
                     //menuItem.addMouseListener(new MouseListener() );
                     this.add(menuItem);
                 }

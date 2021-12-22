@@ -77,7 +77,7 @@ class EncodeTableModel extends AbstractTableModel {
             }
         }
         //tmp.add("path");
-        columnHeadings = tmp.toArray(new String[tmp.size()]);
+        columnHeadings = tmp.toArray(new String[0]);
 
 
         sorter = new TableRowSorter<>(this);

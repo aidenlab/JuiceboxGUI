@@ -104,7 +104,7 @@ public class AssemblyFileImporter {
         return (int) (totalLength / HiCGlobals.hicMapScale); // in case decide to use for validation so that not to count again
     }
 
-    private void parseAssemblyFileNoBundling() throws IOException {
+    private void parseAssemblyFileNoBundling() {
         try {
             for (String row : rawFileData) {
                 if (row.startsWith(">")) {

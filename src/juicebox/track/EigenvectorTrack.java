@@ -38,8 +38,6 @@ import org.broad.igv.util.collections.LRUCache;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.util.HashMap;
 import java.util.Map;
@@ -136,16 +134,13 @@ public class EigenvectorTrack extends HiCTrack {
         menu.addSeparator();
 
         JMenuItem menuItem = new JMenuItem("Flip Eigenvector");
-        menuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GUIMatrixZoomData zd = getAppropriateZD();
-                if (zd == null) return;
+        menuItem.addActionListener(e -> {
+            GUIMatrixZoomData zd = getAppropriateZD();
+            if (zd == null) return;
 
-                int chrIdx = orientation == TrackPanel.Orientation.X ? zd.getChr1Idx() : zd.getChr2Idx();
-                flipEigenvector(chrIdx, superAdapter.getHiC().getZoom().getBinSize());
-                hic.refreshEigenvectorTrackIfExists();
-            }
+            int chrIdx = orientation == TrackPanel.Orientation.X ? zd.getChr1Idx() : zd.getChr2Idx();
+            flipEigenvector(chrIdx, superAdapter.getHiC().getZoom().getBinSize());
+            hic.refreshEigenvectorTrackIfExists();
         });
         menu.add(menuItem);
 
@@ -199,7 +194,7 @@ public class EigenvectorTrack extends HiCTrack {
             if (orientation == TrackPanel.Orientation.X) {
                 GraphicUtils.drawCenteredText("Eigenvector not available at this resolution", rect, g);
             } else {
-                drawRotatedString((Graphics2D) g, "Eigenvector not available at this resolution", (2 * rect.height) / 3, rect.x + 15);
+                drawRotatedString((Graphics2D) g, "Eigenvector not available at this resolution", (2 * rect.height) / 3f, rect.x + 15);
             }
 
             g.setFont(original);

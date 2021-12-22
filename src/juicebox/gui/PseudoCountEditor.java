@@ -29,8 +29,6 @@ import juicebox.mapcolorui.HeatmapRenderer;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PseudoCountEditor extends JDialog {
 
@@ -55,22 +53,16 @@ public class PseudoCountEditor extends JDialog {
         box.add(textPseudocount);
 
         JButton updateButton = new JButton("Update Values");
-        updateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                HeatmapRenderer.PSEUDO_COUNT = Float.parseFloat(textPseudocount.getText());
-                superAdapter.refresh();
-                PseudoCountEditor.this.dispose();
-            }
+        updateButton.addActionListener(e -> {
+            HeatmapRenderer.PSEUDO_COUNT = Float.parseFloat(textPseudocount.getText());
+            superAdapter.refresh();
+            PseudoCountEditor.this.dispose();
         });
         JButton resetButton = new JButton("Reset Values");
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                HeatmapRenderer.PSEUDO_COUNT = 1f;
-                superAdapter.refresh();
-                PseudoCountEditor.this.dispose();
-            }
+        resetButton.addActionListener(e -> {
+            HeatmapRenderer.PSEUDO_COUNT = 1f;
+            superAdapter.refresh();
+            PseudoCountEditor.this.dispose();
         });
 
         JPanel buttonPanel = new JPanel();

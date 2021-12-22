@@ -42,7 +42,7 @@ public class HiCFixedGridAxis implements HiCGridAxis {
         this.binSize = binSize;
 
         // Compute an approximate igv zoom level
-        igvZoom = Math.max(0, (int) (Math.log(binCount / 700) / log2));
+        igvZoom = Math.max(0, (int) (Math.log(binCount / 700f) / log2));
     }
 
     @Override

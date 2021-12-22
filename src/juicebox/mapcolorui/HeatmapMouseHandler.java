@@ -222,8 +222,8 @@ public class HeatmapMouseHandler extends MouseAdapter {
         });
 
         final JCheckBoxMenuItem mi5 = new JCheckBoxMenuItem("Freeze hover text");
-        mi5.setSelected(!superAdapter.isTooltipAllowedToUpdated());
-        mi5.addActionListener(e -> superAdapter.toggleToolTipUpdates(!superAdapter.isTooltipAllowedToUpdated()));
+        mi5.setSelected(superAdapter.isTooltipAllowedToUpdated());
+        mi5.addActionListener(e -> superAdapter.toggleToolTipUpdates(superAdapter.isTooltipAllowedToUpdated()));
 
         final JMenuItem mi6 = new JMenuItem("Copy hover text to clipboard");
         mi6.addActionListener(e -> {
@@ -818,7 +818,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
                 restoreDefaultVariables();
             } else if ((dragMode == DragMode.ZOOM || dragMode == DragMode.SELECT) && zoomRectangle != null) {
-                Runnable runnable = () -> unsafeDragging();
+                Runnable runnable = this::unsafeDragging;
                 superAdapter.executeLongRunningTask(runnable, "Mouse Drag");
             } else if (dragMode == DragMode.ANNOTATE) {
                 // New annotation is added (not single click) and new feature from custom annotation

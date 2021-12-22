@@ -250,24 +250,22 @@ public class SuperAdapter {
     }
 
     public void safeLoadFromURLActionPerformed(final Runnable refresh1DLayers) {
-        Runnable runnable = new Runnable() {
-            public void run() {
-                if (hic.getDataset() == null) {
-                    JOptionPane.showMessageDialog(mainWindow, "HiC file must be loaded to load tracks", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                String url = JOptionPane.showInputDialog("Enter URL: ");
-
-                if (url != null && url.length() > 0) {
-                    if (HiCFileTools.isDropboxURL(url)) {
-                        url = HiCFileTools.cleanUpDropboxURL(url);
-                    }
-                    url = url.trim();
-                    hic.unsafeLoadTrack(url);
-                }
-                refresh1DLayers.run();
+        Runnable runnable = () -> {
+            if (hic.getDataset() == null) {
+                JOptionPane.showMessageDialog(mainWindow, "HiC file must be loaded to load tracks", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+
+            String url = JOptionPane.showInputDialog("Enter URL: ");
+
+            if (url != null && url.length() > 0) {
+                if (HiCFileTools.isDropboxURL(url)) {
+                    url = HiCFileTools.cleanUpDropboxURL(url);
+                }
+                url = url.trim();
+                hic.unsafeLoadTrack(url);
+            }
+            refresh1DLayers.run();
         };
         mainWindow.executeLongRunningTask(runnable, "Load from url");
     }
@@ -356,8 +354,7 @@ public class SuperAdapter {
                             hic.getDataset().getFragmentCounts().get(hic.getYContext().getChromosome().getName()));
                 }
 
-                int maxNBins = pixels;
-                long bp_bin = len / maxNBins;
+                long bp_bin = len / pixels;
                 initialZoom = zooms.get(zooms.size() - 1);
                 for (int z = 1; z < zooms.size(); z++) {
                     if (zooms.get(z).getBinSize() < bp_bin) {
@@ -510,11 +507,9 @@ public class SuperAdapter {
 
     public void safeLoad(final List<String> files, final boolean control, final String title) {
         addRecentMapMenuEntry(title.trim() + RecentMenu.delimiter + files.get(0), true);
-        Runnable runnable = new Runnable() {
-            public void run() {
-                boolean isRestorenMode = false;
-                unsafeLoadWithTitleFix(files, control, title, isRestorenMode);
-            }
+        Runnable runnable = () -> {
+            boolean isRestorenMode = false;
+            unsafeLoadWithTitleFix(files, control, title, isRestorenMode);
         };
         mainWindow.executeLongRunningTask(runnable, "MainWindow safe load");
     }
@@ -556,32 +551,19 @@ public class SuperAdapter {
     }
 
     void safeRefreshButtonActionPerformed() {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                mainViewPanel.unsafeRefreshChromosomes(SuperAdapter.this);
-            }
-        };
+        Runnable runnable = () -> mainViewPanel.unsafeRefreshChromosomes(SuperAdapter.this);
         mainWindow.executeLongRunningTask(runnable, "Refresh Button");
     }
 
     public boolean safeDisplayOptionComboBoxActionPerformed() {
         final boolean[] retVal = new boolean[1];
-        Runnable runnable = new Runnable() {
-            public void run() {
-                retVal[0] = unsafeDisplayOptionComboBoxActionPerformed();
-            }
-        };
+        Runnable runnable = () -> retVal[0] = unsafeDisplayOptionComboBoxActionPerformed();
         mainWindow.executeLongRunningTask(runnable, "DisplayOptionsComboBox");
         return retVal[0];
     }
 
     void safeNormalizationComboBoxActionPerformed(final ActionEvent e, final boolean isForControl) {
-        Runnable runnable = new Runnable() {
-            public void run() {
-                unsafeNormalizationComboBoxActionPerformed(isForControl);
-            }
-        };
+        Runnable runnable = () -> unsafeNormalizationComboBoxActionPerformed(isForControl);
         mainWindow.executeLongRunningTask(runnable, "Normalization ComboBox");
     }
 
@@ -766,7 +748,7 @@ public class SuperAdapter {
     }
 
     public boolean isTooltipAllowedToUpdated() {
-        return mainViewPanel.isTooltipAllowedToUpdate();
+        return !mainViewPanel.isTooltipAllowedToUpdate();
     }
 
     public void toggleToolTipUpdates(boolean b) {
@@ -1011,11 +993,9 @@ public class SuperAdapter {
     }
 
     public void safeClearAllMZDCache() {
-        Runnable runnable = new Runnable() {
-            public void run() {
-                unsafeClearAllMatrixZoomCache(); //split clear current zoom and put the rest in background? Seems to taking a lot of time
-                refresh();
-            }
+        Runnable runnable = () -> {
+            unsafeClearAllMatrixZoomCache(); //split clear current zoom and put the rest in background? Seems to taking a lot of time
+            refresh();
         };
         executeLongRunningTask(runnable, "Assembly clear MZD cache");
     }

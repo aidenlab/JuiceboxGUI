@@ -31,7 +31,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.text.DecimalFormat;
@@ -171,25 +170,17 @@ class ColorRangeDialog extends JDialog {
 
         //---- okButton ----
         JButton okButton = new JButton("OK");
-        okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                okButtonActionPerformed(e, superAdapter, colorRangePanel, isOEColorScaleType);
-            }
-        });
+        okButton.addActionListener(e -> okButtonActionPerformed(e, superAdapter, colorRangePanel, isOEColorScaleType));
         buttonBar.add(okButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 0, 0, 5), 0, 0));
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                colorRangePanel.setColorRangeSliderVisible(true, superAdapter);
-                if (!superAdapter.getMainViewPanel().setResolutionSliderVisible(true, superAdapter)) {
-                    System.err.println("Something went wrong");
-                }
-                setVisible(false);
+        cancelButton.addActionListener(e -> {
+            colorRangePanel.setColorRangeSliderVisible(true, superAdapter);
+            if (!superAdapter.getMainViewPanel().setResolutionSliderVisible(true, superAdapter)) {
+                System.err.println("Something went wrong");
             }
+            setVisible(false);
         });
 
         buttonBar.add(cancelButton, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,

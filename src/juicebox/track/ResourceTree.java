@@ -40,7 +40,10 @@ import org.w3c.dom.NodeList;
 import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.List;
 import java.util.*;
@@ -104,12 +107,7 @@ public class ResourceTree {
                             JPopupMenu menu = new JPopupMenu("popup");
 
                             JMenuItem menuItem = new JMenuItem("Remove feature");
-                            menuItem.addActionListener(new ActionListener() {
-                                @Override
-                                public void actionPerformed(ActionEvent e) {
-                                    removeFeature((DefaultMutableTreeNode) selPath.getLastPathComponent());
-                                }
-                            });
+                            menuItem.addActionListener(e1 -> removeFeature((DefaultMutableTreeNode) selPath.getLastPathComponent()));
                             menu.add(menuItem);
                             menu.show(dialogTree, e.getX(), e.getY());
                         }
@@ -176,54 +174,48 @@ public class ResourceTree {
         JButton okButton = new JButton("OK");
         JButton cancelButton = new JButton("Cancel");
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+        cancelButton.addActionListener(actionEvent -> {
 
-                dialog.dispose();
-                // get selected locators
-                LinkedHashSet<ResourceLocator> selectedLocators = getSelectedResourceLocators();
-                LinkedHashSet<ResourceLocator> newlyAddedLocators = new LinkedHashSet<>();
-                // these have been added from dialog open to hitting the "cancel" button
-                for (ResourceLocator locator : selectedLocators) {
-                    if (!loadedLocators.contains(locator)) {
-                        newlyAddedLocators.add(locator);
-                    }
+            dialog.dispose();
+            // get selected locators
+            LinkedHashSet<ResourceLocator> selectedLocators = getSelectedResourceLocators();
+            LinkedHashSet<ResourceLocator> newlyAddedLocators = new LinkedHashSet<>();
+            // these have been added from dialog open to hitting the "cancel" button
+            for (ResourceLocator locator : selectedLocators) {
+                if (!loadedLocators.contains(locator)) {
+                    newlyAddedLocators.add(locator);
                 }
-                // roll back that change (remove the selected ones)
-                for (ResourceLocator locator : newlyAddedLocators) {
-                    remove(locator);
-                }
-                // add back in anything that was deselected
-                for (ResourceLocator locator : loadedLocators) {
-                    addBack(locator);
-                }
-
             }
+            // roll back that change (remove the selected ones)
+            for (ResourceLocator locator : newlyAddedLocators) {
+                remove(locator);
+            }
+            // add back in anything that was deselected
+            for (ResourceLocator locator : loadedLocators) {
+                addBack(locator);
+            }
+
         });
 
-        okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                dialog.dispose();
-                LinkedHashSet<ResourceLocator> selectedLocators = getSelectedResourceLocators();
-                for (ResourceLocator locator : selectedLocators) {
-                    if (!loadedLocators.contains(locator)) {
-                        newLocators.add(locator);
-                    }
+        okButton.addActionListener(actionEvent -> {
+            dialog.dispose();
+            LinkedHashSet<ResourceLocator> selectedLocators = getSelectedResourceLocators();
+            for (ResourceLocator locator : selectedLocators) {
+                if (!loadedLocators.contains(locator)) {
+                    newLocators.add(locator);
                 }
-                for (ResourceLocator locator : loadedLocators) {
-                    if (!selectedLocators.contains(locator)) {
-                        deselectedLocators.add(locator);
-                    }
-                }
-                // add these to loaded ones for next use
-                loadedLocators.addAll(newLocators);
-                for (ResourceLocator locator : deselectedLocators) {
-                    loadedLocators.remove(locator);
-                }
-                dialogTree.clearSelection();
             }
+            for (ResourceLocator locator : loadedLocators) {
+                if (!selectedLocators.contains(locator)) {
+                    deselectedLocators.add(locator);
+                }
+            }
+            // add these to loaded ones for next use
+            loadedLocators.addAll(newLocators);
+            for (ResourceLocator locator : deselectedLocators) {
+                loadedLocators.remove(locator);
+            }
+            dialogTree.clearSelection();
         });
 
         buttonPanel.add(okButton);
@@ -373,17 +365,11 @@ public class ResourceTree {
 
 
         ResourceLocator locator = ((CheckableResource) node.getUserObject()).getResourceLocator();
-
-        // no longer needed? MSS
-        //String path = locator.getPath();
-        //hic.removeLoadedAnnotation(path); // actually removes the entry (at least 2d annotation) so that it can be reloaded
-
         deselectedLocators.add(locator);
         loadedLocators.remove(locator);
         newLocators.remove(locator);
 
         removeResourceFromLeaf((CheckableResource) node.getUserObject(), leafResources);
-        //leafResources.remove(node);
         dialogTree.updateUI();
 
 
@@ -1054,80 +1040,6 @@ public class ResourceTree {
             return false;
         }
 
-        /**
-         * Return true if it find nodes that ar both selected and disabled
-         *
-         * @param treeNode
-         * @return true if we are working with preselected nodes
-         */
-      /*  public boolean hasLockedChildren(TreeNode treeNode) {
-
-            boolean hasSelectedAndDisabled = false;
-            Enumeration children = treeNode.children();
-            while (children.hasMoreElements()) {
-
-                TreeNode childNode = (TreeNode) children.nextElement();
-
-                Object childsUserObject =
-                        ((DefaultMutableTreeNode) childNode).getUserObject();
-                if (childsUserObject instanceof CheckableResource) {
-
-                    CheckableResource childResource =
-                            ((CheckableResource) childsUserObject);
-
-                    if (!childResource.isEnabled() && childResource.isSelected()) {
-                        hasSelectedAndDisabled = true;
-                    }
-
-                    if (hasSelectedAndDisabled) {
-                        break;
-                    }
-                }
-            }
-            return (hasSelectedAndDisabled);
-        }          */
-
-        /**
-         * @param treeNode
-         * @return true if we are working with preselected nodes
-         */
-     /*   public boolean hasSelectedAndLockedChildren(TreeNode treeNode) {
-
-            boolean hasSelected = false;
-            boolean hasSelectedAndDisabled = false;
-            Enumeration children = treeNode.children();
-            while (children.hasMoreElements()) {
-
-                TreeNode childNode = (TreeNode) children.nextElement();
-
-                Object childsUserObject =
-                        ((DefaultMutableTreeNode) childNode).getUserObject();
-                if (childsUserObject instanceof CheckableResource) {
-
-                    CheckableResource childResource =
-                            ((CheckableResource) childsUserObject);
-
-                    if (childResource.isSelected() && childResource.isEnabled()) {
-                        hasSelected = true;
-                    }
-                    if (!childResource.isEnabled() && childResource.isSelected()) {
-                        hasSelectedAndDisabled = true;
-                    }
-
-                    if (hasSelected & hasSelectedAndDisabled) {
-                        break;
-                    }
-                }
-            }
-
-            // If we have both we can return true
-            return (hasSelected & hasSelectedAndDisabled);
-        }                    /*
-
-        /**
-         * @param treeNode
-         * @return true if we are working with preselected nodes
-         */
         boolean hasSelectedAndLockedDescendants(TreeNode treeNode) {
 
             boolean hasSelected = false;
@@ -1202,12 +1114,9 @@ public class ResourceTree {
                     tree, value, true, expanded, leaf, row, true);
 
 
-            ItemListener itemListener = new ItemListener() {
-
-                public void itemStateChanged(ItemEvent itemEvent) {
-                    if (stopCellEditing()) {
-                        fireEditingStopped();
-                    }
+            ItemListener itemListener = itemEvent -> {
+                if (stopCellEditing()) {
+                    fireEditingStopped();
                 }
             };
             if (rendererComponent instanceof LinkCheckBox) {

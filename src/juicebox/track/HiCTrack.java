@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2020 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,7 @@
  *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -30,8 +30,6 @@ import org.broad.igv.util.ResourceLocator;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 
 /**
@@ -70,21 +68,11 @@ public abstract class HiCTrack{
         JPopupMenu menu = new JPopupMenu(getName());
 
         JMenuItem menuItem = new JMenuItem("Remove track");
-        menuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                trackPanel.removeTrack(HiCTrack.this);
-            }
-        });
+        menuItem.addActionListener(e -> trackPanel.removeTrack(HiCTrack.this));
         menu.add(menuItem);
 
         JMenuItem menuItem2 = new JMenuItem("Move up...");
-        menuItem2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                trackPanel.moveTrackUp(HiCTrack.this);
-            }
-        });
+        menuItem2.addActionListener(e -> trackPanel.moveTrackUp(HiCTrack.this));
 
         //if track is on the top don't add to the menu
         if (trackPanel.getTrackList().indexOf(HiCTrack.this) != 0) {
@@ -92,12 +80,7 @@ public abstract class HiCTrack{
         }
 
         JMenuItem menuItem3 = new JMenuItem("Move down...");
-        menuItem3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                trackPanel.moveTrackDown(HiCTrack.this);
-            }
-        });
+        menuItem3.addActionListener(e -> trackPanel.moveTrackDown(HiCTrack.this));
 
         //if track is on the bottom don't add to the menu
         if (trackPanel.getTrackList().indexOf(HiCTrack.this) != trackPanel.getTrackList().size() - 1) {

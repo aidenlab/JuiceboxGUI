@@ -35,7 +35,9 @@ import juicebox.track.HiCGridAxis;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.RoundRectangle2D;
@@ -129,16 +131,13 @@ public class HiCChromosomeFigPanel extends JComponent {
             }
         });
 
-        addMouseWheelListener(new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                int scroll = (int) Math.round(e.getPreciseWheelRotation());
+        addMouseWheelListener(e -> {
+            int scroll = (int) Math.round(e.getPreciseWheelRotation());
 
-                if (isHorizontal()) {
-                    hic.moveBy(scroll, 0);
-                } else {
-                    hic.moveBy(0, scroll);
-                }
+            if (isHorizontal()) {
+                hic.moveBy(scroll, 0);
+            } else {
+                hic.moveBy(0, scroll);
             }
         });
 
@@ -284,7 +283,7 @@ public class HiCChromosomeFigPanel extends JComponent {
             g.drawLine(chrFigEnd, h / 4 - 3, endbinNumber - 1, 3);
     
             // Later implement shape to create a chromosome shape
-            RoundRectangle2D chrFig = new RoundRectangle2D.Double(1, h / 4, w - 2, h / 2, h / 2, h / 2);
+            RoundRectangle2D chrFig = new RoundRectangle2D.Double(1, h / 4f, w - 2, h / 2f, h / 2f, h / 2f);
             g.setClip(chrFig);
             g.setColor(chrInside);
             g.fillRect(1, h / 4, w - 2, h / 2);
@@ -312,7 +311,7 @@ public class HiCChromosomeFigPanel extends JComponent {
             g.drawLine(chrFigEnd, h / 4 - 3, -w + 1, 3);
 
             // Later implement shape to create a chromosome shape
-            RoundRectangle2D chrFig = new RoundRectangle2D.Double(-w + 1, h / 4, w - 2, h / 2, h / 2, h / 2);
+            RoundRectangle2D chrFig = new RoundRectangle2D.Double(-w + 1, h / 4f, w - 2, h / 2f, h / 2f, h / 2f);
             g.setClip(chrFig);
             g.setColor(chrInside);
             g.fillRect(-w + 1, h / 4, w - 2, h / 2);

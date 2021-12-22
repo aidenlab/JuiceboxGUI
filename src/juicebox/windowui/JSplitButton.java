@@ -92,14 +92,7 @@ class JSplitButton extends AbstractButton implements Accessible {
 
         mainButton.setContentAreaFilled(false);
 
-        mainButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                doClick();
-            }
-
-        });
+        mainButton.addActionListener(e -> doClick());
 
         mainButton.addMouseListener(new MouseAdapter() {
 

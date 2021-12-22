@@ -59,7 +59,7 @@ public class XMLFileHandling {
         StringBuilder currentTrackName = new StringBuilder();
         String configTrackInfo = "none";
         String controlFiles = SuperAdapter.currentlyLoadedControlFiles;
-        if (controlFiles == null || controlFiles.length() < 1 || controlFiles.isEmpty()) {
+        if (controlFiles == null || controlFiles.isEmpty()) {
             controlFiles = "null";
         }
 

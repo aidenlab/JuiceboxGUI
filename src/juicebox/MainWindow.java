@@ -452,20 +452,16 @@ public class MainWindow extends JFrame {
         if (HiCGlobals.printVerboseComments) {
             System.out.println("long_execute " + caller);
         }
-        Callable<Object> wrapper = new Callable<Object>() {
-            public Object call() {
-                MainWindow.this.showDisabledGlassPane(caller, message);
-                try {
-                    runnable.run();
-                    return "done";
-                }
-                catch (Exception error) {
-                    error.printStackTrace();
-                    return "error";
-                }
-                finally {
-                    MainWindow.this.hideDisabledGlassPane(caller);
-                }
+        Callable<Object> wrapper = () -> {
+            MainWindow.this.showDisabledGlassPane(caller, message);
+            try {
+                runnable.run();
+                return "done";
+            } catch (Exception error) {
+                error.printStackTrace();
+                return "error";
+            } finally {
+                MainWindow.this.hideDisabledGlassPane(caller);
             }
         };
 

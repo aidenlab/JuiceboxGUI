@@ -46,7 +46,10 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -122,13 +125,10 @@ public class LoadAssemblyAnnotationsDialog extends JDialog implements TreeSelect
 
         openAssemblyButton = new JButton("Open Assembly");
         openAssemblyButton.setEnabled(false);
-        openAssemblyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mostRecentPaths.clear();
-                safeLoadAssemblyFiles(tree.getSelectionPaths(), layersPanel, superAdapter);
-                LoadAssemblyAnnotationsDialog.this.setVisible(false);
-            }
+        openAssemblyButton.addActionListener(e -> {
+            mostRecentPaths.clear();
+            safeLoadAssemblyFiles(tree.getSelectionPaths(), layersPanel, superAdapter);
+            LoadAssemblyAnnotationsDialog.this.setVisible(false);
         });
 
 
@@ -141,12 +141,7 @@ public class LoadAssemblyAnnotationsDialog extends JDialog implements TreeSelect
         });
 
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                closeWindow();
-            }
-        });
+        cancelButton.addActionListener(e -> closeWindow());
         cancelButton.setPreferredSize(new Dimension((int) cancelButton.getPreferredSize().getWidth(),
                 (int) openAssemblyButton.getPreferredSize().getHeight()));
 
@@ -258,12 +253,7 @@ public class LoadAssemblyAnnotationsDialog extends JDialog implements TreeSelect
 
 
     private void safeLoadAssemblyFiles(final TreePath[] paths, final LayersPanel layersPanel, final SuperAdapter superAdapter) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                unsafeLoadAssemblyFiles(paths, layersPanel, superAdapter);
-            }
-        };
+        Runnable runnable = () -> unsafeLoadAssemblyFiles(paths, layersPanel, superAdapter);
         superAdapter.executeLongRunningTask(runnable, "load 2d annotation files");
     }
 
@@ -453,7 +443,7 @@ public class LoadAssemblyAnnotationsDialog extends JDialog implements TreeSelect
         }
     }
 
-    private class ItemInfo {
+    private static class ItemInfo {
         final String itemName;
         final String itemURL;
 

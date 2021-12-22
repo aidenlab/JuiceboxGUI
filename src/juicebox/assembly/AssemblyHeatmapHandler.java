@@ -45,7 +45,7 @@ public class AssemblyHeatmapHandler {
 
     public static void setListOfOSortedAggregateScaffolds(List<Scaffold> listOfAggregateScaffolds) {
         AssemblyHeatmapHandler.listOfOSortedAggregateScaffolds = new ArrayList<>(listOfAggregateScaffolds);
-        Collections.sort(listOfOSortedAggregateScaffolds, Scaffold.originalStateComparator);
+        listOfOSortedAggregateScaffolds.sort(Scaffold.originalStateComparator);
     }
 
     public static SuperAdapter getSuperAdapter() {

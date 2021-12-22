@@ -50,7 +50,7 @@ public class HiCFragmentAxis implements HiCGridAxis {
         
         // Compute an approximate igv zoom level
         double averageBinSizeInBP = ((double) this.chrLength) / (sites.length + 1) * binSize;
-        igvZoom = (int) (Math.log((this.chrLength / 700) / averageBinSizeInBP) / log2);
+        igvZoom = (int) (Math.log((this.chrLength / 700f) / averageBinSizeInBP) / log2);
     }
 
     @Override
@@ -73,43 +73,6 @@ public class HiCFragmentAxis implements HiCGridAxis {
     }
 
 
-//    @Override
-//    public int getGenomicStart(double binNumber) {
-//
-//
-//        if (binNumber >= sites.length) {
-//            binNumber = sites.length - 1;
-//        }
-//
-//        int bin = (int) binNumber;
-//        double remainder = binNumber % bin;
-//
-//        double start = binNumber == 0 ? 0 : sites[bin-1];
-//        double end = sites[bin];
-//        double delta = end - start;
-//
-//        return (int) (start + remainder * delta);
-//
-//    }
-//
-//    @Override
-//    public int getGenomicEnd(double binNumber) {
-//
-//        if (binNumber >= sites.length) {
-//            return chrLength;
-//        }
-//
-//        int bin = (int) binNumber;
-//        double remainder = binNumber % bin;
-//
-//        double start = binNumber == 0 ? 0 : sites[bin-1];
-//        double end = sites[bin];
-//
-//        return sites[bin];
-//
-//
-//    }
-    
     @Override
     public long getGenomicMid(double binNumber) {
         return (getGenomicStart(binNumber) + getGenomicEnd(binNumber)) / 2;

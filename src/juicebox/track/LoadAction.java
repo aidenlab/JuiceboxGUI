@@ -91,7 +91,7 @@ public class LoadAction extends AbstractAction {
         }
 
         if (buffer.length() > 0) {
-            String message = "<html>The following urls could not be processed due to load failures:<br>" + buffer.toString();
+            String message = "<html>The following urls could not be processed due to load failures:<br>" + buffer;
             JOptionPane.showMessageDialog(parentFrame, message);
         }
 
@@ -201,17 +201,14 @@ public class LoadAction extends AbstractAction {
     }
 
     private void safeLoadNodes(final String xmlFile) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                List<ResourceLocator> locators = unsafeLoadNodes(xmlFile);
-                if (locators != null && !locators.isEmpty()) {
-                    // TODO MSS
-                    hic.unsafeLoadHostedTracks(locators);
-                }
-                if (repaint1DLayersPanel != null) {
-                    repaint1DLayersPanel.run();
-                }
+        Runnable runnable = () -> {
+            List<ResourceLocator> locators = unsafeLoadNodes(xmlFile);
+            if (locators != null && !locators.isEmpty()) {
+                // TODO MSS
+                hic.unsafeLoadHostedTracks(locators);
+            }
+            if (repaint1DLayersPanel != null) {
+                repaint1DLayersPanel.run();
             }
         };
         mainWindow.executeLongRunningTask(runnable, "safe load nodes");

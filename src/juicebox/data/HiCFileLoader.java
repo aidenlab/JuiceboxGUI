@@ -58,11 +58,7 @@ public class HiCFileLoader {
     private static final String RECENT_PROPERTIES_FILE = "recentPropertiesFile";
 
     public static File loadMenuItemActionPerformed(SuperAdapter superAdapter, boolean control, File openHiCPath) {
-        FilenameFilter hicFilter = new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.toLowerCase().endsWith(".hic");
-            }
-        };
+        FilenameFilter hicFilter = (dir, name) -> name.toLowerCase().endsWith(".hic");
 
         File[] files = FileDialogUtils.chooseMultiple("Choose Hi-C file(s)", openHiCPath, hicFilter);
         if (files != null && files.length > 0) {
@@ -133,7 +129,7 @@ public class HiCFileLoader {
                 try {
                     Preferences prefs = Preferences.userNodeForPackage(Globals.class);
                     String potentialURL = prefs.get(RECENT_PROPERTIES_FILE, null);
-                    if (potentialURL != null && potentialURL.length() > 0 && potentialURL.endsWith(".properties")) {
+                    if (potentialURL != null && potentialURL.endsWith(".properties")) {
                         propertiesFileURL = potentialURL;
                     }
                 } catch (Exception ignored) {

@@ -36,8 +36,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -142,30 +140,24 @@ public class Slideshow extends JDialog {
 
             counter = savedStatePaths.indexOf(slideLabel.getText());
 
-            prevButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //int counter = savedStatePaths.indexOf(slideLabel.getText());
-                    if (counter >= 0) {
-                        counter = ((counter - 1) + numSlides) % numSlides;
-                        slideLabel.setText(savedStatePaths.get(counter));
-                        LoadStateFromXMLFile.reloadSelectedState(superAdapter, savedStatePaths.get(counter));
-                        currentSlideNum = counter;
-                    }
+            prevButton.addActionListener(e -> {
+                //int counter = savedStatePaths.indexOf(slideLabel.getText());
+                if (counter >= 0) {
+                    counter = ((counter - 1) + numSlides) % numSlides;
+                    slideLabel.setText(savedStatePaths.get(counter));
+                    LoadStateFromXMLFile.reloadSelectedState(superAdapter, savedStatePaths.get(counter));
+                    currentSlideNum = counter;
                 }
             });
 
 
-            nextButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //int counter = savedStatePaths.indexOf(slideLabel.getText());
-                    if (counter < numSlides) {
-                        counter = (counter + 1) % numSlides;
-                        slideLabel.setText(savedStatePaths.get(counter));
-                        LoadStateFromXMLFile.reloadSelectedState(superAdapter, savedStatePaths.get(counter));
-                        currentSlideNum = counter;
-                    }
+            nextButton.addActionListener(e -> {
+                //int counter = savedStatePaths.indexOf(slideLabel.getText());
+                if (counter < numSlides) {
+                    counter = (counter + 1) % numSlides;
+                    slideLabel.setText(savedStatePaths.get(counter));
+                    LoadStateFromXMLFile.reloadSelectedState(superAdapter, savedStatePaths.get(counter));
+                    currentSlideNum = counter;
                 }
             });
 

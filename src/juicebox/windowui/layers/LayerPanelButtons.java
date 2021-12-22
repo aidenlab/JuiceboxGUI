@@ -32,8 +32,6 @@ import org.broad.igv.ui.color.ColorChooserPanel;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -44,14 +42,11 @@ class LayerPanelButtons {
     public static ColorChooserPanel createColorChooserButton(final SuperAdapter superAdapter, final AnnotationLayerHandler handler) {
         final ColorChooserPanel colorChooserPanel = new ColorChooserPanel();
         colorChooserPanel.setSelectedColor(handler.getDefaultColor());
-        colorChooserPanel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Color c = colorChooserPanel.getSelectedColor();
-                if (c != null) {
-                    handler.setColorOfAllAnnotations(c);
-                    superAdapter.repaint();
-                }
+        colorChooserPanel.addActionListener(e -> {
+            Color c = colorChooserPanel.getSelectedColor();
+            if (c != null) {
+                handler.setColorOfAllAnnotations(c);
+                superAdapter.repaint();
             }
         });
         colorChooserPanel.setToolTipText("Re-color all annotations in this layer");
@@ -63,17 +58,14 @@ class LayerPanelButtons {
                                                     final AnnotationLayerHandler handler) throws IOException {
         final JToggleButton toggleVisibleButton = createToggleIconButton(lp, "/images/layer/eye_clicked_green.png",
                 "/images/layer/eye_clicked.png", handler.getLayerVisibility());
-        toggleVisibleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handler.setLayerVisibility(toggleVisibleButton.isSelected());
-                if (lp instanceof LayersPanel) {
-                    superAdapter.updateMiniAnnotationsLayerPanel();
-                } else if (lp instanceof MiniAnnotationsLayerPanel) {
-                    superAdapter.updateMainLayersPanel();
-                }
-                superAdapter.repaint();
+        toggleVisibleButton.addActionListener(e -> {
+            handler.setLayerVisibility(toggleVisibleButton.isSelected());
+            if (lp instanceof LayersPanel) {
+                superAdapter.updateMiniAnnotationsLayerPanel();
+            } else if (lp instanceof MiniAnnotationsLayerPanel) {
+                superAdapter.updateMainLayersPanel();
             }
+            superAdapter.repaint();
         });
         toggleVisibleButton.setToolTipText("Toggle visibility of this layer");
         return toggleVisibleButton;
@@ -86,12 +78,9 @@ class LayerPanelButtons {
                                                          final AnnotationLayerHandler handler) throws IOException {
         final JToggleButton toggleTransparentButton = createToggleIconButton(lp, "/images/layer/trans_clicked_green.png",
                 "/images/layer/trans_clicked.png", handler.getIsTransparent());
-        toggleTransparentButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handler.setIsTransparent(toggleTransparentButton.isSelected());
-                superAdapter.repaint();
-            }
+        toggleTransparentButton.addActionListener(e -> {
+            handler.setIsTransparent(toggleTransparentButton.isSelected());
+            superAdapter.repaint();
         });
         toggleTransparentButton.setToolTipText("Toggle transparency of this layer");
         return toggleTransparentButton;
@@ -104,12 +93,9 @@ class LayerPanelButtons {
                                                          final AnnotationLayerHandler handler) throws IOException {
         final JToggleButton toggleSparseButton = createToggleIconButton(lp, "/images/layer/sparse.png",
                 "/images/layer/sparse.png", handler.getIsSparse());
-        toggleSparseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handler.setIsSparse(toggleSparseButton.isSelected());
-                superAdapter.repaint();
-            }
+        toggleSparseButton.addActionListener(e -> {
+            handler.setIsSparse(toggleSparseButton.isSelected());
+            superAdapter.repaint();
         });
         toggleSparseButton.setToolTipText("Plot a limited number of 2D annotations in this layer at a time " +
                 "(speed up plotting when there are many annotations).");
@@ -119,12 +105,9 @@ class LayerPanelButtons {
     public static JButton createCopyButton(final LayersPanel lp, final SuperAdapter superAdapter,
                                            final AnnotationLayerHandler handler) throws IOException {
         JButton copyButton = createIconButton(lp, "/images/layer/copy.png");
-        copyButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //AnnotationLayerHandler handlerDup =
-                lp.createNewLayerAndAddItToPanels(superAdapter, handler);
-            }
+        copyButton.addActionListener(e -> {
+            //AnnotationLayerHandler handlerDup =
+            lp.createNewLayerAndAddItToPanels(superAdapter, handler);
         });
         copyButton.setToolTipText("Duplicate this layer");
         return copyButton;
@@ -134,17 +117,14 @@ class LayerPanelButtons {
                                                final JPanel layerBoxGUI, final JPanel parentPanel,
                                                final AnnotationLayerHandler handler) throws IOException {
         JButton downButton = createIconButton(layersPanel, "/images/layer/down.png");
-        downButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                layerBoxGUI.remove(parentPanel);
-                int index = superAdapter.moveDownIndex(handler);
-                layerBoxGUI.add(parentPanel, index);
-                layerBoxGUI.revalidate();
-                layerBoxGUI.repaint();
-                superAdapter.updateMiniAnnotationsLayerPanel();
-                superAdapter.repaint();
-            }
+        downButton.addActionListener(e -> {
+            layerBoxGUI.remove(parentPanel);
+            int index = superAdapter.moveDownIndex(handler);
+            layerBoxGUI.add(parentPanel, index);
+            layerBoxGUI.revalidate();
+            layerBoxGUI.repaint();
+            superAdapter.updateMiniAnnotationsLayerPanel();
+            superAdapter.repaint();
         });
         downButton.setToolTipText("Move this layer down (drawing order)");
         return downButton;
@@ -154,17 +134,14 @@ class LayerPanelButtons {
                                              final JPanel layerBoxGUI, final JPanel parentPanel,
                                              final AnnotationLayerHandler handler) throws IOException {
         JButton upButton = createIconButton(layersPanel, "/images/layer/up.png");
-        upButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                layerBoxGUI.remove(parentPanel);
-                int index = superAdapter.moveUpIndex(handler);
-                layerBoxGUI.add(parentPanel, index);
-                layerBoxGUI.revalidate();
-                layerBoxGUI.repaint();
-                superAdapter.updateMiniAnnotationsLayerPanel();
-                superAdapter.repaint();
-            }
+        upButton.addActionListener(e -> {
+            layerBoxGUI.remove(parentPanel);
+            int index = superAdapter.moveUpIndex(handler);
+            layerBoxGUI.add(parentPanel, index);
+            layerBoxGUI.revalidate();
+            layerBoxGUI.repaint();
+            superAdapter.updateMiniAnnotationsLayerPanel();
+            superAdapter.repaint();
         });
         upButton.setToolTipText("Move this layer up (drawing order)");
         return upButton;
@@ -175,17 +152,14 @@ class LayerPanelButtons {
                                              final AnnotationLayerHandler handler) throws IOException {
 
         JButton deleteButton = createIconButton(layersPanel, "/images/layer/trash.png");
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (superAdapter.deleteCustomAnnotationDialog(handler.getLayerName()) == JOptionPane.YES_OPTION) {
-                    layerBoxGUI.remove(parentPanel);
-                    superAdapter.removeLayer(handler);
-                    layerBoxGUI.revalidate();
-                    layerBoxGUI.repaint();
-                    superAdapter.updateMiniAnnotationsLayerPanel();
-                    superAdapter.repaint();
-                }
+        deleteButton.addActionListener(e -> {
+            if (superAdapter.deleteCustomAnnotationDialog(handler.getLayerName()) == JOptionPane.YES_OPTION) {
+                layerBoxGUI.remove(parentPanel);
+                superAdapter.removeLayer(handler);
+                layerBoxGUI.revalidate();
+                layerBoxGUI.repaint();
+                superAdapter.updateMiniAnnotationsLayerPanel();
+                superAdapter.repaint();
             }
         });
         handler.setDeleteLayerButton(deleteButton);
@@ -201,12 +175,9 @@ class LayerPanelButtons {
 
         final JToggleButton toggleEnlargeButton = createToggleIconButton(lp, "/images/layer/enlarge_clicked_down.png",
                 "/images/layer/enlarge_clicked_up.png", handler.getIsEnlarged());
-        toggleEnlargeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handler.setIsEnlarged(toggleEnlargeButton.isSelected());
-                superAdapter.repaint();
-            }
+        toggleEnlargeButton.addActionListener(e -> {
+            handler.setIsEnlarged(toggleEnlargeButton.isSelected());
+            superAdapter.repaint();
         });
         toggleEnlargeButton.setToolTipText("Enlarge features in this layer");
         return toggleEnlargeButton;
@@ -227,12 +198,7 @@ class LayerPanelButtons {
      */
     public static JButton createExportButton(final LayersPanel layersPanel, final AnnotationLayerHandler handler) throws IOException {
         final JButton exportLayerButton = createIconButton(layersPanel, "/images/layer/export_icon_green.png");
-        exportLayerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handler.exportAnnotations();
-            }
-        });
+        exportLayerButton.addActionListener(e -> handler.exportAnnotations());
         handler.setExportButton(exportLayerButton);
         exportLayerButton.setEnabled(handler.getExportCapability());
         exportLayerButton.setToolTipText("Export annotations from this layer");
@@ -245,12 +211,9 @@ class LayerPanelButtons {
     public static JButton createUndoButton(final LayersPanel lp, final SuperAdapter superAdapter,
                                            final AnnotationLayerHandler handler) throws IOException {
         final JButton undoButton = createIconButton(lp, "/images/layer/undo.png");
-        undoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handler.undo(undoButton);
-                superAdapter.repaint();
-            }
+        undoButton.addActionListener(e -> {
+            handler.undo(undoButton);
+            superAdapter.repaint();
         });
         handler.setUndoButton(undoButton);
         undoButton.setEnabled(handler.getUndoCapability());
@@ -264,17 +227,14 @@ class LayerPanelButtons {
     public static JButton createEraseButton(final LayersPanel lp, final SuperAdapter superAdapter,
                                             final AnnotationLayerHandler handler) throws IOException {
         JButton clearButton = createIconButton(lp, "/images/layer/erase.png");
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (superAdapter.clearCustomAnnotationDialog() == JOptionPane.YES_OPTION) {
-                    //TODO: do something with the saving... just update temp?
-                    handler.clearAnnotations();
-                    handler.setExportAbility(false);
-                    superAdapter.repaint();
-                    handler.setExportAbility(false);
-                    handler.setUndoAbility(false);
-                }
+        clearButton.addActionListener(e -> {
+            if (superAdapter.clearCustomAnnotationDialog() == JOptionPane.YES_OPTION) {
+                //TODO: do something with the saving... just update temp?
+                handler.clearAnnotations();
+                handler.setExportAbility(false);
+                superAdapter.repaint();
+                handler.setExportAbility(false);
+                handler.setUndoAbility(false);
             }
         });
         clearButton.setToolTipText("Clear all annotations in this layer");
@@ -288,14 +248,11 @@ class LayerPanelButtons {
                                                     final AnnotationLayerHandler handler) throws IOException {
         final JToggleButton writeButton = createToggleIconButton(lp, "/images/layer/pencil.png", "/images/layer/pencil_gray.png", handler.isActiveLayer(superAdapter));
         handler.setActiveLayerButton(writeButton);
-        writeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.setActiveLayerHandler(handler);
-                superAdapter.updateMiniAnnotationsLayerPanel();
-                superAdapter.updateMainLayersPanel();
-                superAdapter.repaint();
-            }
+        writeButton.addActionListener(e -> {
+            superAdapter.setActiveLayerHandler(handler);
+            superAdapter.updateMiniAnnotationsLayerPanel();
+            superAdapter.updateMainLayersPanel();
+            superAdapter.repaint();
         });
         writeButton.setToolTipText("Enable drawing of annotations to this layer; Hold down shift key, then click and drag on map");
         return writeButton;
@@ -310,15 +267,10 @@ class LayerPanelButtons {
         final PlottingStyleButton triStateButton = new PlottingStyleButton();
         triStateButton.setPreferredSize(new Dimension(miniButtonSize, miniButtonSize));
         triStateButton.setBorderPainted(false);
-        triStateButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                FeatureRenderer.PlottingOption currentState = FeatureRenderer.getNextState(handler.getPlottingStyle());
-                handler.setPlottingStyle(currentState);
-                superAdapter.repaint();
-            }
-
+        triStateButton.addActionListener(e -> {
+            FeatureRenderer.PlottingOption currentState = FeatureRenderer.getNextState(handler.getPlottingStyle());
+            handler.setPlottingStyle(currentState);
+            superAdapter.repaint();
         });
 
         triStateButton.setCurrentState(handler.getPlottingStyle());

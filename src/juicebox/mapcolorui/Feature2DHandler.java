@@ -24,7 +24,6 @@
 
 package juicebox.mapcolorui;
 
-import gnu.trove.procedure.TIntProcedure;
 import javastraw.feature2D.Feature2D;
 import javastraw.feature2D.Feature2DList;
 import javastraw.feature2D.Feature2DParser;
@@ -206,17 +205,16 @@ public class Feature2DHandler {
             if (sparseFeaturePlottingEnabled) {
 
                 try {
+                    // a procedure whose execute() method will be called with the results
                     featureRtrees.get(key).nearestN(
                             getGenomicPointFromXYCoordinate(x, y, xAxis, yAxis, binOriginX, binOriginY, scale),      // the point for which we want to find nearby rectangles
-                            new TIntProcedure() {         // a procedure whose execute() method will be called with the results
-                                public boolean execute(int i) {
-                                    Feature2D feature = loopList.get(key).get(i);
-                                    Rectangle rect = getRectangleFromFeature(xAxis, yAxis, feature, binOriginX, binOriginY, scale);
-                                    if (!SuperAdapter.assemblyModeCurrentlyActive || (rect.getWidth() > 1 && rect.getHeight() > 1)) {
-                                        foundFeatures.add(feature);
-                                    }
-                                    return true;              // return true here to continue receiving results
+                            i -> {
+                                Feature2D feature = loopList.get(key).get(i);
+                                Rectangle rect = getRectangleFromFeature(xAxis, yAxis, feature, binOriginX, binOriginY, scale);
+                                if (!SuperAdapter.assemblyModeCurrentlyActive || (rect.getWidth() > 1 && rect.getHeight() > 1)) {
+                                    foundFeatures.add(feature);
                                 }
+                                return true;              // return true here to continue receiving results
                             },
                             n,                            // the number of nearby rectangles to find
                             Float.MAX_VALUE               // Don't bother searching further than this. MAX_VALUE means search everything
@@ -244,14 +242,13 @@ public class Feature2DHandler {
         if (layerVisible || ignoreVisibility) {
             if (featureRtrees.containsKey(key)) {
                 try {
+                    // a procedure whose execute() method will be called with the results
                     featureRtrees.get(key).intersects(
                             selectionWindow,
-                            new TIntProcedure() {     // a procedure whose execute() method will be called with the results
-                                public boolean execute(int i) {
-                                    Feature2D feature = loopList.get(key).get(i);
-                                    foundFeatures.add(feature);
-                                    return true;      // return true here to continue receiving results
-                                }
+                            i -> {
+                                Feature2D feature = loopList.get(key).get(i);
+                                foundFeatures.add(feature);
+                                return true;      // return true here to continue receiving results
                             });
                     } catch (Exception e) {
                         System.err.println("Error encountered getting intersecting features" + e.getLocalizedMessage());
@@ -270,15 +267,14 @@ public class Feature2DHandler {
         final String key = Feature2DList.getKey(chrIdx1, chrIdx2);
 
         if (featureRtrees.containsKey(key)) {
+            // a procedure whose execute() method will be called with the results
             featureRtrees.get(key).contains(
                     currentWindow,      // the window in which we want to find all rectangles
-                    new TIntProcedure() {         // a procedure whose execute() method will be called with the results
-                        public boolean execute(int i) {
-                            Feature2D feature = loopList.get(key).get(i);
-                            //System.out.println(feature.getChr1() + "\t" + feature.getStart1() + "\t" + feature.getStart2());
-                            foundFeatures.add(feature);
-                            return true;              // return true here to continue receiving results
-                        }
+                    i -> {
+                        Feature2D feature = loopList.get(key).get(i);
+                        //System.out.println(feature.getChr1() + "\t" + feature.getStart1() + "\t" + feature.getStart2());
+                        foundFeatures.add(feature);
+                        return true;              // return true here to continue receiving results
                     }
             );
         } else {
@@ -339,7 +335,7 @@ public class Feature2DHandler {
         return getContainedFeatures(chrom.getIndex(), chrom.getIndex(), currentWindow);
     }
 
-    public class resultContainer {
+    public static class resultContainer {
         public final int n;
         public final Color color;
         final ArrayList<String> attributes;

@@ -109,12 +109,7 @@ public class Feature2DUtils {
                     continue;
                 }
                 //sort attributes before printing
-                Comparator<Map.Entry<String, String>> cmp = new Comparator<Map.Entry<String, String>>() {
-                    @Override
-                    public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
-                        return o1.getKey().compareToIgnoreCase(o2.getKey());
-                    }
-                };
+                Comparator<Map.Entry<String, String>> cmp = (o1, o2) -> o1.getKey().compareToIgnoreCase(o2.getKey());
                 attributeCategory.sort(cmp);
                 for (Map.Entry<String, String> entry : attributeCategory) {
                     String tmpKey = entry.getKey();

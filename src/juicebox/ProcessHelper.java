@@ -54,10 +54,7 @@ public class ProcessHelper {
     private ProcessBuilder createProcess() {
         String jvm = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
         String classpath = System.getProperty("java.class.path");
-        //System.err.println("classpath: " + classpath);
-        // String workingDirectory = System.getProperty("user.dir");
 
-        // String[] options = optionsAsString.split(" ");
         List<String> command = new ArrayList<>();
         command.add(jvm);
 

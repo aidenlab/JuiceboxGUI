@@ -49,11 +49,8 @@ import juicebox.windowui.layers.MiniAnnotationsLayerPanel;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by muhammadsaadshamim on 8/4/15.
@@ -169,32 +166,20 @@ public class MainViewPanel {
         //---- chrBox1 ----
         chrBox1 = new JComboBox<>(); //new Chromosome[]{new Chromosome(0, Globals.CHR_ALL, 0)});
         chrBox1.addPopupMenuListener(new BoundsPopupMenuListener<Chromosome>(true, false));
-        chrBox1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                chrBox1ActionPerformed(e);
-            }
-        });
+        chrBox1.addActionListener(e -> chrBox1ActionPerformed(e));
         chrBox1.setPreferredSize(chrBoxDim);
         chrButtonPanel.add(chrBox1);
 
         //---- chrBox2 ----
         chrBox2 = new JComboBox<>(); //new Chromosome[]{new Chromosome(0, Globals.CHR_ALL, 0)});
         chrBox2.addPopupMenuListener(new BoundsPopupMenuListener<Chromosome>(true, false));
-        chrBox2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                chrBox2ActionPerformed(e);
-            }
-        });
+        chrBox2.addActionListener(e -> chrBox2ActionPerformed(e));
         chrBox2.setPreferredSize(chrBoxDim);
         chrButtonPanel.add(chrBox2);
 
         //---- refreshButton ----
         refreshButton.setIcon(new ImageIcon(getClass().getResource("/toolbarButtonGraphics/general/Refresh24.gif")));
-        refreshButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.safeRefreshButtonActionPerformed();
-            }
-        });
+        refreshButton.addActionListener(e -> superAdapter.safeRefreshButtonActionPerformed());
         refreshButton.setPreferredSize(new Dimension(24, 24));
         chrButtonPanel.add(refreshButton);
         chrSelectionPanel.add(chrButtonPanel, BorderLayout.CENTER);
@@ -211,12 +196,10 @@ public class MainViewPanel {
         displayOptionComboBox = new JComboBox<>(new MatrixType[]{MatrixType.OBSERVED});
         displayOptionComboBox.setPreferredSize(new Dimension(500, 30));
         displayOptionComboBox.addPopupMenuListener(new BoundsPopupMenuListener<MatrixType>(true, false));
-        displayOptionComboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.safeDisplayOptionComboBoxActionPerformed();
-                observedNormalizationComboBox.setEnabled(!isWholeGenome());
-                controlNormalizationComboBox.setEnabled(!isWholeGenome() && ifControlIsLoaded());
-            }
+        displayOptionComboBox.addActionListener(e -> {
+            superAdapter.safeDisplayOptionComboBoxActionPerformed();
+            observedNormalizationComboBox.setEnabled(!isWholeGenome());
+            controlNormalizationComboBox.setEnabled(!isWholeGenome() && ifControlIsLoaded());
         });
         displayOptionButtonPanel.add(displayOptionComboBox);
         displayOptionPanel.add(displayOptionButtonPanel, BorderLayout.CENTER);
@@ -239,19 +222,11 @@ public class MainViewPanel {
         normalizationButtonPanel.setLayout(new GridLayout(1, 0, 20, 0));
         observedNormalizationComboBox = new JComboBox<>(new String[]{NormalizationHandler.NONE.getDescription()});
         observedNormalizationComboBox.addPopupMenuListener(new BoundsPopupMenuListener<String>(true, false));
-        observedNormalizationComboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.safeNormalizationComboBoxActionPerformed(e, false);
-            }
-        });
+        observedNormalizationComboBox.addActionListener(e -> superAdapter.safeNormalizationComboBoxActionPerformed(e, false));
 
         controlNormalizationComboBox = new JComboBox<>(new String[]{NormalizationHandler.NONE.getDescription()});
         controlNormalizationComboBox.addPopupMenuListener(new BoundsPopupMenuListener<String>(true, false));
-        controlNormalizationComboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.safeNormalizationComboBoxActionPerformed(e, true);
-            }
-        });
+        controlNormalizationComboBox.addActionListener(e -> superAdapter.safeNormalizationComboBoxActionPerformed(e, true));
 
         normalizationButtonPanel.add(observedNormalizationComboBox);
         normalizationButtonPanel.add(controlNormalizationComboBox);
@@ -430,26 +405,20 @@ public class MainViewPanel {
 
         rightSidePanel.add(tooltipPanel, BorderLayout.CENTER);
 
-        annotationsPanelToggleButton.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (annotationsPanelToggleButton.isSelected()) {
-                    annotationsPanelToggleButton.setText("Hide Annotation Panel");
-                } else {
-                    annotationsPanelToggleButton.setText("Show Annotation Panel");
-                }
+        annotationsPanelToggleButton.addChangeListener(e -> {
+            if (annotationsPanelToggleButton.isSelected()) {
+                annotationsPanelToggleButton.setText("Hide Annotation Panel");
+            } else {
+                annotationsPanelToggleButton.setText("Show Annotation Panel");
             }
         });
-        annotationsPanelToggleButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (annotationsPanelToggleButton.isSelected()) {
-                    superAdapter.setLayersPanelVisible(true);
-                    annotationsPanelToggleButton.setText("Hide Annotation Panel");
-                } else {
-                    superAdapter.setLayersPanelVisible(false);
-                    annotationsPanelToggleButton.setText("Show Annotation Panel");
-                }
+        annotationsPanelToggleButton.addActionListener(e -> {
+            if (annotationsPanelToggleButton.isSelected()) {
+                superAdapter.setLayersPanelVisible(true);
+                annotationsPanelToggleButton.setText("Hide Annotation Panel");
+            } else {
+                superAdapter.setLayersPanelVisible(false);
+                annotationsPanelToggleButton.setText("Show Annotation Panel");
             }
         });
         annotationsPanelToggleButton.setSelected(false);
@@ -672,8 +641,6 @@ public class MainViewPanel {
 
         if (hic.getMatrix() != null) {
 
-            //   GUIMatrixZoomData zd0 = initialZoom == null ? hic.getMatrix().getFirstZoomData(hic.getZoom().getUnit()) :
-            //           hic.getMatrix().getZoomData(initialZoom);
             GUIMatrixZoomData zd0 = new GUIMatrixZoomData(hic.getMatrix().getFirstZoomData(hic.getZoom().getUnit()));
             GUIMatrixZoomData zdControl = null;
             if (hic.getControlMatrix() != null) {

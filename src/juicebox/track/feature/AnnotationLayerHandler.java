@@ -114,31 +114,6 @@ public class AnnotationLayerHandler {
         selectionRegion = newRegion;
     }
 
-//    // Update selection region from new coordinates
-//    public Rectangle updateSelectionRegion(int x, int y, int deltaX, int deltaY) {
-//
-//        int x2, y2;
-//        doDomain();
-//        Rectangle lastRegion, damageRect;
-//
-//        lastRegion = selectionRegion;
-//
-//        if (deltaX == 0 || deltaY == 0) {
-//            return null;
-//        }
-//
-//        x2 = deltaX > 0 ? x : x + deltaX;
-//        y2 = deltaY > 0 ? y : y + deltaY;
-//        selectionRegion = new Rectangle(x2, y2, Math.abs(deltaX), Math.abs(deltaY));
-//
-//        damageRect = lastRegion == null ? selectionRegion : selectionRegion.union(lastRegion);
-//        damageRect.x--;
-//        damageRect.y--;
-//        damageRect.width += 2;
-//        damageRect.height += 2;
-//        return damageRect;
-//    }
-
     public void setLastItem(int idx1, int idx2, Feature2D lastLoop) {
         lastChr1Idx = idx1;
         lastChr2Idx = idx2;
@@ -150,12 +125,6 @@ public class AnnotationLayerHandler {
         lastChr2Idx = -1;
         lastResizeLoop = null;
     }
-
-    /*
-    public void updateSelectionPoint(int x, int y) {
-        selectionPoint = new Point(x, y);
-    }
-    */
 
     // Adds to lower lefthand side, for consistency.
 
@@ -204,8 +173,6 @@ public class AnnotationLayerHandler {
         }
 
         // Make sure bounds aren't unreasonable (out of HiC map)
-//                int rightBound = hic.getChromosomes().get(0).getLength();
-//                int bottomBound = hic.getChromosomes().get(1).getLength();
         start1 = Math.min(Math.max(start1, leftBound), rightBound);
         start2 = Math.min(Math.max(start2, leftBound), bottomBound);
         end1 = Math.max(Math.min(end1, rightBound), leftBound);
@@ -330,34 +297,6 @@ public class AnnotationLayerHandler {
 
         return (x1 < y2 && x2 < y1) || (x1 > y2 && x2 > y1);
     }
-
-    /*
-    public void addVisibleLoops(HiC hic) {
-        try {
-            hic.getZd();
-        } catch (Exception e) {
-            return;
-        }
-
-        if (hic.getXContext() == null || hic.getYContext() == null)
-            return;
-
-        java.util.List<Feature2DList> loops = hic.getAllVisibleLoops();
-        if (loops == null) return;
-        if (customAnnotation == null) {
-            System.err.println("Error! Custom annotations should not be null!");
-            return;
-        }
-
-        // Add each loop list to the custom annotation list
-        if (loops.size() > 0) {
-            setExportAbility(true);
-            for (Feature2DList list : loops) {
-                customAnnotation.addVisibleToCustom(list);
-            }
-        }
-    }
-    */
 
     public void undo(JButton undoButton) {
         annotationLayer.undo();

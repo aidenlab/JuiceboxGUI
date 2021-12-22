@@ -24,19 +24,12 @@
 
 package juicebox.track;
 
-//import juicebox.Context;
-
 import juicebox.HiC;
 import juicebox.HiCGlobals;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-
-//import java.util.HashMap;
-//import java.util.Map;
-//import org.broad.igv.renderer.GraphicUtils;
-//import java.awt.geom.Rectangle2D;
 
 /**
  * @author jrobinso

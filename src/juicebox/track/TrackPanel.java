@@ -160,11 +160,6 @@ public class TrackPanel extends JPanel {
                         JPopupMenu menu = track.getPopupMenu(TrackPanel.this, superAdapter, orientation);
                         menu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
                         repaint();
-
-//                        Collection<Track> selectedTracks = Arrays.asList(p.getSecond());
-//                        TrackClickEvent te = new TrackClickEvent(mouseEvent, null);
-//                        IGVPopupMenu menu = TrackMenuUtils.getPopupMenu(selectedTracks, "", te);
-//                        menu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
                     }
                 }
             }
@@ -389,12 +384,6 @@ public class TrackPanel extends JPanel {
         }
         return null;
     }
-
-
-//    @Override
-//    public String getToolTipText(MouseEvent event) {
-//        return tooltipText(event.getX(), event.getY());
-//    }
 
     public enum Orientation {X, Y}
 }

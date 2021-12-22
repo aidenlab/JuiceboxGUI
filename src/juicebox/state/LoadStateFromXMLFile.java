@@ -99,14 +99,12 @@ public class LoadStateFromXMLFile {
     private static void safeLoadStateFromXML(final SuperAdapter superAdapter, final HiC hic, final String[] initialInfo,
                                              final int binSize, final double[] doubleInfo, final MatrixType displaySelection,
                                              final String normSelection, final String[] tracks) {
-        Runnable runnable = new Runnable() {
-            public void run() {
-                try {
-                    unsafeLoadStateFromXML(superAdapter, hic, initialInfo, binSize, doubleInfo,
-                            displaySelection, normSelection, tracks);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        Runnable runnable = () -> {
+            try {
+                unsafeLoadStateFromXML(superAdapter, hic, initialInfo, binSize, doubleInfo,
+                        displaySelection, normSelection, tracks);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         };
         superAdapter.executeLongRunningTask(runnable, "Loading a saved state from XML");

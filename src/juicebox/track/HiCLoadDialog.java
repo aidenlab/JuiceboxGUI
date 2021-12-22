@@ -31,8 +31,6 @@ import org.broad.igv.util.ResourceLocator;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.*;
 
@@ -93,29 +91,22 @@ class HiCLoadDialog extends JDialog {
 
         //---- okButton ----
         JButton okButton = new JButton("OK");
-        okButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                canceled = false;
-                for (Component c : mainPanel.getComponents()) {
-                    if (c instanceof CategoryPanel) {
-                        selectedTracks.addAll(((CategoryPanel) c).getSelectedTracks());
-                    }
+        okButton.addActionListener(actionEvent -> {
+            canceled = false;
+            for (Component c : mainPanel.getComponents()) {
+                if (c instanceof CategoryPanel) {
+                    selectedTracks.addAll(((CategoryPanel) c).getSelectedTracks());
                 }
-                setVisible(false);
             }
+            setVisible(false);
         });
 
 
         //---- cancelButton ----
         JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                canceled = true;
-                setVisible(false);
-            }
+        cancelButton.addActionListener(actionEvent -> {
+            canceled = true;
+            setVisible(false);
         });
 
         buttonBar.add(cancelButton, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,

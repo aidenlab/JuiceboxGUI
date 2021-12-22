@@ -253,9 +253,7 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
             dashChrTokens = textField.getText().substring(tmpChrTokens[0].length() + 1).split(dashDelimiters);
             chrTokens = new String[dashChrTokens.length + 1];
             chrTokens[0] = tmpChrTokens[0];
-            for (int i = 0; i < dashChrTokens.length; i++) {
-                chrTokens[i + 1] = dashChrTokens[i];
-            }
+            System.arraycopy(dashChrTokens, 0, chrTokens, 1, dashChrTokens.length);
         } else if (tmpChrTokens.length == 3) {
             dashChrTokens = textField.getText().substring(tmpChrTokens[0].length() + 1, tmpChrTokens[0].length() + tmpChrTokens[1].length() + 1).split(dashDelimiters);
             chrTokens = new String[dashChrTokens.length + 2];
@@ -357,22 +355,12 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
     private void initializeGeneHashMap(String genomeID) {
         if (genomeID.equals("hg19") || genomeID.equals("hg38") || genomeID.equals("mm9") || genomeID.equals("mm10")) {
             final String gID = genomeID;
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    unsafeInitializeGeneHashMap(gID);
-                }
-            };
+            Runnable runnable = () -> unsafeInitializeGeneHashMap(gID);
             superAdapter.executeLongRunningTask(runnable, "Initialize Gene Hash Map");
         } else {
             for (HiCTrack track : hic.getLoadedTracks()) {
                 if (track.getName().contains("refGene")) {
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            unsafeInitializeGeneHashMap(track.getLocator().getPath());
-                        }
-                    };
+                    Runnable runnable = () -> unsafeInitializeGeneHashMap(track.getLocator().getPath());
                     superAdapter.executeLongRunningTask(runnable, "Initialize Gene Hash Map");
                 }
             }

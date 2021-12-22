@@ -36,8 +36,6 @@ import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -147,62 +145,36 @@ public class LayersPanel extends JDialog {
         dim.setSize(dim.getWidth(), dim.getHeight() * 4);
         pane.setPreferredSize(dim);
 
-        final Runnable repaint1DLayersPanel = new Runnable() {
-            @Override
-            public void run() {
-                redraw1DLayerPanels(superAdapter);
-            }
-        };
+        final Runnable repaint1DLayersPanel = () -> redraw1DLayerPanels(superAdapter);
 
         repaint1DLayersPanel.run();
 
         trackLoadAction = new LoadAction("Load Basic Annotations...", superAdapter.getMainWindow(),
                 superAdapter.getHiC(), repaint1DLayersPanel);
-        loadBasicButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                trackLoadAction.actionPerformed(e);
-            }
-        });
+        loadBasicButton.addActionListener(e -> trackLoadAction.actionPerformed(e));
 
-        addLocalButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                HiC hiC = superAdapter.getHiC();
-                if (hiC.getResourceTree() == null) {
-                    ResourceTree resourceTree = new ResourceTree(superAdapter.getHiC(), null);
-                    hiC.setResourceTree(resourceTree);
-                }
-                boolean loadSuccessful = superAdapter.getHiC().getResourceTree().addLocalButtonActionPerformed(superAdapter);
-                if (loadSuccessful) {
-                    trackLoadAction.actionPerformed(e);
-                }
+        addLocalButton.addActionListener(e -> {
+            HiC hiC = superAdapter.getHiC();
+            if (hiC.getResourceTree() == null) {
+                ResourceTree resourceTree = new ResourceTree(superAdapter.getHiC(), null);
+                hiC.setResourceTree(resourceTree);
+            }
+            boolean loadSuccessful = superAdapter.getHiC().getResourceTree().addLocalButtonActionPerformed(superAdapter);
+            if (loadSuccessful) {
+                trackLoadAction.actionPerformed(e);
             }
         });
 
         encodeAction = new LoadEncodeAction("Load ENCODE Tracks...",
                 superAdapter.getMainWindow(), superAdapter.getHiC(), repaint1DLayersPanel);
 
-        loadEncodeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                encodeAction.actionPerformed(e);
-            }
-        });
+        loadEncodeButton.addActionListener(e -> encodeAction.actionPerformed(e));
 
-        loadFromURLButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.safeLoadFromURLActionPerformed(repaint1DLayersPanel);
-            }
-        });
+        loadFromURLButton.addActionListener(e -> superAdapter.safeLoadFromURLActionPerformed(repaint1DLayersPanel));
 
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.refresh();
-                redraw1DLayerPanels(superAdapter);
-            }
+        refreshButton.addActionListener(e -> {
+            superAdapter.refresh();
+            redraw1DLayerPanels(superAdapter);
         });
         return pane;
     }
@@ -243,13 +215,10 @@ public class LayersPanel extends JDialog {
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         JButton refreshButton = new JButton("Refresh View");
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                superAdapter.updateMainLayersPanel();
-                superAdapter.updateMiniAnnotationsLayerPanel();
-                superAdapter.refresh();
-            }
+        refreshButton.addActionListener(e -> {
+            superAdapter.updateMainLayersPanel();
+            superAdapter.updateMiniAnnotationsLayerPanel();
+            superAdapter.refresh();
         });
 
         JButton importButton = new JButton("Load Loops/Domains...");
@@ -273,40 +242,24 @@ public class LayersPanel extends JDialog {
         pane.setPreferredSize(dim);
 
         /* import 2d annotations into layer */
-        importButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (load2DAnnotationsDialog == null) {
-                    load2DAnnotationsDialog = new Load2DAnnotationsDialog(LayersPanel.this, superAdapter);
-                }
-                load2DAnnotationsDialog.setVisible(true);
+        importButton.addActionListener(e -> {
+            if (load2DAnnotationsDialog == null) {
+                load2DAnnotationsDialog = new Load2DAnnotationsDialog(LayersPanel.this, superAdapter);
             }
+            load2DAnnotationsDialog.setVisible(true);
         });
         importButton.setToolTipText("Import annotations into new layer");
 
-        addLocalButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (load2DAnnotationsDialog == null) {
-                    load2DAnnotationsDialog = new Load2DAnnotationsDialog(LayersPanel.this, superAdapter);
-                }
-                load2DAnnotationsDialog.addLocalButtonActionPerformed(LayersPanel.this);
+        addLocalButton.addActionListener(e -> {
+            if (load2DAnnotationsDialog == null) {
+                load2DAnnotationsDialog = new Load2DAnnotationsDialog(LayersPanel.this, superAdapter);
             }
+            load2DAnnotationsDialog.addLocalButtonActionPerformed(LayersPanel.this);
         });
 
-        newLayerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createNewLayerAndAddItToPanels(superAdapter, null);
-            }
-        });
+        newLayerButton.addActionListener(e -> createNewLayerAndAddItToPanels(superAdapter, null));
 
-        mergeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                merge2DAnnotationsAction(superAdapter);
-            }
-        });
+        mergeButton.addActionListener(e -> merge2DAnnotationsAction(superAdapter));
 
         superAdapter.updateLayerDeleteStatus();
         return pane;

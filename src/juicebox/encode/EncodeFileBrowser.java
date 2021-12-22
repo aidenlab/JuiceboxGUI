@@ -40,7 +40,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -345,24 +344,14 @@ public class EncodeFileBrowser extends JDialog {
 
         //---- okButton ----
         okButton.setText("Load");
-        okButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loadButtonActionPerformed(e);
-            }
-        });
+        okButton.addActionListener(e -> loadButtonActionPerformed(e));
         buttonBar.add(okButton, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 5), 0, 0));
 
         //---- cancelButton ----
         cancelButton.setText("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cancelButtonActionPerformed(e);
-            }
-        });
+        cancelButton.addActionListener(e -> cancelButtonActionPerformed(e));
         buttonBar.add(cancelButton, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));

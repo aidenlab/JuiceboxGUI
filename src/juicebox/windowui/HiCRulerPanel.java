@@ -85,7 +85,7 @@ public class HiCRulerPanel extends JPanel {
             return new TickSpacing(1, HiCZoom.HiCUnit.BP.toString(), 1);
         }
 
-        int maxNumberOfTickMarks = (int) Math.ceil(width / 25);
+        int maxNumberOfTickMarks = (int) Math.ceil(width / 25f);
 
         // How many zeroes?
         int nZeroes = (int) Math.log10(maxValue);
@@ -106,14 +106,14 @@ public class HiCRulerPanel extends JPanel {
         int decrementIter = nZeroes - 1;
         while (decrementIter > -1) {
 
-            int latestIncrement = (int) Math.pow(10, nZeroes - decrementIter);
+            double latestIncrement = Math.pow(10, nZeroes - decrementIter);
             int nMajorTicks = (int) Math.ceil(maxValue / latestIncrement);
 
             if (nMajorTicks < maxNumberOfTickMarks) {
                 return new TickSpacing(latestIncrement, majorUnit, unitMultiplier);
             }
 
-            latestIncrement = (int) Math.pow(10, nZeroes - decrementIter + 1) / 2;
+            latestIncrement = Math.pow(10, nZeroes - decrementIter + 1) / 2;
             nMajorTicks = (int) Math.ceil(maxValue / latestIncrement);
 
             if (nMajorTicks < maxNumberOfTickMarks) {
@@ -375,18 +375,6 @@ public class HiCRulerPanel extends JPanel {
                         g.drawLine(xpos, h - 10, xpos, h - 2);
                         nTick++;
                     }
-                    /* //for previously selected
-                    g.setColor(new Color(200,0,0));
-                    for(Feature2D feature2D:hic.getSuperAdaptor().getPreviousTempSelectedGroup()){ //add tick marks for previously selected group
-                        int startCoordinate = axis.getBinNumberForGenomicPosition(feature2D.getStart1());
-                        int endCoordinate = axis.getBinNumberForGenomicPosition(feature2D.getEnd1());
-                        startCoordinate = (int) ((startCoordinate - binOrigin) * hic.getScaleFactor());
-                        endCoordinate = (int) ((endCoordinate - binOrigin) * hic.getScaleFactor());
-                        g.drawLine(startCoordinate,h-10,startCoordinate,h-2);
-                        g.setColor(new Color(200,100,50));
-                        g.drawLine(endCoordinate,h-10,endCoordinate,h-2);
-
-                    }   */
                 } catch (Exception ignored) {
                 }
             }
@@ -436,7 +424,7 @@ public class HiCRulerPanel extends JPanel {
 
 // TODO -- possibly generalize?
 
-    class ClickLink {
+    static class ClickLink {
 
         final Rectangle region;
         final String value;
