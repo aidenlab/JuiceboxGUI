@@ -26,7 +26,7 @@ package juicebox.windowui;
 
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.basics.ChromosomeHandler;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.data.Context;
 import juicebox.data.GUIMatrixZoomData;
@@ -54,7 +54,7 @@ import java.awt.geom.RoundRectangle2D;
 public class HiCChromosomeFigPanel extends JComponent {
 
     private static final long serialVersionUID = 9000042;
-    private final Font spanFont = HiCGlobals.font(12, false);
+    private final Font spanFont = JBGlobals.font(12, false);
     private final HiC hic;
     private Orientation orientation;
     private Context context;
@@ -64,7 +64,7 @@ public class HiCChromosomeFigPanel extends JComponent {
 
     public HiCChromosomeFigPanel(final HiC hic) {
         this.hic = hic;
-        if (HiCGlobals.isDarkulaModeEnabled) {
+        if (JBGlobals.isDarkulaModeEnabled) {
             setBackground(Color.BLACK);
         } else {
             setBackground(Color.WHITE);

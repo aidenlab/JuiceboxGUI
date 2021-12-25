@@ -27,7 +27,7 @@ package juicebox.state;
 import javastraw.feature2D.Feature2DList;
 import javastraw.reader.Dataset;
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.Context;
 import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
@@ -63,7 +63,7 @@ public class XMLFileHandling {
             controlFiles = "null";
         }
 
-        String mapNameAndURLs = superAdapter.getMainWindow().getTitle().replace(HiCGlobals.juiceboxTitle, "") + "@@" + SuperAdapter.currentlyLoadedMainFiles
+        String mapNameAndURLs = superAdapter.getMainWindow().getTitle().replace(JBGlobals.juiceboxTitle, "") + "@@" + SuperAdapter.currentlyLoadedMainFiles
                 + "@@" + controlFiles;
 
         String textToWrite = stateID + "--currentState:$$" + mapNameAndURLs + "$$" + xChr + "$$" + yChr + "$$" + zoom.getUnit().toString() + "$$" +
@@ -114,7 +114,7 @@ public class XMLFileHandling {
 
         //("currentState,xChr,yChr,resolution,zoom level,xbin,ybin,scale factor,display selection,
         // normalization type,color range values, tracks")
-        HiCGlobals.savedStatesList.add(textToWrite);
+        JBGlobals.savedStatesList.add(textToWrite);
         XMLFileWriter.overwriteXMLFile();
     }
 }

@@ -24,7 +24,7 @@
 
 package juicebox.windowui;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyFileExporter;
 import juicebox.assembly.AssemblyScaffoldHandler;
@@ -55,7 +55,7 @@ public class SaveAssemblyDialog extends JFileChooser {
     // todo add file extension filter
     private void menuOptions() {
         setSelectedFile(new File(mapName + ".review"));
-        if (HiCGlobals.guiIsCurrentlyActive) {
+        if (JBGlobals.guiIsCurrentlyActive) {
             int actionDialog = showSaveDialog(MainWindow.getInstance());
             if (actionDialog == JFileChooser.APPROVE_OPTION) {
                 File file = getSelectedFile();
@@ -65,7 +65,7 @@ public class SaveAssemblyDialog extends JFileChooser {
                     if (actionDialog == JOptionPane.NO_OPTION || actionDialog == JOptionPane.CANCEL_OPTION)
                         return;
                 }
-                if (HiCGlobals.phasing) {
+                if (JBGlobals.phasing) {
                     PsfFileExporter psfFileExporter = new PsfFileExporter(assemblyScaffoldHandler, outputPath);
                     psfFileExporter.exportPsfFile();
                 } else {

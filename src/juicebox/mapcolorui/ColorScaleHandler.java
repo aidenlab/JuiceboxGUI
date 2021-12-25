@@ -28,7 +28,7 @@ import javastraw.matrices.BasicMatrix;
 import javastraw.reader.block.Block;
 import javastraw.reader.block.ContactRecord;
 import javastraw.reader.type.MatrixType;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.gui.SuperAdapter;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.broad.igv.renderer.ColorScale;
@@ -83,7 +83,7 @@ public class ColorScaleHandler {
 
             ContinuousColorScale observedColorScale = observedColorScaleMap.get(key);
             if (observedColorScale == null) {
-                if (HiCGlobals.isDarkulaModeEnabled) {
+                if (JBGlobals.isDarkulaModeEnabled) {
                     observedColorScale = new ContinuousColorScale(min, max, Color.black, HIC_MAP_COLOR);
                 } else {
                     observedColorScale = new ContinuousColorScale(min, max, Color.white, HIC_MAP_COLOR);
@@ -124,7 +124,7 @@ public class ColorScaleHandler {
                 }
 
                 //observedColorScale = new ContinuousColorScale(0, max, Color.white, Color.red);
-                if (HiCGlobals.isDarkulaModeEnabled) {
+                if (JBGlobals.isDarkulaModeEnabled) {
                     observedColorScale = new ContinuousColorScale(0, max, Color.black, HIC_MAP_COLOR);
                 } else {
                     observedColorScale = new ContinuousColorScale(0, max, Color.white, HIC_MAP_COLOR);

@@ -77,7 +77,7 @@ public class MainWindow extends JFrame {
 
     private MainWindow() {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        HiCGlobals.guiIsCurrentlyActive = true;
+        JBGlobals.guiIsCurrentlyActive = true;
         hic = new HiC(superAdapter);
         MainViewPanel mainViewPanel = new MainViewPanel();
         superAdapter.setAdapters(this, hic, mainViewPanel);
@@ -129,7 +129,7 @@ public class MainWindow extends JFrame {
             BufferedReader reader = new BufferedReader(new InputStreamReader(next.getInputStream()));
             String latestVersion = reader.readLine();
             String[] latest = latestVersion.split("\\.");
-            String[] current = HiCGlobals.versionNum.split("\\.");
+            String[] current = JBGlobals.versionNum.split("\\.");
             boolean isOutdated = false;
     
             int iC = Integer.parseInt(current[0]);
@@ -151,7 +151,7 @@ public class MainWindow extends JFrame {
 
             if (isOutdated) {
                 JPanel textPanel = new JPanel(new GridLayout(0, 1));
-                JLabel label = new JLabel("<html><p> You are using Juicebox " + HiCGlobals.versionNum + "<br>The lastest version is "
+                JLabel label = new JLabel("<html><p> You are using Juicebox " + JBGlobals.versionNum + "<br>The lastest version is "
                         + latestVersion + "<br>To download the lastest version, go to</p></html>");
                 JLabel label2 = new JLabel("<html><a href=\"https://github.com/theaidenlab/juicebox/wiki/Download\"> https://github.com/theaidenlab/juicebox/wiki/Download </a></html>");
                 textPanel.add(label);
@@ -180,12 +180,12 @@ public class MainWindow extends JFrame {
         System.err.println("Default User Directory: " + DirectoryManager.getUserDirectory());
 
         try {
-            HiCGlobals.stateFile = new File(DirectoryManager.getHiCDirectory(), "CurrentJuiceboxStates");
-            HiCGlobals.xmlSavedStatesFile = new File(DirectoryManager.getHiCDirectory(),
+            JBGlobals.stateFile = new File(DirectoryManager.getHiCDirectory(), "CurrentJuiceboxStates");
+            JBGlobals.xmlSavedStatesFile = new File(DirectoryManager.getHiCDirectory(),
                     "JuiceboxStatesForExport.xml");
         } catch (Exception e) {
             System.err.println("Init Error: " + e.getLocalizedMessage());
-            if (HiCGlobals.guiIsCurrentlyActive) {
+            if (JBGlobals.guiIsCurrentlyActive) {
                 SuperAdapter.showMessageDialog("Error with state file\n" + e.getLocalizedMessage());
             }
         }
@@ -201,7 +201,7 @@ public class MainWindow extends JFrame {
             }
         });
 
-        if (HiCGlobals.printVerboseComments) {
+        if (JBGlobals.printVerboseComments) {
             System.out.println("Initializing Components");
         }
 
@@ -452,7 +452,7 @@ public class MainWindow extends JFrame {
     }
 
     public Future<?> executeLongRunningTask(final Runnable runnable, final String caller, final String message) {
-        if (HiCGlobals.printVerboseComments) {
+        if (JBGlobals.printVerboseComments) {
             System.out.println("long_execute " + caller);
         }
         Callable<Object> wrapper = () -> {
@@ -474,7 +474,7 @@ public class MainWindow extends JFrame {
     private void showDisabledGlassPane(String caller, String displayMessage) {
         disabledGlassPane.activate(displayMessage);
         LayersPanel.disabledGlassPane.activate(displayMessage);
-        if (HiCGlobals.printVerboseComments) {
+        if (JBGlobals.printVerboseComments) {
             System.out.println("Loading " + caller);
         }
     }
@@ -484,7 +484,7 @@ public class MainWindow extends JFrame {
     }
 
     private void hideDisabledGlassPane(String caller) {//getRootPane().getContentPane()
-        if (HiCGlobals.printVerboseComments) {
+        if (JBGlobals.printVerboseComments) {
             System.out.println("Done loading " + caller);
         }
         disabledGlassPane.deactivate();

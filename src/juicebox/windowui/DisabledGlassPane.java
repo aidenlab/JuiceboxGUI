@@ -24,7 +24,7 @@
 
 package juicebox.windowui;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -58,7 +58,7 @@ public class DisabledGlassPane extends JComponent implements KeyListener {
         Color background = new Color(base.getRed(), base.getGreen(), base.getBlue(), 128);
         setBackground(background);
         setLayout(new GridBagLayout());
-        message.setFont(HiCGlobals.font(30, true));
+        message.setFont(JBGlobals.font(30, true));
         //  Add a message label to the glass pane
 
         add(message, new GridBagConstraints());

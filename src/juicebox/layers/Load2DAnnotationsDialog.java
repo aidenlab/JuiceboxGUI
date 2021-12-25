@@ -27,7 +27,7 @@ package juicebox.layers;
 import com.jidesoft.swing.JideBoxLayout;
 import javastraw.reader.basics.ChromosomeHandler;
 import javastraw.tools.HiCFileTools;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.data.DirectoryManager;
 import juicebox.data.HiC;
@@ -141,7 +141,7 @@ public class Load2DAnnotationsDialog extends JDialog implements TreeSelectionLis
                 }
 
                 if (loadedAnnotationsMap.containsKey(url)) {
-                    if (HiCGlobals.guiIsCurrentlyActive) {
+                    if (JBGlobals.guiIsCurrentlyActive) {
                         int dialogResult = JOptionPane.showConfirmDialog(window,
                                 "File is already loaded. Would you like to overwrite it?", "Warning",
                                 JOptionPane.YES_NO_OPTION);
@@ -242,7 +242,7 @@ public class Load2DAnnotationsDialog extends JDialog implements TreeSelectionLis
                 openAnnotationPath = new File(path);
 
                 if (loadedAnnotationsMap.containsKey(path)) {
-                    if (HiCGlobals.guiIsCurrentlyActive) {
+                    if (JBGlobals.guiIsCurrentlyActive) {
                         int dialogResult = JOptionPane.showConfirmDialog(parentComponent,
                                 file.getName() + " is already loaded. Would you like to overwrite it?", "Warning",
                                 JOptionPane.YES_NO_OPTION);
@@ -345,7 +345,7 @@ public class Load2DAnnotationsDialog extends JDialog implements TreeSelectionLis
         top.add(parent);
 
         InputStream is = Load2DAnnotationsDialog.class.getResourceAsStream("annotations2d.txt");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is), HiCGlobals.bufferSize);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is), JBGlobals.bufferSize);
         String nextLine;
 
         try {

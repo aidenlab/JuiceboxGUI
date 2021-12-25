@@ -27,7 +27,7 @@ package juicebox.mapcolorui;
 import javastraw.feature2D.Feature2D;
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyOperationExecutor;
 import juicebox.data.HiC;
@@ -187,7 +187,7 @@ class HeatmapClickListener extends MouseAdapter implements ActionListener {
             }
         }
 
-        if (HiCGlobals.printVerboseComments) {
+        if (JBGlobals.printVerboseComments) {
             try {
                 superAdapter.getAssemblyStateTracker().getAssemblyHandler().toString();
             } catch (Exception e) {

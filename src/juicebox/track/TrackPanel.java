@@ -26,7 +26,7 @@ package juicebox.track;
 
 import javastraw.feature2D.Feature2D;
 import javastraw.tools.HiCFileTools;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.Context;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
@@ -66,7 +66,7 @@ public class TrackPanel extends JPanel {
         this.orientation = orientation;
         setAutoscrolls(true);
         trackRectangles = new ArrayList<>();
-        if (HiCGlobals.isDarkulaModeEnabled) {
+        if (JBGlobals.isDarkulaModeEnabled) {
             setBackground(Color.black);
         } else {
             setBackground(Color.white);
@@ -278,7 +278,7 @@ public class TrackPanel extends JPanel {
                 }
             }
         } catch (Exception e) {
-            if (HiCGlobals.printVerboseComments)
+            if (JBGlobals.printVerboseComments)
                 e.printStackTrace();
         }
 
@@ -289,10 +289,10 @@ public class TrackPanel extends JPanel {
         }
 
         if (cursorPoint != null) {
-            if (HiCGlobals.isDarkulaModeEnabled) {
-                g.setColor(HiCGlobals.DARKULA_RULER_LINE_COLOR);
+            if (JBGlobals.isDarkulaModeEnabled) {
+                g.setColor(JBGlobals.DARKULA_RULER_LINE_COLOR);
             } else {
-                g.setColor(HiCGlobals.RULER_LINE_COLOR);
+                g.setColor(JBGlobals.RULER_LINE_COLOR);
             }
             if (orientation == Orientation.X) {
                 g.drawLine(cursorPoint.x, 0, cursorPoint.x, getHeight());

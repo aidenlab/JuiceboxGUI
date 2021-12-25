@@ -24,7 +24,7 @@
 
 package juicebox.track;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.HiC;
 
 import javax.swing.*;
@@ -93,7 +93,7 @@ public class TrackLabelPanel extends JPanel {
     private JLabel getTrackLabel(String name, boolean addToolTip) {
         JLabel label = new JLabel(name); //, SwingConstants.RIGHT);
         label.setVerticalAlignment(SwingConstants.CENTER);
-        label.setFont(HiCGlobals.font(10, false));
+        label.setFont(JBGlobals.font(10, false));
         if (addToolTip)
             label.setToolTipText(name);
         return label;

@@ -27,7 +27,7 @@ package juicebox.guifeature2d;
 import javastraw.feature2D.Feature2D;
 import javastraw.feature2D.Feature2DList;
 import javastraw.tools.HiCFileTools;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.DirectoryManager;
 import juicebox.data.GUIMatrixZoomData;
 
@@ -330,7 +330,7 @@ public class AnnotationLayer {
     }
 
     private String getAutosaveFilename() {
-        return HiCGlobals.BACKUP_FILE_STEM + id + ".bedpe";
+        return JBGlobals.BACKUP_FILE_STEM + id + ".bedpe";
     }
 
     private File getAutosaveFile() {

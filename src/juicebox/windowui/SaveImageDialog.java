@@ -27,7 +27,7 @@ package juicebox.windowui;
 import de.erichseifert.vectorgraphics2d.PDFGraphics2D;
 import de.erichseifert.vectorgraphics2d.ProcessingPipeline;
 import de.erichseifert.vectorgraphics2d.SVGGraphics2D;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.data.HiC;
 
@@ -56,7 +56,7 @@ public class SaveImageDialog extends JFileChooser {
             setSelectedFile(new File(timeStamp + ".HiCImage" + extension));
 
         }
-        if (HiCGlobals.guiIsCurrentlyActive) {
+        if (JBGlobals.guiIsCurrentlyActive) {
             int actionDialog = showSaveDialog(mainWindow);
             if (actionDialog == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = getSelectedFile();
@@ -78,7 +78,7 @@ public class SaveImageDialog extends JFileChooser {
                     try {
                         int w = Integer.parseInt(width.getText());
                         int h = Integer.parseInt(height.getText());
-                        if (HiCGlobals.printVerboseComments) System.out.println("Exporting another figure");
+                        if (JBGlobals.printVerboseComments) System.out.println("Exporting another figure");
                         if (outputFile.getPath().endsWith(".svg") || outputFile.getPath().endsWith(".SVG")) {
                             exportAsSVG(outputFile, mainWindow, hic, hiCPanel, w, h);
                         } else {

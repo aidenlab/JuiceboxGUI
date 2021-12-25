@@ -26,7 +26,7 @@ package juicebox.assembly;
 
 import javastraw.feature1D.Feature1D;
 import javastraw.feature2D.Feature2D;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 
 import java.awt.*;
 import java.util.Comparator;
@@ -180,7 +180,7 @@ public class Scaffold extends Feature1D implements Comparable<Scaffold> {
     }
 
     private int scale(long longCoordinate) {
-        return (int) (longCoordinate / HiCGlobals.hicMapScale);
+        return (int) (longCoordinate / JBGlobals.hicMapScale);
     }
 
     public boolean isDebris() {
@@ -276,7 +276,7 @@ public class Scaffold extends Feature1D implements Comparable<Scaffold> {
 
     @Override
     public int hashCode() {
-		return Objects.hash(currentStart, length, HiCGlobals.hicMapScale);
+        return Objects.hash(currentStart, length, JBGlobals.hicMapScale);
     }
 
     @Override

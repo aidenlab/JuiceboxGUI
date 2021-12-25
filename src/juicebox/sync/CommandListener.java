@@ -24,7 +24,7 @@
 
 package juicebox.sync;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.HiC;
 
 import java.io.BufferedReader;
@@ -111,7 +111,7 @@ public class CommandListener implements Runnable {
      */
     private void processClientRequest(CommandExecutor cmdExe) throws IOException {
 
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()), HiCGlobals.bufferSize)) {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()), JBGlobals.bufferSize)) {
             String cmd;
             while (!halt && (cmd = in.readLine()) != null) {
                 if (cmd.equalsIgnoreCase("halt")) {

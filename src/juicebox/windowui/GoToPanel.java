@@ -28,7 +28,7 @@ import com.jidesoft.swing.JideButton;
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.basics.ChromosomeHandler;
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.assembly.Scaffold;
 import juicebox.data.HiC;
 import juicebox.genes.GeneFileTools;
@@ -72,7 +72,7 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
         goLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         JPanel goLabelPanel = new JPanel();
-        goLabelPanel.setBackground(HiCGlobals.backgroundColor);
+        goLabelPanel.setBackground(JBGlobals.backgroundColor);
         goLabelPanel.setLayout(new BorderLayout());
         goLabelPanel.add(goLabel, BorderLayout.CENTER);
 
@@ -90,12 +90,12 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
         goButton.addActionListener(this);
 
         JPanel goButtonPanel = new JPanel();
-        goButtonPanel.setBackground(HiCGlobals.diffGrayColor);
+        goButtonPanel.setBackground(JBGlobals.diffGrayColor);
         goButtonPanel.setLayout(new BoxLayout(goButtonPanel, BoxLayout.X_AXIS));
         goButtonPanel.add(goPositionPanel, BorderLayout.PAGE_START);
         goButtonPanel.add(goButton);
 
-        setBackground(HiCGlobals.diffGrayColor);
+        setBackground(JBGlobals.diffGrayColor);
         setBorder(LineBorder.createGrayLineBorder());
         setLayout(new BorderLayout());
         add(goLabelPanel, BorderLayout.PAGE_START);
@@ -337,7 +337,7 @@ public class GoToPanel extends JPanel implements ActionListener, FocusListener {
         return (int) (Long.parseLong(number.toLowerCase()
                 .replaceAll(",", "")
                 .replaceAll("m", "000000")
-                .replaceAll("k", "000")) / HiCGlobals.hicMapScale);
+                .replaceAll("k", "000")) / JBGlobals.hicMapScale);
     }
 
     private void parseGenePositionText() {

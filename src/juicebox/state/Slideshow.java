@@ -24,7 +24,7 @@
 
 package juicebox.state;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.gui.SuperAdapter;
 import org.w3c.dom.Document;
@@ -91,7 +91,7 @@ public class Slideshow extends JDialog {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = null;
             db = dbf.newDocumentBuilder();
-            dom = db.parse(HiCGlobals.xmlSavedStatesFile.getAbsolutePath());
+            dom = db.parse(JBGlobals.xmlSavedStatesFile.getAbsolutePath());
             NodeList nodeList = dom.getElementsByTagName("STATE");
             for (int i = 0; i < nodeList.getLength(); i++) {
                 savedStatePaths.add(nodeList.item(i).getAttributes().getNamedItem("SelectedPath").getNodeValue());

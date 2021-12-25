@@ -26,7 +26,7 @@ package juicebox.windowui;
 
 import javastraw.reader.Dataset;
 import javastraw.reader.expected.ExpectedValueFunction;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.data.HiC;
 import org.jfree.chart.ChartFactory;
@@ -195,7 +195,7 @@ public class QCDialog extends JDialog {
 
                 readTypePlot.setDomainAxis(new LogarithmicAxis("Distance (log)"));
                 readTypePlot.setRangeAxis(new LogarithmicAxis("Binned Reads (log)"));
-                Color backgroundColor = HiCGlobals.isDarkulaModeEnabled ? Color.BLACK : Color.WHITE;
+                Color backgroundColor = JBGlobals.isDarkulaModeEnabled ? Color.BLACK : Color.WHITE;
                 readTypePlot.setBackgroundPaint(backgroundColor);
                 readTypePlot.setRangeGridlinePaint(Color.lightGray);
                 readTypePlot.setDomainGridlinePaint(Color.lightGray);
@@ -320,7 +320,7 @@ public class QCDialog extends JDialog {
 
             readTypePlot.setDomainAxis(new LogarithmicAxis("Distance between reads (log)"));
             readTypePlot.setRangeAxis(new LogarithmicAxis("Genome-wide expected (log)"));
-            Color backgroundColor = HiCGlobals.isDarkulaModeEnabled ? Color.BLACK : Color.WHITE;
+            Color backgroundColor = JBGlobals.isDarkulaModeEnabled ? Color.BLACK : Color.WHITE;
             readTypePlot.setBackgroundPaint(backgroundColor);
             readTypePlot.setRangeGridlinePaint(Color.lightGray);
             readTypePlot.setDomainGridlinePaint(Color.lightGray);

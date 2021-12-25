@@ -24,7 +24,7 @@
 
 package juicebox.mapcolorui;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.GUIMatrixZoomData;
 
 import java.awt.*;
@@ -40,7 +40,7 @@ public class BoundingBoxRenderer {
 
     public void drawAllByAllGrid(Graphics2D g, GUIMatrixZoomData zd, boolean showGridLines,
                                  double binOriginX, double binOriginY, double scaleFactor) {
-        if (HiCGlobals.isDarkulaModeEnabled) {
+        if (JBGlobals.isDarkulaModeEnabled) {
             g.setColor(Color.LIGHT_GRAY);
         } else {
             g.setColor(Color.DARK_GRAY);
@@ -71,7 +71,7 @@ public class BoundingBoxRenderer {
         }
 
         //Cover gray background for the empty parts of the matrix:
-        if (HiCGlobals.isDarkulaModeEnabled) {
+        if (JBGlobals.isDarkulaModeEnabled) {
             g.setColor(Color.darkGray);
         } else {
             g.setColor(Color.white);

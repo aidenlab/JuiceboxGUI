@@ -35,7 +35,7 @@ import javastraw.reader.type.HiCZoom;
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationHandler;
 import javastraw.reader.type.NormalizationType;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.gui.SuperAdapter;
 import juicebox.sync.CommandBroadcaster;
 import juicebox.sync.CommandExecutor;
@@ -384,17 +384,17 @@ public class HiC {
 
     public Matrix getMatrix() {
         if (dataset == null) {
-            if (HiCGlobals.printVerboseComments) {
+            if (JBGlobals.printVerboseComments) {
                 System.err.println("Dataset is null");
             }
             return null;
         } else if (xContext == null) {
-            if (HiCGlobals.printVerboseComments) {
+            if (JBGlobals.printVerboseComments) {
                 System.err.println("xContext is null");
             }
             return null;
         } else if (yContext == null) {
-            if (HiCGlobals.printVerboseComments) {
+            if (JBGlobals.printVerboseComments) {
                 System.err.println("yContext is null");
             }
             return null;
@@ -622,9 +622,9 @@ public class HiC {
 
             // this addresses draw box to zoom when down from low res pearsons
             // it can't zoom all the way in, but can zoom in a little more up to 500K
-            if (isInPearsonsMode() && newZoom.getBinSize() < HiCGlobals.MAX_PEARSON_ZOOM) {
+            if (isInPearsonsMode() && newZoom.getBinSize() < JBGlobals.MAX_PEARSON_ZOOM) {
                 for (int i = zoomList.size() - 1; i >= 0; i--) {
-                    if (zoomList.get(i).getBinSize() >= HiCGlobals.MAX_PEARSON_ZOOM) {
+                    if (zoomList.get(i).getBinSize() >= JBGlobals.MAX_PEARSON_ZOOM) {
                         newZoom = zoomList.get(i);
                         break;
                     }
@@ -936,7 +936,7 @@ public class HiC {
     }
 
     public boolean isPearsonEdgeCaseEncountered(HiCZoom zoom) {
-        return isInPearsonsMode() && zoom.getBinSize() < HiCGlobals.MAX_PEARSON_ZOOM;
+        return isInPearsonsMode() && zoom.getBinSize() < JBGlobals.MAX_PEARSON_ZOOM;
     }
 
     public boolean isResolutionLocked() {
@@ -944,7 +944,7 @@ public class HiC {
                 // pearson can't zoom in
                 // even though it should never be less, I think we should try to catch it
                 // (i.e. <= rather than ==)?
-                (isInPearsonsMode() && currentZoom.getBinSize() <= HiCGlobals.MAX_PEARSON_ZOOM);
+                (isInPearsonsMode() && currentZoom.getBinSize() <= JBGlobals.MAX_PEARSON_ZOOM);
     }
 
     public boolean isPearsonsNotAvailableForFile(boolean isControl) {
@@ -977,10 +977,10 @@ public class HiC {
         if (MatrixType.isPearsonType(displayOption)) {
             return Color.WHITE;
         } else {
-            if (HiCGlobals.isDarkulaModeEnabled) {
-                return HiCGlobals.DARKULA_RULER_LINE_COLOR;
+            if (JBGlobals.isDarkulaModeEnabled) {
+                return JBGlobals.DARKULA_RULER_LINE_COLOR;
             } else {
-                return HiCGlobals.RULER_LINE_COLOR;
+                return JBGlobals.RULER_LINE_COLOR;
             }
         }
     }
@@ -1044,13 +1044,13 @@ public class HiC {
 
     public String[] getNormalizationOptions(boolean isControl) {
         if (isControl) {
-            if (controlDataset == null || controlDataset.getVersion() < HiCGlobals.minVersion) {
+            if (controlDataset == null || controlDataset.getVersion() < JBGlobals.minVersion) {
                 return new String[]{NormalizationHandler.NONE.getDescription()};
             } else {
                 return getNormalizationsArray(controlDataset);
             }
         } else {
-            if (dataset.getVersion() < HiCGlobals.minVersion) {
+            if (dataset.getVersion() < JBGlobals.minVersion) {
                 return new String[]{NormalizationHandler.NONE.getDescription()};
             } else {
                 return getNormalizationsArray(dataset);

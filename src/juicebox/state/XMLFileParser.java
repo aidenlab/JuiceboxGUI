@@ -24,7 +24,7 @@
 
 package juicebox.state;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
@@ -45,14 +45,14 @@ class XMLFileParser {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();
-            dom = db.parse(HiCGlobals.xmlSavedStatesFile.getAbsolutePath());
+            dom = db.parse(JBGlobals.xmlSavedStatesFile.getAbsolutePath());
 
             //validate
             dbf.setValidating(false);
             dbf.setNamespaceAware(true);
             DocumentBuilder builder = dbf.newDocumentBuilder();
             builder.setErrorHandler(new SimpleErrorHandler());
-            builder.parse(new InputSource(HiCGlobals.xmlSavedStatesFile.getAbsolutePath()));
+            builder.parse(new InputSource(JBGlobals.xmlSavedStatesFile.getAbsolutePath()));
             dom.getDocumentElement();
 
 

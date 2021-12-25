@@ -30,7 +30,7 @@ import javastraw.reader.block.ContactRecord;
 import javastraw.reader.expected.ExpectedValueFunction;
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationType;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.GUIMatrixZoomData;
 import org.broad.igv.renderer.ColorScale;
 
@@ -927,7 +927,7 @@ public class HeatmapRenderer {
             try {
                 return zd.getNormalizedBlocksOverlapping(x, y, maxX, maxY, normType, isImportant, false);
             } catch (Exception ee) {
-                if (HiCGlobals.printVerboseComments) ee.printStackTrace();
+                if (JBGlobals.printVerboseComments) ee.printStackTrace();
             }
         }
         return new ArrayList<>();

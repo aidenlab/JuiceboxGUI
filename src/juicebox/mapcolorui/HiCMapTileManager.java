@@ -27,7 +27,7 @@ package juicebox.mapcolorui;
 import javastraw.reader.expected.ExpectedValueFunction;
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationType;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
@@ -88,7 +88,7 @@ public class HiCMapTileManager {
                                             ExpectedValueFunction expectedValues, ExpectedValueFunction expectedControlValues) {
         BufferedImage image = (BufferedImage) parent.createImage(imageWidth, imageHeight);
         Graphics2D g2D = (Graphics2D) image.getGraphics();
-        if (HiCGlobals.isDarkulaModeEnabled) {
+        if (JBGlobals.isDarkulaModeEnabled) {
             g2D.setColor(Color.darkGray);
             g2D.fillRect(0, 0, imageWidth, imageHeight);
         }

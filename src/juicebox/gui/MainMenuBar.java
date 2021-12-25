@@ -24,8 +24,7 @@
 
 package juicebox.gui;
 
-import juicebox.HiCGlobals;
-import juicebox.assembly.AssemblyFileImporter;
+import juicebox.JBGlobals;
 import juicebox.assembly.IGVFeatureCopy;
 import juicebox.data.DirectoryManager;
 import juicebox.data.ProcessHelper;
@@ -96,7 +95,7 @@ public class MainMenuBar extends JMenuBar {
   }
 
   public boolean unsavedEditsExist() {
-    File unsavedSampleFile = new File(DirectoryManager.getHiCDirectory(), HiCGlobals.BACKUP_FILE_STEM + "0.bedpe");
+    File unsavedSampleFile = new File(DirectoryManager.getHiCDirectory(), JBGlobals.BACKUP_FILE_STEM + "0.bedpe");
     return unsavedSampleFile.exists();
   }
 
@@ -138,7 +137,7 @@ public class MainMenuBar extends JMenuBar {
     fileMenu.add(openItem);
     fileMenu.add(loadControlFromList);
 
-    recentMapMenu = new RecentMenu("Open Recent", recentMapListMaxItems, recentMapEntityNode, HiCGlobals.menuType.MAP) {
+    recentMapMenu = new RecentMenu("Open Recent", recentMapListMaxItems, recentMapEntityNode, JBGlobals.menuType.MAP) {
 
       private static final long serialVersionUID = 9000021;
 
@@ -151,7 +150,7 @@ public class MainMenuBar extends JMenuBar {
 
     fileMenu.add(recentMapMenu);
 
-    recentControlMapMenu = new RecentMenu("Open Recent as Control", recentMapListMaxItems, recentMapEntityNode, HiCGlobals.menuType.MAP) {
+    recentControlMapMenu = new RecentMenu("Open Recent as Control", recentMapListMaxItems, recentMapEntityNode, JBGlobals.menuType.MAP) {
 
       private static final long serialVersionUID = 9000022;
 
@@ -201,7 +200,7 @@ public class MainMenuBar extends JMenuBar {
                 "such as Hi-C. Juicebox was created by Jim Robinson, Neva C. Durand, and Erez Aiden.<br><br>" +
                 "Ongoing development work is carried out by Muhammad S. Shamim, Neva Durand, Olga Dudchenko, " +
                 "Suhas Rao, and other members of the Aiden Lab.<br><br>" +
-                "Current version: " + HiCGlobals.versionNum + "<br>" +
+                "Current version: " + JBGlobals.versionNum + "<br>" +
                 "Copyright © 2014-2021. Broad Institute and Aiden Lab" +
                 "<br><br>" +
                 "" +
@@ -274,7 +273,7 @@ public class MainMenuBar extends JMenuBar {
     saveStateForReload.setEnabled(false);
     //bookmarksMenu.add(saveStateForReload);
 
-    recentLocationMenu = new RecentMenu("Restore Saved Location", recentLocationMaxItems, recentLocationEntityNode, HiCGlobals.menuType.LOCATION) {
+    recentLocationMenu = new RecentMenu("Restore Saved Location", recentLocationMaxItems, recentLocationEntityNode, JBGlobals.menuType.LOCATION) {
 
       private static final long serialVersionUID = 9000023;
 
@@ -293,10 +292,10 @@ public class MainMenuBar extends JMenuBar {
     //---Export States----
     exportSavedStateMenuItem = new JMenuItem();
     exportSavedStateMenuItem.setText("Export Saved States");
-    exportSavedStateMenuItem.addActionListener(e -> new SaveFileDialog(HiCGlobals.xmlSavedStatesFile));
+    exportSavedStateMenuItem.addActionListener(e -> new SaveFileDialog(JBGlobals.xmlSavedStatesFile));
 
     // restore recent saved states
-    previousStates = new RecentMenu("Restore Previous States", recentLocationMaxItems, recentStateEntityNode, HiCGlobals.menuType.STATE) {
+    previousStates = new RecentMenu("Restore Previous States", recentLocationMaxItems, recentStateEntityNode, JBGlobals.menuType.STATE) {
 
       private static final long serialVersionUID = 9000024;
 
@@ -317,7 +316,7 @@ public class MainMenuBar extends JMenuBar {
     importMapAsFile = new JMenuItem();
     importMapAsFile.setText("Import State From File");
     importMapAsFile.addActionListener(e -> {
-      superAdapter.launchImportState(HiCGlobals.xmlSavedStatesFile);
+      superAdapter.launchImportState(JBGlobals.xmlSavedStatesFile);
       importMapAsFile.setSelected(true);
     });
 
@@ -327,7 +326,7 @@ public class MainMenuBar extends JMenuBar {
     slideShow.setText("View Slideshow");
     slideShow.addActionListener(e -> {
       superAdapter.launchSlideShow();
-      HiCGlobals.slideshowEnabled = true;
+      JBGlobals.slideshowEnabled = true;
     });
     //bookmarksMenu.add(slideShow);
 
@@ -360,12 +359,12 @@ public class MainMenuBar extends JMenuBar {
 
     final JCheckBoxMenuItem darkulaMode = new JCheckBoxMenuItem("Darkula Mode");
     darkulaMode.addActionListener(e -> {
-      HiCGlobals.isDarkulaModeEnabled = !HiCGlobals.isDarkulaModeEnabled;
+      JBGlobals.isDarkulaModeEnabled = !JBGlobals.isDarkulaModeEnabled;
       superAdapter.getMainViewPanel().resetAllColors();
       //superAdapter.safeClearAllMZDCache();
       superAdapter.refresh();
     });
-    darkulaMode.setSelected(HiCGlobals.isDarkulaModeEnabled);
+    darkulaMode.setSelected(JBGlobals.isDarkulaModeEnabled);
     viewMenu.add(darkulaMode);
     viewMenu.addSeparator();
 
@@ -415,17 +414,17 @@ public class MainMenuBar extends JMenuBar {
 
     final JMenuItem addRainbowTrack = new JMenuItem("Add a rainbow track...");
     addRainbowTrack.addActionListener(e -> superAdapter.getHiC().generateRainbowBed());
-    if (HiCGlobals.isDevAssemblyToolsAllowedPublic) {
+    if (JBGlobals.isDevAssemblyToolsAllowedPublic) {
       devMenu.add(addRainbowTrack);
     }
 
     final JCheckBoxMenuItem skipSortInPhase = new JCheckBoxMenuItem("Skip variant sorting in phase mode");
     skipSortInPhase.addActionListener(e -> {
-      HiCGlobals.noSortInPhasing = !HiCGlobals.noSortInPhasing;
+      JBGlobals.noSortInPhasing = !JBGlobals.noSortInPhasing;
       superAdapter.getHeatmapPanel().repaint();
     });
-    skipSortInPhase.setSelected(HiCGlobals.noSortInPhasing);
-    if (HiCGlobals.isDevAssemblyToolsAllowedPublic) {
+    skipSortInPhase.setSelected(JBGlobals.noSortInPhasing);
+    if (JBGlobals.isDevAssemblyToolsAllowedPublic) {
       devMenu.add(skipSortInPhase);
     }
 
@@ -436,10 +435,11 @@ public class MainMenuBar extends JMenuBar {
 
     final JCheckBoxMenuItem displayTiles = new JCheckBoxMenuItem("Display Tiles");
     displayTiles.addActionListener(e -> {
-      HiCGlobals.displayTiles = !HiCGlobals.displayTiles;
+      JBGlobals.displayTiles = !JBGlobals.displayTiles;
       superAdapter.getHeatmapPanel().repaint();
     });
 
+    /*
     final JCheckBoxMenuItem hackLinearColorScale = new JCheckBoxMenuItem("Hack linear color scale");
     hackLinearColorScale.addActionListener(e -> {
       HiCGlobals.HACK_COLORSCALE_LINEAR = !HiCGlobals.HACK_COLORSCALE_LINEAR;
@@ -458,12 +458,16 @@ public class MainMenuBar extends JMenuBar {
       superAdapter.getHeatmapPanel().repaint();
     });
 
-    displayTiles.setSelected(HiCGlobals.displayTiles);
-    if (HiCGlobals.isDevAssemblyToolsAllowedPublic) {
+     */
+
+    displayTiles.setSelected(JBGlobals.displayTiles);
+    if (JBGlobals.isDevAssemblyToolsAllowedPublic) {
       devMenu.add(displayTiles);
+      /*
       devMenu.add(hackColorScaleEqual);
       devMenu.add(hackColorScale);
       devMenu.add(hackLinearColorScale);
+       */
     }
 
     final JCheckBoxMenuItem colorFeatures = new JCheckBoxMenuItem("Recolor 1D Annotations in Assembly Mode");
@@ -472,10 +476,11 @@ public class MainMenuBar extends JMenuBar {
       repaint();
     });
     colorFeatures.setSelected(IGVFeatureCopy.colorFeaturesChk);
-    if (HiCGlobals.isDevAssemblyToolsAllowedPublic) {
+    if (JBGlobals.isDevAssemblyToolsAllowedPublic) {
       devMenu.add(colorFeatures);
     }
 
+    /*
     // todo MSS and Santiago - is this to be deleted?
     final JCheckBoxMenuItem useAssemblyMatrix = new JCheckBoxMenuItem("Use Assembly Chromosome Matrix");
     useAssemblyMatrix.setEnabled(!SuperAdapter.assemblyModeCurrentlyActive);
@@ -488,10 +493,11 @@ public class MainMenuBar extends JMenuBar {
 //        superAdapter.assemblyModeCurrentlyActive = true;
       System.out.println(assemblyFileImporter.getAssemblyScaffoldHandler().toString());
     });
+     */
 
-    useAssemblyMatrix.setSelected(HiCGlobals.isAssemblyMatCheck);
-    if (HiCGlobals.isDevAssemblyToolsAllowedPublic) {
-      devMenu.add(useAssemblyMatrix);
+    //useAssemblyMatrix.setSelected(HiCGlobals.isAssemblyMatCheck);
+    if (JBGlobals.isDevAssemblyToolsAllowedPublic) {
+      //devMenu.add(useAssemblyMatrix);
     }
 
 
@@ -512,9 +518,11 @@ public class MainMenuBar extends JMenuBar {
     editPearsonsColorItem.addActionListener(e -> superAdapter.launchPearsonColorScaleEditor());
     devMenu.add(editPearsonsColorItem);
 
+    /*
     JMenuItem editPseudoCounts = new JMenuItem("Change Pseudocount");
     editPseudoCounts.addActionListener(e -> superAdapter.launchSetPseudoCountEditor());
     devMenu.add(editPseudoCounts);
+    */
 
     final JTextField numSparse = new JTextField("" + Feature2DHandler.numberOfLoopsToFind);
     numSparse.setEnabled(true);
@@ -596,13 +604,13 @@ public class MainMenuBar extends JMenuBar {
     setScale = new JMenuItem("Set Scale");
     setScale.addActionListener(e -> {
       double scale;
-      String newScale = MessageUtils.showInputDialog("Specify a scale", Double.toString(HiCGlobals.hicMapScale));
+      String newScale = MessageUtils.showInputDialog("Specify a scale", Double.toString(JBGlobals.hicMapScale));
       try {
         scale = Double.parseDouble(newScale);
         if (scale == 0.0) {  // scale cannot be zero
           scale = 1.0;
         }
-        HiCGlobals.hicMapScale = scale;
+        JBGlobals.hicMapScale = scale;
 
         // Rescale resolution slider labels
         superAdapter.getMainViewPanel().getResolutionSlider().reset();
@@ -646,7 +654,7 @@ public class MainMenuBar extends JMenuBar {
     // add(annotationsMenu);
     add(viewMenu);
     add(bookmarksMenu);
-    if (HiCGlobals.isDevAssemblyToolsAllowedPublic) {
+    if (JBGlobals.isDevAssemblyToolsAllowedPublic) {
       add(assemblyMenu);
     }
     add(devMenu);

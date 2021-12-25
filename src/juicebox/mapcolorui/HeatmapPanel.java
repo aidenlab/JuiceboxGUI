@@ -29,7 +29,7 @@ import javastraw.reader.basics.Chromosome;
 import javastraw.reader.basics.ChromosomeHandler;
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationType;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyHeatmapHandler;
 import juicebox.assembly.AssemblyOperationExecutor;
@@ -101,7 +101,7 @@ public class HeatmapPanel extends JComponent {
         Rectangle clipBounds = g.getClipBounds();
         g.clearRect(clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height);
 
-        if (HiCGlobals.isDarkulaModeEnabled) {
+        if (JBGlobals.isDarkulaModeEnabled) {
             g.setColor(Color.darkGray);
             g.fillRect(clipBounds.x, clipBounds.y, clipBounds.width, clipBounds.height);
         }
@@ -231,7 +231,7 @@ public class HeatmapPanel extends JComponent {
 
         BufferedImage image = (BufferedImage) createImage(wh, wh);
         Graphics2D g = image.createGraphics();
-        if (HiCGlobals.isDarkulaModeEnabled) {
+        if (JBGlobals.isDarkulaModeEnabled) {
             g.setColor(Color.darkGray);
             g.fillRect(0, 0, wh, wh);
         }
@@ -309,7 +309,7 @@ public class HeatmapPanel extends JComponent {
         mouseHandler.clearSelectedFeatures();
         superAdapter.getMainViewPanel().toggleToolTipUpdates(true);
         mouseHandler.setActivelyEditingAssembly(false);
-        HiCGlobals.splitModeEnabled = false;
+        JBGlobals.splitModeEnabled = false;
         SuperAdapter.assemblyModeCurrentlyActive = false;
     }
 
@@ -325,7 +325,7 @@ public class HeatmapPanel extends JComponent {
         superAdapter.updatePreviousTempSelectedGroups(mouseHandler.getTempSelectedGroup());
         mouseHandler.setTempSelectedGroup(null);
         superAdapter.clearEditsAndUpdateLayers();
-        HiCGlobals.splitModeEnabled = false;
+        JBGlobals.splitModeEnabled = false;
         superAdapter.getMainViewPanel().toggleToolTipUpdates(true);
         removeHighlightedFeature();
 

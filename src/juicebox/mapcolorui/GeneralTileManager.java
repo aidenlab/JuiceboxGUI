@@ -26,7 +26,7 @@ package juicebox.mapcolorui;
 
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationType;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
@@ -122,7 +122,7 @@ public class GeneralTileManager {
 
                         // handling for svg export
                         try {
-                            if (HiCGlobals.printVerboseComments) {
+                            if (JBGlobals.printVerboseComments) {
                                 System.out.println("svg plotting for\n" + xDest0 + "_" + yDest0 + "_" + xDest1 + "_" +
                                         yDest1 + "_" + xSrc0 + "_" + ySrc0 + "_" + xSrc1 + "_" + ySrc1);
                             }
@@ -135,7 +135,7 @@ public class GeneralTileManager {
                         }
                     }
 
-                    if (HiCGlobals.displayTiles) {
+                    if (JBGlobals.displayTiles) {
                         renderer.drawRect(xDest0, yDest0, (xDest1 - xDest0), (yDest1 - yDest0));
                     }
                 }

@@ -26,7 +26,7 @@ package juicebox.mapcolorui;
 
 import com.jidesoft.swing.JideButton;
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
@@ -89,10 +89,10 @@ public class ResolutionControl extends JPanel {
 
         resolutionLabel = new JLabel(getUnitLabel());
         resolutionLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        resolutionLabel.setBackground(HiCGlobals.backgroundColor);
+        resolutionLabel.setBackground(JBGlobals.backgroundColor);
 
         JPanel resolutionLabelPanel = new JPanel();
-        resolutionLabelPanel.setBackground(HiCGlobals.backgroundColor);
+        resolutionLabelPanel.setBackground(JBGlobals.backgroundColor);
         resolutionLabelPanel.setLayout(new BorderLayout());
         resolutionLabelPanel.add(resolutionLabel, BorderLayout.CENTER);
 
@@ -325,7 +325,7 @@ public class ResolutionControl extends JPanel {
         }
 
         String label;
-        int adjustedBinSize = (int) (binSize * HiCGlobals.hicMapScale);
+        int adjustedBinSize = (int) (binSize * JBGlobals.hicMapScale);
 
         if (adjustedBinSize >= 1000000) {
             label = ((double) adjustedBinSize / 1000000) + " MB";

@@ -26,7 +26,7 @@ package juicebox.assembly;
 
 import javastraw.feature2D.Feature2D;
 import javastraw.feature2D.Feature2DList;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.guifeature2d.Feature2DHandler;
 
 import java.awt.*;
@@ -211,11 +211,11 @@ public class AssemblyScaffoldHandler {
         attributes.put(superScaffoldNameAttributeKey, listOfScaffolds.get(Math.abs(listOfSuperscaffolds.get(i).get(0)) - 1).getName());
         return new Feature2D(Feature2D.FeatureType.SUPERSCAFFOLD,
                 chrName,
-                (int) (start / HiCGlobals.hicMapScale),
-                (int) (end / HiCGlobals.hicMapScale),
+                (int) (start / JBGlobals.hicMapScale),
+                (int) (end / JBGlobals.hicMapScale),
                 chrName,
-                (int) (start / HiCGlobals.hicMapScale),
-                (int) (end / HiCGlobals.hicMapScale),
+                (int) (start / JBGlobals.hicMapScale),
+                (int) (end / JBGlobals.hicMapScale),
                 new Color(0, 0, 255),
                 attributes);
     }
@@ -292,11 +292,11 @@ public class AssemblyScaffoldHandler {
         long endCut;
 
         if (targetScaffold.getSignIndexId() > 0) {
-            startCut = (long) (debrisFeature.getStart1() * HiCGlobals.hicMapScale) - targetScaffold.getCurrentStart();
-            endCut = (long) (debrisFeature.getEnd1() * HiCGlobals.hicMapScale) - targetScaffold.getCurrentStart();
+            startCut = (long) (debrisFeature.getStart1() * JBGlobals.hicMapScale) - targetScaffold.getCurrentStart();
+            endCut = (long) (debrisFeature.getEnd1() * JBGlobals.hicMapScale) - targetScaffold.getCurrentStart();
         } else {
-            startCut = (long) (targetScaffold.getCurrentEnd() - debrisFeature.getEnd1() * HiCGlobals.hicMapScale);
-            endCut = (long) (targetScaffold.getCurrentEnd() - debrisFeature.getStart1() * HiCGlobals.hicMapScale);
+            startCut = (long) (targetScaffold.getCurrentEnd() - debrisFeature.getEnd1() * JBGlobals.hicMapScale);
+            endCut = (long) (targetScaffold.getCurrentEnd() - debrisFeature.getStart1() * JBGlobals.hicMapScale);
         }
 
         editCprops(targetScaffold, startCut, endCut);
@@ -628,7 +628,7 @@ public class AssemblyScaffoldHandler {
 
     // SuperScaffold manipulations
   private void mergeSuperScaffolds (int super1, int super2){
-      if (HiCGlobals.phasing) {
+      if (JBGlobals.phasing) {
           List<Integer> idListToMerge = new ArrayList<>();
           idListToMerge.add(super1);
           idListToMerge.add(super2);
@@ -667,7 +667,7 @@ public class AssemblyScaffoldHandler {
 
         boolean altGoesFirst = altIdListToMerge.contains(idListToMerge.get(0));
 
-        if (!HiCGlobals.noSortInPhasing)
+        if (!JBGlobals.noSortInPhasing)
             Collections.sort(newSuperscaffold);
 
         for (int i : newSuperscaffold) {
@@ -698,7 +698,7 @@ public class AssemblyScaffoldHandler {
     }
 
     private void splitSuperscaffold(int superscaffoldId, int scaffoldId) {
-        if (HiCGlobals.phasing) {
+        if (JBGlobals.phasing) {
             if (superscaffoldId % 2 != 0) {
                 superscaffoldId -= 1;
                 if (scaffoldId % 2 == 0) {
@@ -715,14 +715,14 @@ public class AssemblyScaffoldHandler {
                 int breakPointIndex = listOfSuperscaffolds.get(superscaffoldId).indexOf(scaffoldId);
                 newSuperscaffolds.add(listOfSuperscaffolds.get(superscaffoldId)
                         .subList(0, 1 + breakPointIndex));
-                if (HiCGlobals.phasing) {
+                if (JBGlobals.phasing) {
                     newSuperscaffolds.add(listOfSuperscaffolds.get(superscaffoldId + 1)
                             .subList(0, 1 + breakPointIndex));
                 }
                 newSuperscaffolds.add(listOfSuperscaffolds.get(superscaffoldId)
                         .subList(1 + breakPointIndex,
                                 listOfSuperscaffolds.get(superscaffoldId).size()));
-                if (HiCGlobals.phasing) {
+                if (JBGlobals.phasing) {
                     newSuperscaffolds.add(listOfSuperscaffolds.get(superscaffoldId + 1)
                             .subList(1 + breakPointIndex,
                                     listOfSuperscaffolds.get(superscaffoldId + 1).size()));

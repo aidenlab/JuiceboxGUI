@@ -29,7 +29,7 @@ import javastraw.feature2D.Feature2D;
 import javastraw.reader.Matrix;
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.expected.ExpectedValueFunction;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyOperationExecutor;
 import juicebox.assembly.AssemblyScaffoldHandler;
@@ -213,7 +213,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
         mi4.addActionListener(e -> {
             final boolean isLinked = mi4.isSelected();
             if (isLinked) {
-                HiCGlobals.wasLinkedBeforeMousePress = false;
+                JBGlobals.wasLinkedBeforeMousePress = false;
                 hic.broadcastLocation();
             }
             hic.setLinkedMode(isLinked);
@@ -416,7 +416,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
         AssemblyOperationExecutor.splitContig(selectedFeatures.get(0), debrisFeature, superAdapter, hic, true);
 
-        HiCGlobals.splitModeEnabled = false;
+        JBGlobals.splitModeEnabled = false;
         Chromosome chrX = superAdapter.getHiC().getXContext().getChromosome();
         Chromosome chrY = superAdapter.getHiC().getYContext().getChromosome();
         superAdapter.getEditLayer().filterTempSelectedGroup(chrX.getIndex(), chrY.getIndex());
@@ -539,7 +539,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
             // turn off continuous sync for dragging
             if (hic.isLinkedMode()) {
-                HiCGlobals.wasLinkedBeforeMousePress = true;
+                JBGlobals.wasLinkedBeforeMousePress = true;
                 hic.setLinkedMode(false);
             }
 
@@ -572,13 +572,13 @@ public class HeatmapMouseHandler extends MouseAdapter {
                     List<Feature2D> newSelectedFeatures = superAdapter.getMainLayer().getSelectedFeatures(hic, e.getX(), e.getY());
                     if (!selectedFeatures.get(0).equals(newSelectedFeatures.get(0))) {
 
-                        HiCGlobals.splitModeEnabled = false;
+                        JBGlobals.splitModeEnabled = false;
                         superAdapter.setActiveLayerHandler(superAdapter.getMainLayer());
                         superAdapter.getLayersPanel().updateBothLayersPanels(superAdapter);
                         superAdapter.getEditLayer().clearAnnotations();
                     }
                     if (selectedFeatures.size() == 1 && selectedFeatures.get(0).equals(newSelectedFeatures.get(0))) {
-                        HiCGlobals.splitModeEnabled = true;
+                        JBGlobals.splitModeEnabled = true;
                     }
                 } catch (Exception ignored) {
                 }
@@ -626,7 +626,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                     superAdapter.getEditLayer().getAnnotationLayer().getFeatureHandler().getFeatureList().checkAndRemoveFeature(chr1Idx, chr2Idx, debrisFeature);
                 }
                 superAdapter.getEditLayer().getAnnotationLayer().add(chr1Idx, chr2Idx, debrisFeature);
-                HiCGlobals.splitModeEnabled = true;
+                JBGlobals.splitModeEnabled = true;
                 superAdapter.setActiveLayerHandler(superAdapter.getEditLayer());
                 restoreDefaultVariables();
                 parent.repaint();
@@ -674,8 +674,8 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
             }*/ else {
             // turn on continuous sync after dragging
-            if (HiCGlobals.wasLinkedBeforeMousePress) {
-                HiCGlobals.wasLinkedBeforeMousePress = false;
+            if (JBGlobals.wasLinkedBeforeMousePress) {
+                JBGlobals.wasLinkedBeforeMousePress = false;
                 hic.setLinkedMode(true);
 
                 if (lastPressedMousePoint != null) {
@@ -689,7 +689,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                 }
             }
 
-            if (e.isShiftDown() && HiCGlobals.phasing) {
+            if (e.isShiftDown() && JBGlobals.phasing) {
 
                 //superscaffold selection handling in the phasing case
 
@@ -728,7 +728,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                 return;
             }
 
-            if (activelyEditingAssembly && HiCGlobals.splitModeEnabled && currentPromptedAssemblyAction == PromptedAssemblyAction.CUT) {
+            if (activelyEditingAssembly && JBGlobals.splitModeEnabled && currentPromptedAssemblyAction == PromptedAssemblyAction.CUT) {
                 // disable long click: it seems that no one is using it anyway. But let's keep it commented around for now..
 //                    holdTime = (endTime - startTime) / Math.pow(10, 6);
                 //Short click: execute split, long click: expert mode leave annotation be for editing purposes
@@ -780,7 +780,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                     parent.removeSelection();
                 }
 
-                if (HiCGlobals.translationInProgress) {
+                if (JBGlobals.translationInProgress) {
                     translationInProgressMouseReleased(newSelectedFeatures);
                 } else {
                     if (selectedFeatures.equals(newSelectedFeatures) && currentPromptedAssemblyAction != PromptedAssemblyAction.ADJUST) {
@@ -853,7 +853,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                         }
 
                         //remove preadjust loop from list
-                        if (activelyEditingAssembly && HiCGlobals.splitModeEnabled) {
+                        if (activelyEditingAssembly && JBGlobals.splitModeEnabled) {
                             debrisFeature = tempFeature2D;
                         }
                     }
@@ -878,7 +878,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
         if (newSelectedFeatures != null) {
             selectedFeatures.addAll(newSelectedFeatures);
         }
-        HiCGlobals.translationInProgress = false;
+        JBGlobals.translationInProgress = false;
         parent.removeSelection(); //TODO fix this so that highlight moves with translated selection
     }
 
@@ -1119,7 +1119,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                 int bottomRightCornerX = (int) ((lastGenomicBin - binOriginX) * scaleFactor);
                 int bottomRightCornerY = (int) ((lastGenomicBin - binOriginY) * scaleFactor);
 
-                if (!selectedFeatures.isEmpty() && !HiCGlobals.phasing) {
+                if (!selectedFeatures.isEmpty() && !JBGlobals.phasing) {
                     if (mousePoint.getX() - topLeftCornerX >= 0 &&
                             mousePoint.getX() - topLeftCornerX <= minDist &&
                             mousePoint.getY() - topLeftCornerY >= 0 &&
@@ -1232,7 +1232,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
 //              }
 //            }
 
-                    if (!HiCGlobals.splitModeEnabled && (currentUpstreamFeature.getFeature2D().getEnd1() == currentDownstreamFeature.getFeature2D().getStart1()) || (currentDownstreamFeature == null && currentUpstreamFeature == null)) {
+                    if (!JBGlobals.splitModeEnabled && (currentUpstreamFeature.getFeature2D().getEnd1() == currentDownstreamFeature.getFeature2D().getStart1()) || (currentDownstreamFeature == null && currentUpstreamFeature == null)) {
 
                         if ((mousePoint.getX() - currentUpstreamFeature.getRectangle().getMaxX() >= 0) &&
                                 (mousePoint.getX() - currentUpstreamFeature.getRectangle().getMaxX() <= minDist) &&
@@ -1264,7 +1264,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
                     }
                 }
 
-                if (!HiCGlobals.splitModeEnabled && !selectedFeatures.isEmpty()) {
+                if (!JBGlobals.splitModeEnabled && !selectedFeatures.isEmpty()) {
 
                     for (Feature2DGuiContainer asmFragment : allEditFeaturePairs) {
                         if (asmFragment.getFeature2D().equals(tempSelectedGroup) && !asmFragment.getFeature2D().equals(debrisFeature)) {
@@ -1466,11 +1466,11 @@ public class HeatmapMouseHandler extends MouseAdapter {
                 long yChromPos = (yGenomeStart - leftBoundaryY) * 1000;
 
                 String txt = "";
-                txt += "<html><span style='color:" + HiCGlobals.topChromosomeColor + "; font-family: arial; font-size: 12pt;'>";
+                txt += "<html><span style='color:" + JBGlobals.topChromosomeColor + "; font-family: arial; font-size: 12pt;'>";
                 txt += xChrom.getName();
                 txt += ":";
                 txt += String.valueOf(xChromPos);
-                txt += "</span><br><span style='color:" + HiCGlobals.leftChromosomeColor + "; font-family: arial; font-size: 12pt;'>";
+                txt += "</span><br><span style='color:" + JBGlobals.leftChromosomeColor + "; font-family: arial; font-size: 12pt;'>";
                 txt += yChrom.getName();
                 txt += ":";
                 txt += String.valueOf(yChromPos);
@@ -1507,12 +1507,12 @@ public class HeatmapMouseHandler extends MouseAdapter {
             //int binY = (int) ((mainWindow.yContext.getOrigin() + e.getY() * mainWindow.yContext.getScale()) / getBinWidth());
             StringBuilder txt = new StringBuilder();
 
-            txt.append("<html><span style='color:" + HiCGlobals.topChromosomeColor + "; font-family: arial; font-size: 12pt; '>");
+            txt.append("<html><span style='color:" + JBGlobals.topChromosomeColor + "; font-family: arial; font-size: 12pt; '>");
             txt.append(hic.getXContext().getChromosome().getName());
             txt.append(":");
-            txt.append(formatter.format(Math.round((xGenomeStart - 1) * HiCGlobals.hicMapScale + 1)));
+            txt.append(formatter.format(Math.round((xGenomeStart - 1) * JBGlobals.hicMapScale + 1)));
             txt.append("-");
-            txt.append(formatter.format(Math.round(xGenomeEnd) * HiCGlobals.hicMapScale));
+            txt.append(formatter.format(Math.round(xGenomeEnd) * JBGlobals.hicMapScale));
 
             if (xGridAxis instanceof HiCFragmentAxis) {
                 String fragNumbers;
@@ -1531,12 +1531,12 @@ public class HeatmapMouseHandler extends MouseAdapter {
                 txt.append(")");
             }
 
-            txt.append("</span><br><span style='color:" + HiCGlobals.leftChromosomeColor + "; font-family: arial; font-size: 12pt; '>");
+            txt.append("</span><br><span style='color:" + JBGlobals.leftChromosomeColor + "; font-family: arial; font-size: 12pt; '>");
             txt.append(hic.getYContext().getChromosome().getName());
             txt.append(":");
-            txt.append(formatter.format(Math.round((yGenomeStart - 1) * HiCGlobals.hicMapScale + 1)));
+            txt.append(formatter.format(Math.round((yGenomeStart - 1) * JBGlobals.hicMapScale + 1)));
             txt.append("-");
-            txt.append(formatter.format(Math.round(yGenomeEnd * HiCGlobals.hicMapScale)));
+            txt.append(formatter.format(Math.round(yGenomeEnd * JBGlobals.hicMapScale)));
 
             if (yGridAxis instanceof HiCFragmentAxis) {
                 String fragNumbers;
@@ -1804,7 +1804,7 @@ public class HeatmapMouseHandler extends MouseAdapter {
 
     private JidePopupMenu getAssemblyPopupMenu(final int xMousePos, final int yMousePos, JidePopupMenu menu) {
 
-        if (HiCGlobals.phasing) {
+        if (JBGlobals.phasing) {
             final JMenuItem phaseMergeItems = new JMenuItem("Merge phased blocks");
             phaseMergeItems.setEnabled(selectedSuperscaffolds.size() > 1);
             phaseMergeItems.addActionListener(e -> {

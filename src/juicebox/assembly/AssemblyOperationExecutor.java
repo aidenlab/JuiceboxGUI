@@ -25,7 +25,7 @@
 package juicebox.assembly;
 
 import javastraw.feature2D.Feature2D;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 
@@ -71,7 +71,7 @@ public class AssemblyOperationExecutor {
         if (upstreamFeature2D != null && downstreamFeature2D != null) {
             AssemblyScaffoldHandler assemblyScaffoldHandler = superAdapter.getAssemblyStateTracker().getNewAssemblyHandler();
             assemblyScaffoldHandler.toggleGroup(upstreamFeature2D, downstreamFeature2D);
-            performAssemblyAction(superAdapter, assemblyScaffoldHandler, HiCGlobals.phasing);
+            performAssemblyAction(superAdapter, assemblyScaffoldHandler, JBGlobals.phasing);
         }
     }
 

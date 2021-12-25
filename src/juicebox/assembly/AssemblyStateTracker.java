@@ -24,7 +24,7 @@
 
 package juicebox.assembly;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.DirectoryManager;
 import juicebox.gui.SuperAdapter;
 
@@ -74,7 +74,7 @@ public class AssemblyStateTracker {
         redoStack.clear();
         undoStack.push(assemblyScaffoldHandler);
         if (counter % 20 == 0) {
-            if (HiCGlobals.phasing) {
+            if (JBGlobals.phasing) {
                 PsfFileExporter psfFileExporter = new PsfFileExporter(assemblyScaffoldHandler, autoSaveFileName);
                 psfFileExporter.exportPsfFile();
             } else {

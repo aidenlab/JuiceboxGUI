@@ -25,7 +25,7 @@
 package juicebox.track;
 
 import javastraw.reader.type.NormalizationType;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 import org.broad.igv.ui.color.ColorUtilities;
@@ -156,7 +156,7 @@ public class ResourceTree {
 
         pane.setPreferredSize(new Dimension(650, 500));
         pane.setOpaque(true);
-        Color backGroundColor = HiCGlobals.isDarkulaModeEnabled ? Color.BLACK : Color.WHITE;
+        Color backGroundColor = JBGlobals.isDarkulaModeEnabled ? Color.BLACK : Color.WHITE;
         pane.setBackground(backGroundColor);
         pane.setViewportView(dialogTree);
 
@@ -258,7 +258,7 @@ public class ResourceTree {
                 treeNode.setUserObject(resource);
 
                 if (containsDuplicate(treeNode)) {
-                    if (HiCGlobals.guiIsCurrentlyActive) {
+                    if (JBGlobals.guiIsCurrentlyActive) {
                         int dialogResult = JOptionPane.showConfirmDialog(superAdapter.getMainWindow(),
                                 file.getName() + " is already loaded. Would you like to overwrite it?", "Warning",
                                 JOptionPane.YES_NO_OPTION);

@@ -26,7 +26,7 @@ package juicebox.assembly;
 
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.HiC;
 import juicebox.track.*;
 import org.broad.igv.feature.Exon;
@@ -63,32 +63,32 @@ public class OneDimAssemblyTrackLifter {
         }
 
         List<Scaffold> xAxisAggregateScaffolds = aFragHandler.getIntersectingAggregateFeatures(
-                (long) (actualBinSize * binX1 * HiCGlobals.hicMapScale),
-                (long) (actualBinSize * binX2 * HiCGlobals.hicMapScale));
+                (long) (actualBinSize * binX1 * JBGlobals.hicMapScale),
+                (long) (actualBinSize * binX2 * JBGlobals.hicMapScale));
 
         List<HiCDataPoint> modifiedDataPoints = new ArrayList<>();
 
         int x1pos, x2pos;
         for (Scaffold xScaffold : xAxisAggregateScaffolds) {
-            x1pos = (int) (xScaffold.getOriginalStart() / HiCGlobals.hicMapScale);
-            x2pos = (int) (xScaffold.getOriginalEnd() / HiCGlobals.hicMapScale);
+            x1pos = (int) (xScaffold.getOriginalStart() / JBGlobals.hicMapScale);
+            x2pos = (int) (xScaffold.getOriginalEnd() / JBGlobals.hicMapScale);
 
             // have to case long because of thumbnail, maybe fix thumbnail instead
-            if (xScaffold.getCurrentStart() < actualBinSize * binX1 * HiCGlobals.hicMapScale) {
+            if (xScaffold.getCurrentStart() < actualBinSize * binX1 * JBGlobals.hicMapScale) {
                 if (!xScaffold.getInvertedVsInitial()) {
-                    x1pos = (int) ((xScaffold.getOriginalStart() + actualBinSize * binX1 * HiCGlobals.hicMapScale - xScaffold.getCurrentStart()) / HiCGlobals.hicMapScale);
+                    x1pos = (int) ((xScaffold.getOriginalStart() + actualBinSize * binX1 * JBGlobals.hicMapScale - xScaffold.getCurrentStart()) / JBGlobals.hicMapScale);
                 } else {
-                    x2pos = (int) ((xScaffold.getOriginalStart() - actualBinSize * binX1 * HiCGlobals.hicMapScale + xScaffold.getCurrentEnd()) / HiCGlobals.hicMapScale);
+                    x2pos = (int) ((xScaffold.getOriginalStart() - actualBinSize * binX1 * JBGlobals.hicMapScale + xScaffold.getCurrentEnd()) / JBGlobals.hicMapScale);
                 }
             }
 
-            if (xScaffold.getCurrentEnd() > actualBinSize * binX2 * HiCGlobals.hicMapScale) {
+            if (xScaffold.getCurrentEnd() > actualBinSize * binX2 * JBGlobals.hicMapScale) {
                 if (!xScaffold.getInvertedVsInitial()) {
                     x2pos =
-                            (int) ((xScaffold.getOriginalStart() + actualBinSize * binX2 * HiCGlobals.hicMapScale - xScaffold.getCurrentStart()) / HiCGlobals.hicMapScale);
+                            (int) ((xScaffold.getOriginalStart() + actualBinSize * binX2 * JBGlobals.hicMapScale - xScaffold.getCurrentStart()) / JBGlobals.hicMapScale);
                 } else {
                     x1pos =
-                            (int) ((xScaffold.getOriginalStart() - actualBinSize * binX2 * HiCGlobals.hicMapScale + xScaffold.getCurrentEnd()) / HiCGlobals.hicMapScale);
+                            (int) ((xScaffold.getOriginalStart() - actualBinSize * binX2 * JBGlobals.hicMapScale + xScaffold.getCurrentEnd()) / JBGlobals.hicMapScale);
                 }
             }
 
@@ -111,11 +111,11 @@ public class OneDimAssemblyTrackLifter {
                 long newBin;
     
                 if (!xScaffold.getInvertedVsInitial()) {
-                    newStart = (long) ((xScaffold.getCurrentStart() + HiCGlobals.hicMapScale * point.getGenomicStart() - xScaffold.getOriginalStart()) / HiCGlobals.hicMapScale);
-                    newBin = (long) ((xScaffold.getCurrentStart() + HiCGlobals.hicMapScale * point.getBinNumber() * binSize - xScaffold.getOriginalStart()) / HiCGlobals.hicMapScale / binSize);
+                    newStart = (long) ((xScaffold.getCurrentStart() + JBGlobals.hicMapScale * point.getGenomicStart() - xScaffold.getOriginalStart()) / JBGlobals.hicMapScale);
+                    newBin = (long) ((xScaffold.getCurrentStart() + JBGlobals.hicMapScale * point.getBinNumber() * binSize - xScaffold.getOriginalStart()) / JBGlobals.hicMapScale / binSize);
                 } else {
-                    newStart = (long) ((xScaffold.getCurrentEnd() - HiCGlobals.hicMapScale * point.getGenomicEnd() + xScaffold.getOriginalStart()) / HiCGlobals.hicMapScale);
-                    newBin = (long) ((xScaffold.getCurrentEnd() - HiCGlobals.hicMapScale * point.getBinNumber() * binSize + xScaffold.getOriginalStart()) / HiCGlobals.hicMapScale / binSize - 1);
+                    newStart = (long) ((xScaffold.getCurrentEnd() - JBGlobals.hicMapScale * point.getGenomicEnd() + xScaffold.getOriginalStart()) / JBGlobals.hicMapScale);
+                    newBin = (long) ((xScaffold.getCurrentEnd() - JBGlobals.hicMapScale * point.getBinNumber() * binSize + xScaffold.getOriginalStart()) / JBGlobals.hicMapScale / binSize - 1);
                 }
     
                 newEnd = newStart + point.getGenomicEnd() - point.getGenomicStart();
@@ -164,32 +164,32 @@ public class OneDimAssemblyTrackLifter {
         }
 
         List<Scaffold> xAxisAggregateScaffolds = aFragHandler.getIntersectingAggregateFeatures(
-                (long) (actualBinSize * binX1 * HiCGlobals.hicMapScale), (long) (actualBinSize * binX2 * HiCGlobals.hicMapScale));
+                (long) (actualBinSize * binX1 * JBGlobals.hicMapScale), (long) (actualBinSize * binX2 * JBGlobals.hicMapScale));
 
         // Determine positions of all aggregate scaffolds
         int x1pos, x2pos;
         HashMap<Scaffold, ArrayList<Integer>> scaffoldOriginalPositions = new HashMap<>();
         for (Scaffold xScaffold : xAxisAggregateScaffolds) {
             ArrayList<Integer> originalPositions = new ArrayList<>(2);
-            x1pos = (int) (xScaffold.getOriginalStart() / HiCGlobals.hicMapScale);
-            x2pos = (int) (xScaffold.getOriginalEnd() / HiCGlobals.hicMapScale);
+            x1pos = (int) (xScaffold.getOriginalStart() / JBGlobals.hicMapScale);
+            x2pos = (int) (xScaffold.getOriginalEnd() / JBGlobals.hicMapScale);
 
             // Have to case long because of thumbnail, maybe fix thumbnail instead
             // Following results in "fragmentation" when feature is outside of window which may not be ideal if fragments are labeled in some matter
             // could fix by extending window boundaries to include intersecting feature boundaries
-            if (xScaffold.getCurrentStart() < actualBinSize * binX1 * HiCGlobals.hicMapScale) {
+            if (xScaffold.getCurrentStart() < actualBinSize * binX1 * JBGlobals.hicMapScale) {
                 if (!xScaffold.getInvertedVsInitial()) {
-                    x1pos = (int) ((xScaffold.getOriginalStart() + actualBinSize * binX1 * HiCGlobals.hicMapScale - xScaffold.getCurrentStart()) / HiCGlobals.hicMapScale);
+                    x1pos = (int) ((xScaffold.getOriginalStart() + actualBinSize * binX1 * JBGlobals.hicMapScale - xScaffold.getCurrentStart()) / JBGlobals.hicMapScale);
                 } else {
-                    x2pos = (int) ((xScaffold.getOriginalStart() - actualBinSize * binX1 * HiCGlobals.hicMapScale + xScaffold.getCurrentEnd()) / HiCGlobals.hicMapScale);
+                    x2pos = (int) ((xScaffold.getOriginalStart() - actualBinSize * binX1 * JBGlobals.hicMapScale + xScaffold.getCurrentEnd()) / JBGlobals.hicMapScale);
                 }
             }
 
-            if (xScaffold.getCurrentEnd() > actualBinSize * binX2 * HiCGlobals.hicMapScale) {
+            if (xScaffold.getCurrentEnd() > actualBinSize * binX2 * JBGlobals.hicMapScale) {
                 if (!xScaffold.getInvertedVsInitial()) {
-                    x2pos = (int) ((xScaffold.getOriginalStart() + actualBinSize * binX2 * HiCGlobals.hicMapScale - xScaffold.getCurrentStart()) / HiCGlobals.hicMapScale);
+                    x2pos = (int) ((xScaffold.getOriginalStart() + actualBinSize * binX2 * JBGlobals.hicMapScale - xScaffold.getCurrentStart()) / JBGlobals.hicMapScale);
                 } else {
-                    x1pos = (int) ((xScaffold.getOriginalStart() - actualBinSize * binX2 * HiCGlobals.hicMapScale + xScaffold.getCurrentEnd()) / HiCGlobals.hicMapScale);
+                    x1pos = (int) ((xScaffold.getOriginalStart() - actualBinSize * binX2 * JBGlobals.hicMapScale + xScaffold.getCurrentEnd()) / JBGlobals.hicMapScale);
                 }
             }
 
@@ -220,9 +220,9 @@ public class OneDimAssemblyTrackLifter {
               int newStart, newEnd;
 
               if (!xScaffold.getInvertedVsInitial()) {
-                  newStart = (int) ((xScaffold.getCurrentStart() + (HiCGlobals.hicMapScale * featureFraction.getStart()) - xScaffold.getOriginalStart()) / HiCGlobals.hicMapScale);
+                  newStart = (int) ((xScaffold.getCurrentStart() + (JBGlobals.hicMapScale * featureFraction.getStart()) - xScaffold.getOriginalStart()) / JBGlobals.hicMapScale);
               } else {
-                  newStart = (int) ((xScaffold.getCurrentEnd() - (HiCGlobals.hicMapScale * featureFraction.getEnd()) + xScaffold.getOriginalStart()) / HiCGlobals.hicMapScale);
+                  newStart = (int) ((xScaffold.getCurrentEnd() - (JBGlobals.hicMapScale * featureFraction.getEnd()) + xScaffold.getOriginalStart()) / JBGlobals.hicMapScale);
               }
 
               newEnd = newStart + featureFraction.getEnd() - featureFraction.getStart();
@@ -251,9 +251,9 @@ public class OneDimAssemblyTrackLifter {
                   int newExonStart, newExonEnd;
 
                   if (!xScaffold.getInvertedVsInitial()) {
-                    newExonStart = (int) ((xScaffold.getCurrentStart() + (HiCGlobals.hicMapScale * newExon.getStart()) - xScaffold.getOriginalStart()) / HiCGlobals.hicMapScale);
+                      newExonStart = (int) ((xScaffold.getCurrentStart() + (JBGlobals.hicMapScale * newExon.getStart()) - xScaffold.getOriginalStart()) / JBGlobals.hicMapScale);
                   } else {
-                    newExonStart = (int) ((xScaffold.getCurrentEnd() - (HiCGlobals.hicMapScale * newExon.getEnd()) + xScaffold.getOriginalStart()) / HiCGlobals.hicMapScale);
+                      newExonStart = (int) ((xScaffold.getCurrentEnd() - (JBGlobals.hicMapScale * newExon.getEnd()) + xScaffold.getOriginalStart()) / JBGlobals.hicMapScale);
                   }
 
                   newExonEnd = newExonStart + newExon.getEnd() - newExon.getStart();

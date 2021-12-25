@@ -34,7 +34,7 @@ import javastraw.reader.basics.ChromosomeHandler;
 import javastraw.reader.type.HiCZoom;
 import javastraw.reader.type.MatrixType;
 import javastraw.tools.HiCFileTools;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyStateTracker;
 import juicebox.data.HiC;
@@ -391,6 +391,30 @@ public class SuperAdapter {
         return false;
     }
 
+    public static int getNewResolutionGUI() {
+        int newResolution = -1;
+        String newSize = MessageUtils.showInputDialog("Specify a new resolution", "");
+        try {
+            newResolution = Integer.parseInt(newSize);
+        } catch (Exception e) {
+            if (JBGlobals.guiIsCurrentlyActive) {
+                SuperAdapter.showMessageDialog("Invalid resolution given (not integer): " + newSize);
+            } else {
+                MessageUtils.showMessage("Invalid resolution given (not integer): " + newSize);
+            }
+        }
+        return newResolution;
+    }
+
+    public void safeLoad(final List<String> files, final boolean control, final String title) {
+        addRecentMapMenuEntry(title.trim() + RecentMenu.delimiter + files.get(0), true);
+        Runnable runnable = () -> {
+            boolean isRestorenMode = false;
+            unsafeLoadWithTitleFix(files, control, title, isRestorenMode);
+        };
+        mainWindow.executeLongRunningTask(runnable, "MainWindow safe load");
+    }
+
     private boolean unsafeLoad(final List<String> files, final boolean control, boolean restore) throws IOException {
 
         StringBuilder newFilesToBeLoaded = new StringBuilder();
@@ -430,7 +454,7 @@ public class SuperAdapter {
 
             if (reader == null) return false;
             Dataset dataset = reader.read();
-            if (reader.getVersion() < HiCGlobals.minVersion) {
+            if (reader.getVersion() < JBGlobals.minVersion) {
                 JOptionPane.showMessageDialog(mainWindow, "This version of \"hic\" format is no longer supported");
                 return false;
             }
@@ -442,6 +466,9 @@ public class SuperAdapter {
                     (dataset.getVersion() < 7 || hic.getDataset().getVersion() < 7)) {
                 JOptionPane.showMessageDialog(mainWindow, "Cannot load control with .hic files less than version 7");
                 return false;
+            }
+            if (dataset.getHiCFileScalingFactor() != null) {
+                JBGlobals.hicMapScale = Double.parseDouble(dataset.getHiCFileScalingFactor());
             }
 
             if (assemblyModeCurrentlyActive) {
@@ -457,7 +484,7 @@ public class SuperAdapter {
             if (control) {
                 hic.setControlDataset(dataset);
                 mainViewPanel.setEnabledForNormalization(true, hic.getNormalizationOptions(true),
-                        dataset.getVersion() >= HiCGlobals.minVersion);
+                        dataset.getVersion() >= JBGlobals.minVersion);
             } else {
                 hic.reset();
                 hic.setDataset(dataset);
@@ -465,7 +492,7 @@ public class SuperAdapter {
                 mainViewPanel.setChromosomes(hic.getChromosomeHandler());
 
                 mainViewPanel.setEnabledForNormalization(false, hic.getNormalizationOptions(false),
-                        dataset.getVersion() >= HiCGlobals.minVersion);
+                        dataset.getVersion() >= JBGlobals.minVersion);
 
                 hic.resetContexts();
                 updateTrackPanel();
@@ -494,43 +521,6 @@ public class SuperAdapter {
             JOptionPane.showMessageDialog(mainWindow, "Please choose a .hic file to load");
         }
         return true;
-    }
-
-    public void safeLoad(final List<String> files, final boolean control, final String title) {
-        addRecentMapMenuEntry(title.trim() + RecentMenu.delimiter + files.get(0), true);
-        Runnable runnable = () -> {
-            boolean isRestorenMode = false;
-            unsafeLoadWithTitleFix(files, control, title, isRestorenMode);
-        };
-        mainWindow.executeLongRunningTask(runnable, "MainWindow safe load");
-    }
-
-    public void unsafeLoadWithTitleFix(List<String> files, boolean control, String title, boolean restore) {
-        String resetTitle = datasetTitle;
-        if (control) resetTitle = controlTitle;
-
-        getHeatmapPanel().disableAssemblyEditing();
-        resetAnnotationLayers();
-        HiCGlobals.hicMapScale = 1;
-//        refresh();
-
-        ActionListener l = mainViewPanel.getDisplayOptionComboBox().getActionListeners()[0];
-        try {
-            mainViewPanel.getDisplayOptionComboBox().removeActionListener(l);
-            if (unsafeLoad(files, control, restore)) {
-                //mainViewPanel.updateThumbnail(hic);
-                refresh();
-                updateTitle(control, title);
-            }
-        } catch (IOException e) {
-            // TODO somehow still have trouble reloading the previous file
-            System.err.println("Error loading hic file " + e.getLocalizedMessage());
-            JOptionPane.showMessageDialog(mainWindow, "Error loading .hic file", "Error", JOptionPane.ERROR_MESSAGE);
-            mainViewPanel.updateThumbnail(hic);
-            updateTitle(control, resetTitle);
-        } finally {
-            mainViewPanel.getDisplayOptionComboBox().addActionListener(l);
-        }
     }
 
     public KeyEventDispatcher getNewHiCKeyDispatcher() {
@@ -693,22 +683,32 @@ public class SuperAdapter {
         }
     }
 
-    private void updateTitle() {
-        String newTitle = datasetTitle;
-        String fileVersions = "";
-        try {
-            fileVersions += hic.getDataset().getVersion() + "";
-        } catch (Exception ignored) {
-        }
+    public void unsafeLoadWithTitleFix(List<String> files, boolean control, String title, boolean restore) {
+        String resetTitle = datasetTitle;
+        if (control) resetTitle = controlTitle;
 
-        if (controlTitle != null && controlTitle.length() > 0) {
-            newTitle += "  (control=" + controlTitle + ")";
-            try {
-                fileVersions += "/" + hic.getControlDataset().getVersion();
-            } catch (Exception ignored) {
+        getHeatmapPanel().disableAssemblyEditing();
+        resetAnnotationLayers();
+        JBGlobals.hicMapScale = 1;
+//        refresh();
+
+        ActionListener l = mainViewPanel.getDisplayOptionComboBox().getActionListeners()[0];
+        try {
+            mainViewPanel.getDisplayOptionComboBox().removeActionListener(l);
+            if (unsafeLoad(files, control, restore)) {
+                //mainViewPanel.updateThumbnail(hic);
+                refresh();
+                updateTitle(control, title);
             }
+        } catch (IOException e) {
+            // TODO somehow still have trouble reloading the previous file
+            System.err.println("Error loading hic file " + e.getLocalizedMessage());
+            JOptionPane.showMessageDialog(mainWindow, "Error loading .hic file", "Error", JOptionPane.ERROR_MESSAGE);
+            mainViewPanel.updateThumbnail(hic);
+            updateTitle(control, resetTitle);
+        } finally {
+            mainViewPanel.getDisplayOptionComboBox().addActionListener(l);
         }
-        mainWindow.setTitle(HiCGlobals.juiceboxTitle + "<" + fileVersions + ">: " + newTitle);
     }
 
     public void launchGenericMessageDialog(String message, String error, int errorMessage) {
@@ -1016,19 +1016,22 @@ public class SuperAdapter {
         }
     }
 
-    public static int getNewResolutionGUI() {
-        int newResolution = -1;
-        String newSize = MessageUtils.showInputDialog("Specify a new resolution", "");
+    private void updateTitle() {
+        String newTitle = datasetTitle;
+        String fileVersions = "";
         try {
-            newResolution = Integer.parseInt(newSize);
-        } catch (Exception e) {
-            if (HiCGlobals.guiIsCurrentlyActive) {
-                SuperAdapter.showMessageDialog("Invalid resolution given (not integer): " + newSize);
-            } else {
-                MessageUtils.showMessage("Invalid resolution given (not integer): " + newSize);
+            fileVersions += hic.getDataset().getVersion() + "";
+        } catch (Exception ignored) {
+        }
+
+        if (controlTitle != null && controlTitle.length() > 0) {
+            newTitle += "  (control=" + controlTitle + ")";
+            try {
+                fileVersions += "/" + hic.getControlDataset().getVersion();
+            } catch (Exception ignored) {
             }
         }
-        return newResolution;
+        mainWindow.setTitle(JBGlobals.juiceboxTitle + "<" + fileVersions + ">: " + newTitle);
     }
 
     public void safeLaunchCreateNewResolution() {

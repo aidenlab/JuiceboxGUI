@@ -27,7 +27,7 @@ package juicebox.guifeature2d;
 import javastraw.feature2D.Feature2D;
 import javastraw.feature2D.Feature2DList;
 import javastraw.reader.basics.ChromosomeHandler;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
@@ -190,7 +190,7 @@ public class AnnotationLayerHandler {
         }
 
         // Add new feature
-        if (HiCGlobals.splitModeEnabled) {
+        if (JBGlobals.splitModeEnabled) {
         }
         newFeature = new Feature2D(Feature2D.FeatureType.DOMAIN, chr1, start1, end1, chr2, start2, end2,
                 defaultColor, attributes);

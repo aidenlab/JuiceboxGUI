@@ -24,7 +24,7 @@
 
 package juicebox.windowui;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyFileImporter;
 import juicebox.assembly.AssemblyStateTracker;
@@ -210,7 +210,7 @@ public class LoadAssemblyAnnotationsDialog extends JDialog implements TreeSelect
                 openAnnotationPath = new File(path);
 
                 if (loadedAnnotationsMap.containsKey(path)) {
-                    if (HiCGlobals.guiIsCurrentlyActive) {
+                    if (JBGlobals.guiIsCurrentlyActive) {
                         int dialogResult = JOptionPane.showConfirmDialog(window,
                                 file.getName() + " is already loaded. Would you like to overwrite it?", "Warning",
                                 JOptionPane.YES_NO_OPTION);
@@ -273,7 +273,7 @@ public class LoadAssemblyAnnotationsDialog extends JDialog implements TreeSelect
                 } else if (info.itemURL.endsWith("psf")) {
                     psfPath = info.itemURL;
                     SuperAdapter.setDatasetTitle(psfPath);
-                    HiCGlobals.phasing = true;
+                    JBGlobals.phasing = true;
                 } else {
                     JOptionPane.showMessageDialog(layersPanel, "Unable to load invalid file!",
                             "Error Message", JOptionPane.ERROR_MESSAGE);
@@ -394,7 +394,7 @@ public class LoadAssemblyAnnotationsDialog extends JDialog implements TreeSelect
         top.add(parent);
 
         InputStream is = Load2DAnnotationsDialog.class.getResourceAsStream("annotations2d.txt");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is), HiCGlobals.bufferSize);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is), JBGlobals.bufferSize);
         String nextLine;
 
         try {

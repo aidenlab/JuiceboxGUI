@@ -24,7 +24,7 @@
 
 package juicebox.layers;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.DirectoryManager;
 import juicebox.gui.SuperAdapter;
 
@@ -95,7 +95,7 @@ public class UnsavedAnnotationWarning {
      */
     private void removeAllOldAnnotationFiles() {
         for (int i = 0; i < 10; i++) {
-            File temp = new File(DirectoryManager.getHiCDirectory(), HiCGlobals.BACKUP_FILE_STEM + i + ".bedpe");
+            File temp = new File(DirectoryManager.getHiCDirectory(), JBGlobals.BACKUP_FILE_STEM + i + ".bedpe");
             if (temp.exists()) {
                 temp.delete();
             }
@@ -105,7 +105,7 @@ public class UnsavedAnnotationWarning {
     private String moveOldAnnotationFiles() {
         String timeStamp = System.nanoTime() + "_annotations_";
         for (int i = 0; i < 10; i++) {
-            File temp = new File(DirectoryManager.getHiCDirectory(), HiCGlobals.BACKUP_FILE_STEM + i + ".bedpe");
+            File temp = new File(DirectoryManager.getHiCDirectory(), JBGlobals.BACKUP_FILE_STEM + i + ".bedpe");
             if (temp.exists()) {
                 temp.renameTo(new File(DirectoryManager.getHiCDirectory(), timeStamp + i + ".bedpe"));
             }

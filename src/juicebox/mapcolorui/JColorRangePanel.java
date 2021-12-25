@@ -26,7 +26,7 @@ package juicebox.mapcolorui;
 
 import com.jidesoft.swing.JideButton;
 import javastraw.reader.type.MatrixType;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.HiC;
 import juicebox.gui.SuperAdapter;
 import org.broad.igv.ui.FontManager;
@@ -127,7 +127,7 @@ public class JColorRangePanel extends JPanel {
         });
 
         JPanel colorLabelPanel = new JPanel(new BorderLayout());
-        colorLabelPanel.setBackground(HiCGlobals.backgroundColor); //set color to gray
+        colorLabelPanel.setBackground(JBGlobals.backgroundColor); //set color to gray
         colorLabelPanel.add(colorRangeLabel, BorderLayout.CENTER);
         add(colorLabelPanel, BorderLayout.PAGE_START);
 
@@ -150,7 +150,7 @@ public class JColorRangePanel extends JPanel {
                     key = HeatmapRenderer.getColorScaleCacheKey(hic.getZd(), hic.getDisplayOption(), hic.getObsNormalizationType(), hic.getControlNormalizationType());
                 }
             } catch (Exception e2) {
-                if (HiCGlobals.printVerboseComments) {
+                if (JBGlobals.printVerboseComments) {
                     e2.printStackTrace();
                 }
             }

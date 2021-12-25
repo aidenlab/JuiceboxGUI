@@ -25,7 +25,7 @@
 package juicebox.guifeature2d;
 
 import javastraw.feature2D.Feature2D;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.assembly.AssemblyHeatmapHandler;
 import juicebox.assembly.Scaffold;
 
@@ -44,10 +44,10 @@ public class Feature2DUtils {
 
         NumberFormat formatter = NumberFormat.getInstance();
 
-        String scaledStart1 = formatter.format(f.getStart1() * HiCGlobals.hicMapScale + 1);
-        String scaledStart2 = formatter.format(f.getStart2() * HiCGlobals.hicMapScale + 1);
-        String scaledEnd1 = formatter.format(f.getEnd1() * HiCGlobals.hicMapScale);
-        String scaledEnd2 = formatter.format(f.getEnd2() * HiCGlobals.hicMapScale);
+        String scaledStart1 = formatter.format(f.getStart1() * JBGlobals.hicMapScale + 1);
+        String scaledStart2 = formatter.format(f.getStart2() * JBGlobals.hicMapScale + 1);
+        String scaledEnd1 = formatter.format(f.getEnd1() * JBGlobals.hicMapScale);
+        String scaledEnd2 = formatter.format(f.getEnd2() * JBGlobals.hicMapScale);
 
         if (f.getFeatureType() == Feature2D.FeatureType.SCAFFOLD) {
             Scaffold scaffold = AssemblyHeatmapHandler.getSuperAdapter().getAssemblyStateTracker()
@@ -64,7 +64,7 @@ public class Feature2DUtils {
         txt.append(f.getFeatureName());
         txt.append("</span><br>");
 
-        txt.append("<span style='font-family: arial; font-size: 12pt;color:" + HiCGlobals.topChromosomeColor + ";'>");
+        txt.append("<span style='font-family: arial; font-size: 12pt;color:" + JBGlobals.topChromosomeColor + ";'>");
         txt.append(f.getChr1()).append(":").append(scaledStart1);
         if (f.getWidth1() > 1) {
             txt.append("-").append(scaledEnd1);
@@ -72,7 +72,7 @@ public class Feature2DUtils {
 
         txt.append("</span><br>");
 
-        txt.append("<span style='font-family: arial; font-size: 12pt;color:" + HiCGlobals.leftChromosomeColor + ";'>");
+        txt.append("<span style='font-family: arial; font-size: 12pt;color:" + JBGlobals.leftChromosomeColor + ";'>");
         txt.append(f.getChr2()).append(":").append(scaledStart2);
         if (f.getWidth2() > 1) {
             txt.append("-").append(scaledEnd2);
@@ -80,7 +80,7 @@ public class Feature2DUtils {
         txt.append("</span>");
         DecimalFormat df = new DecimalFormat("#.##");
 
-        if (HiCGlobals.allowSpacingBetweenFeatureText) {
+        if (JBGlobals.allowSpacingBetweenFeatureText) {
             // organize attributes into categories. +1 is for the leftover category if no keywords present
             List<List<Map.Entry<String, String>>> sortedFeatureAttributes = new ArrayList<>();
             for (int i = 0; i < categories.length + 1; i++) {

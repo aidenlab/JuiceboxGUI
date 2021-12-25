@@ -24,7 +24,7 @@
 
 package juicebox.state;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 
 import javax.swing.*;
@@ -50,14 +50,14 @@ public class SaveFileDialog extends JFileChooser {
         setSelectedFile(new File(timeStamp + ".xml"));
         FileNameExtensionFilter filter = new FileNameExtensionFilter("XML Files", "xml", "XML");
         setFileFilter(filter);
-        if (HiCGlobals.guiIsCurrentlyActive) {
+        if (JBGlobals.guiIsCurrentlyActive) {
             int actionDialog = showSaveDialog(MainWindow.getInstance());
             if (actionDialog == JFileChooser.APPROVE_OPTION) {
                 File file = getSelectedFile();
                 if (!file.getPath().endsWith(".xml") && !file.getPath().endsWith(".XML")) {
                     file = new File(file + ".xml");
                 }
-                
+
                 try {
                     copyFile(fileToSave, file);
                 } catch (IOException e) {

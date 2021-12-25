@@ -27,7 +27,7 @@ package juicebox.windowui;
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.basics.ChromosomeHandler;
 import javastraw.reader.type.HiCZoom;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.Context;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
@@ -48,15 +48,15 @@ public class HiCRulerPanel extends JPanel {
     private static final long serialVersionUID = 9000043;
     private static boolean showOnlyEndPts = false;
     private static boolean showChromosomeFigure = true;
-    private final Font tickFont = HiCGlobals.font(9, false);
-    private final Font spanFont = HiCGlobals.font(12, false);
+    private final Font tickFont = JBGlobals.font(9, false);
+    private final Font spanFont = JBGlobals.font(12, false);
     private final HiC hic;
     private Orientation orientation;
     private Context context;
 
     public HiCRulerPanel(HiC hic) {
         this.hic = hic;
-        if (HiCGlobals.isDarkulaModeEnabled) {
+        if (JBGlobals.isDarkulaModeEnabled) {
             setBackground(Color.BLACK);
         } else {
             setBackground(Color.WHITE);
@@ -351,7 +351,7 @@ public class HiCRulerPanel extends JPanel {
                         binNumber = axis.getBinNumberForGenomicPosition(genomePosition);
                         x = (int) ((binNumber - binOrigin) * hic.getScaleFactor());
 
-                        String chrPosition = formatNumber((double) genomePosition / ts.getUnitMultiplier() * HiCGlobals.hicMapScale) + " " + ts.getMajorUnit();
+                        String chrPosition = formatNumber((double) genomePosition / ts.getUnitMultiplier() * JBGlobals.hicMapScale) + " " + ts.getMajorUnit();
                         int strWidth = g.getFontMetrics().stringWidth(chrPosition);
                         int strPosition = isHorizontal() ? x - strWidth / 2 : -x - strWidth / 2;
 

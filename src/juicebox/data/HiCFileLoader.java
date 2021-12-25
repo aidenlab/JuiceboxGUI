@@ -25,7 +25,7 @@
 package juicebox.data;
 
 import javastraw.tools.HiCFileTools;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.gui.SuperAdapter;
 import juicebox.windowui.LoadDialog;
 import juicebox.windowui.RecentMenu;
@@ -135,7 +135,7 @@ public class HiCFileLoader {
                 } catch (Exception ignored) {
                 }
                 if (propertiesFileURL == null) propertiesFileURL = System.getProperty("jnlp.loadMenu");
-                if (propertiesFileURL == null) propertiesFileURL = HiCGlobals.defaultPropertiesURL;
+                if (propertiesFileURL == null) propertiesFileURL = JBGlobals.defaultPropertiesURL;
             }
             InputStream is = ParsingUtils.openInputStream(propertiesFileURL);
             properties = new Properties();
@@ -144,9 +144,9 @@ public class HiCFileLoader {
             }
         } catch (Exception error) {
             boolean fileFailedToLoad = true;
-            if (!propertiesFileURL.equals(HiCGlobals.defaultPropertiesURL)) {
+            if (!propertiesFileURL.equals(JBGlobals.defaultPropertiesURL)) {
                 try {
-                    loadPropertiesViaURL(HiCGlobals.defaultPropertiesURL);
+                    loadPropertiesViaURL(JBGlobals.defaultPropertiesURL);
                     fileFailedToLoad = false;
                 } catch (Exception ignored) {
                 }
@@ -175,7 +175,7 @@ public class HiCFileLoader {
             }
         } catch (Exception error) {
             providedURLIsValid = false;
-            if (HiCGlobals.guiIsCurrentlyActive) {
+            if (JBGlobals.guiIsCurrentlyActive) {
                 SuperAdapter.showMessageDialog("Can't find/load specified properties file");
             } else {
                 MessageUtils.showErrorMessage("Can't find/load specified properties file", error);

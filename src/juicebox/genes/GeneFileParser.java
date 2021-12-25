@@ -24,7 +24,7 @@
 
 package juicebox.genes;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 
 import java.io.*;
 import java.net.URL;
@@ -61,7 +61,7 @@ public class GeneFileParser {
             is = urlConn.getInputStream();
             fos = new FileOutputStream(outputFile);
 
-            byte[] buffer = new byte[HiCGlobals.bufferSize];
+            byte[] buffer = new byte[JBGlobals.bufferSize];
             int length;
 
             // read from source and write into local file
@@ -95,7 +95,7 @@ public class GeneFileParser {
 
         try {
 
-            byte[] buffer = new byte[HiCGlobals.bufferSize];
+            byte[] buffer = new byte[JBGlobals.bufferSize];
 
 
             fileIn = new FileInputStream(compressedFile);

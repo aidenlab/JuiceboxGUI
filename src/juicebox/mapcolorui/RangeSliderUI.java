@@ -24,7 +24,7 @@
 
 package juicebox.mapcolorui;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -49,7 +49,7 @@ class RangeSliderUI extends BasicSliderUI {
     //private final Color[] gradientColors = {Color.WHITE, HICGlobals.HIC_MAP_COLOR};
     private final float[] fractions = {0.0f, 1.0f};
 
-    private final Color[] gradientColorsOE = HiCGlobals.isDarkulaModeEnabled ?
+    private final Color[] gradientColorsOE = JBGlobals.isDarkulaModeEnabled ?
             new Color[]{Color.BLUE, Color.BLACK, Color.RED} : new Color[]{Color.BLUE, Color.WHITE, Color.RED};
     private final float[] fractionsOE = {0.0f, 0.5f, 1.0f};
 
@@ -244,7 +244,7 @@ class RangeSliderUI extends BasicSliderUI {
                 LinearGradientPaint gradient = new LinearGradientPaint(startP, endP, fractionsOE, gradientColorsOE);
                 drawSubTrackRectangles((Graphics2D) g, gradient, subRect, Color.BLUE, leftSide, Color.RED, rightSide);
             } else {
-                Color backgroundColor = HiCGlobals.isDarkulaModeEnabled ? Color.BLACK : Color.WHITE;
+                Color backgroundColor = JBGlobals.isDarkulaModeEnabled ? Color.BLACK : Color.WHITE;
                 LinearGradientPaint gradient = new LinearGradientPaint(startP, endP, fractions, new Color[]{backgroundColor, ColorScaleHandler.HIC_MAP_COLOR});
                 drawSubTrackRectangles((Graphics2D) g, gradient, subRect, backgroundColor, leftSide, ColorScaleHandler.HIC_MAP_COLOR, rightSide);
             }

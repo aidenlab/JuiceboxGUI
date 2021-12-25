@@ -30,7 +30,7 @@ import javastraw.reader.basics.ChromosomeHandler;
 import javastraw.reader.type.HiCZoom;
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationHandler;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.Context;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
@@ -446,7 +446,7 @@ public class MainViewPanel {
     }
 
     public void resetAllColors() {
-        Color mainBackgroundColor = HiCGlobals.isDarkulaModeEnabled ? Color.darkGray : Color.WHITE;
+        Color mainBackgroundColor = JBGlobals.isDarkulaModeEnabled ? Color.darkGray : Color.WHITE;
         JComponent[] components = new JComponent[]{mainPanel, bigPanel, topPanel, trackLabelPanel,
                 leftPanel, chrSidePanel, chrSidePanel2, chrSidePanel3, bottomChromosomeFigPanel, wrapHeatmapPanel,
                 heatmapPanel, wrapGapPanel, hiCPanel, trackPanelX, trackPanelY, rulerPanelX, rulerPanelY,
@@ -458,13 +458,13 @@ public class MainViewPanel {
         }
 
         topCenterPanel.setBackground(Color.BLUE);
-        normalizationLabelPanel.setBackground(HiCGlobals.backgroundColor);
-        chrLabelPanel.setBackground(HiCGlobals.backgroundColor);
-        displayOptionLabelPanel.setBackground(HiCGlobals.backgroundColor);
+        normalizationLabelPanel.setBackground(JBGlobals.backgroundColor);
+        chrLabelPanel.setBackground(JBGlobals.backgroundColor);
+        displayOptionLabelPanel.setBackground(JBGlobals.backgroundColor);
 
-        normalizationPanel.setBackground(HiCGlobals.diffGrayColor);
-        displayOptionPanel.setBackground(HiCGlobals.diffGrayColor);
-        chrButtonPanel.setBackground(HiCGlobals.diffGrayColor);
+        normalizationPanel.setBackground(JBGlobals.diffGrayColor);
+        displayOptionPanel.setBackground(JBGlobals.diffGrayColor);
+        chrButtonPanel.setBackground(JBGlobals.diffGrayColor);
 
         displayOptionPanel.setBorder(LineBorder.createGrayLineBorder());
 
@@ -625,10 +625,10 @@ public class MainViewPanel {
         String trackToolTip = "";
         try {
             String text = trackPanelX.tooltipText(x, y, false);
-            if (text != null) trackToolTip += "<span style='color:" + HiCGlobals.topChromosomeColor +
+            if (text != null) trackToolTip += "<span style='color:" + JBGlobals.topChromosomeColor +
                     "; font-family: arial; font-size: 12pt; '>" + text + "</span>";
             text = trackPanelY.tooltipText(x, y, false);
-            if (text != null) trackToolTip += "<span style='color:" + HiCGlobals.leftChromosomeColor +
+            if (text != null) trackToolTip += "<span style='color:" + JBGlobals.leftChromosomeColor +
                     "; font-family: arial; font-size: 12pt; '>" + text + "</span>";
         } catch (Exception ignored) {
         }
@@ -664,24 +664,20 @@ public class MainViewPanel {
         }
     }
 
-    public static void invertAssemblyMatCheck() {
-        HiCGlobals.isAssemblyMatCheck = !HiCGlobals.isAssemblyMatCheck;
-    }
-
     private void chrBox1ActionPerformed(ActionEvent e) {
-      if (chrBox1.getSelectedIndex() == 0) {
-        chrBox2.setSelectedIndex(0);
-      } else if (HiCGlobals.isAssemblyMatCheck && chrBox1.getSelectedIndex() == (chrBox1.getItemCount() - 1)) {
-        chrBox2.setSelectedIndex(chrBox1.getItemCount() - 1);
-      }
+        if (chrBox1.getSelectedIndex() == 0) {
+            chrBox2.setSelectedIndex(0);
+        } else if (SuperAdapter.assemblyModeCurrentlyActive && chrBox1.getSelectedIndex() == (chrBox1.getItemCount() - 1)) {
+            chrBox2.setSelectedIndex(chrBox1.getItemCount() - 1);
+        }
     }
 
     private void chrBox2ActionPerformed(ActionEvent e) {
-      if (chrBox2.getSelectedIndex() == 0) {
-        chrBox1.setSelectedIndex(0);
-      } else if (HiCGlobals.isAssemblyMatCheck && chrBox2.getSelectedIndex() == (chrBox1.getItemCount() - 1)) {
-        chrBox1.setSelectedIndex(chrBox1.getItemCount() - 1);
-      }
+        if (chrBox2.getSelectedIndex() == 0) {
+            chrBox1.setSelectedIndex(0);
+        } else if (SuperAdapter.assemblyModeCurrentlyActive && chrBox2.getSelectedIndex() == (chrBox1.getItemCount() - 1)) {
+            chrBox1.setSelectedIndex(chrBox1.getItemCount() - 1);
+        }
     }
 
     public boolean setResolutionSliderVisible(boolean state, SuperAdapter superAdapter) {

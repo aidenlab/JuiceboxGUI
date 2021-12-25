@@ -25,7 +25,7 @@
 package juicebox.layers;
 
 import javastraw.feature2D.Feature2DList;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.guifeature2d.AnnotationLayer;
 
@@ -61,7 +61,7 @@ public class SaveAnnotationsDialog extends JFileChooser {
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "BEDPE Files", "bedpe", "txt", "text");
         setFileFilter(filter);
-        if (HiCGlobals.guiIsCurrentlyActive) {
+        if (JBGlobals.guiIsCurrentlyActive) {
             int actionDialog = showSaveDialog(MainWindow.getInstance());
             if (actionDialog == JFileChooser.APPROVE_OPTION) {
                 File file = getSelectedFile();

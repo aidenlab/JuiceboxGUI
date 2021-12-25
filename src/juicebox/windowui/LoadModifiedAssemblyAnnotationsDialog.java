@@ -24,7 +24,7 @@
 
 package juicebox.windowui;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyFileImporter;
 import juicebox.assembly.AssemblyScaffoldHandler;
@@ -208,7 +208,7 @@ public class LoadModifiedAssemblyAnnotationsDialog extends JDialog implements Tr
                 openAnnotationPath = new File(path);
 
                 if (loadedAnnotationsMap.containsKey(path)) {
-                    if (HiCGlobals.guiIsCurrentlyActive) {
+                    if (JBGlobals.guiIsCurrentlyActive) {
                         int dialogResult = JOptionPane.showConfirmDialog(window,
                                 file.getName() + " is already loaded. Would you like to overwrite it?", "Warning",
                                 JOptionPane.YES_NO_OPTION);
@@ -329,7 +329,7 @@ public class LoadModifiedAssemblyAnnotationsDialog extends JDialog implements Tr
         top.add(parent);
 
         InputStream is = Load2DAnnotationsDialog.class.getResourceAsStream("annotations2d.txt");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is), HiCGlobals.bufferSize);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is), JBGlobals.bufferSize);
         String nextLine;
 
         try {

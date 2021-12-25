@@ -26,7 +26,7 @@ package juicebox.assembly;
 
 import javastraw.reader.block.Block;
 import javastraw.reader.block.ContactRecord;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.gui.SuperAdapter;
 
 import java.util.ArrayList;
@@ -90,7 +90,7 @@ public class AssemblyHeatmapHandler {
 
     private static int getAlteredAsmBin(int binValue, int binSize) {
 
-        long originalFirstNucleotide = (long) (binValue * HiCGlobals.hicMapScale * binSize + 1);
+        long originalFirstNucleotide = (long) (binValue * JBGlobals.hicMapScale * binSize + 1);
         long currentFirstNucleotide;
         Scaffold aggregateScaffold = lookUpOriginalAggregateScaffold(originalFirstNucleotide);
 
@@ -98,10 +98,10 @@ public class AssemblyHeatmapHandler {
             if (!aggregateScaffold.getInvertedVsInitial()) {
                 currentFirstNucleotide = (aggregateScaffold.getCurrentStart() + originalFirstNucleotide - aggregateScaffold.getOriginalStart());
             } else {
-                currentFirstNucleotide = (aggregateScaffold.getCurrentEnd() - originalFirstNucleotide + 2 - (long) (HiCGlobals.hicMapScale * binSize) + aggregateScaffold.getOriginalStart());
+                currentFirstNucleotide = (aggregateScaffold.getCurrentEnd() - originalFirstNucleotide + 2 - (long) (JBGlobals.hicMapScale * binSize) + aggregateScaffold.getOriginalStart());
             }
 
-            return (int) ((currentFirstNucleotide - 1) / (HiCGlobals.hicMapScale * binSize));
+            return (int) ((currentFirstNucleotide - 1) / (JBGlobals.hicMapScale * binSize));
         }
         return -1;
     }

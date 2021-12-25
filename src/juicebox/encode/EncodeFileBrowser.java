@@ -26,7 +26,7 @@
 package juicebox.encode;
 
 import com.jidesoft.swing.JideBoxLayout;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import org.broad.igv.Globals;
 import org.broad.igv.ui.IGV;
 import org.broad.igv.util.Pair;
@@ -111,7 +111,7 @@ public class EncodeFileBrowser extends JDialog {
                 return null;
             }
             //}
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is), HiCGlobals.bufferSize);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is), JBGlobals.bufferSize);
 
             String[] headers = Globals.tabPattern.split(reader.readLine());
 

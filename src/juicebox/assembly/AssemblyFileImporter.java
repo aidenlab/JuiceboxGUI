@@ -24,7 +24,7 @@
 
 package juicebox.assembly;
 
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.gui.SuperAdapter;
 
 import java.io.File;
@@ -100,8 +100,8 @@ public class AssemblyFileImporter {
         for (Scaffold fragmentProperty : listOfScaffolds) {
             totalLength += fragmentProperty.getLength();
         }
-        HiCGlobals.hicMapScale = (int) (1 + totalLength / 2100000000);
-        return (int) (totalLength / HiCGlobals.hicMapScale); // in case decide to use for validation so that not to count again
+        JBGlobals.hicMapScale = (int) (1 + totalLength / 2100000000);
+        return (int) (totalLength / JBGlobals.hicMapScale); // in case decide to use for validation so that not to count again
     }
 
     private void parseAssemblyFileNoBundling() {

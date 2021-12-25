@@ -25,7 +25,7 @@
 package juicebox.windowui;
 
 import javastraw.reader.type.MatrixType;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import juicebox.data.HiC;
 import juicebox.data.HiCFileLoader;
 import juicebox.gui.SuperAdapter;
@@ -120,7 +120,7 @@ public class HiCKeyDispatcher implements KeyEventDispatcher {
             return true;
         } else if (e.getID() == KeyEvent.KEY_PRESSED && e.getKeyCode() == KeyEvent.VK_F7) {
             String newURL = MessageUtils.showInputDialog("Specify a new properties file",
-                    HiCGlobals.defaultPropertiesURL);
+                    JBGlobals.defaultPropertiesURL);
             if (newURL != null) {
                 HiCFileLoader.changeJuiceboxPropertiesFile(newURL);
             }

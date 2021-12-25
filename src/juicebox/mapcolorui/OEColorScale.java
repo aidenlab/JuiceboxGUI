@@ -25,7 +25,7 @@
 package juicebox.mapcolorui;
 
 import javastraw.reader.type.MatrixType;
-import juicebox.HiCGlobals;
+import juicebox.JBGlobals;
 import org.broad.igv.renderer.ColorScale;
 
 import java.awt.*;
@@ -54,7 +54,7 @@ class OEColorScale implements ColorScale {
     public Color getColor(float score) {
 
         double newValue;
-        if (HiCGlobals.HACK_COLORSCALE_LINEAR) {
+        if (JBGlobals.HACK_COLORSCALE_LINEAR) {
             if (score < 1) {
                 newValue = 1 - (1 / score);
             } else {
@@ -80,7 +80,7 @@ class OEColorScale implements ColorScale {
         }
 
 
-        if (HiCGlobals.HACK_COLORSCALE) {
+        if (JBGlobals.HACK_COLORSCALE) {
             newValue = score;
             if (newValue > (threshold / 2)) {
                 R = 255;
@@ -116,7 +116,7 @@ class OEColorScale implements ColorScale {
     }
 
     public double getMax() {
-        if (HiCGlobals.HACK_COLORSCALE || HiCGlobals.HACK_COLORSCALE_LINEAR) {
+        if (JBGlobals.HACK_COLORSCALE || JBGlobals.HACK_COLORSCALE_LINEAR) {
             return 2 * threshold;
         } else {
             return 2 * Math.exp(threshold);
@@ -124,7 +124,7 @@ class OEColorScale implements ColorScale {
     }
 
     public float getThreshold() {
-        if (HiCGlobals.HACK_COLORSCALE || HiCGlobals.HACK_COLORSCALE_LINEAR) {
+        if (JBGlobals.HACK_COLORSCALE || JBGlobals.HACK_COLORSCALE_LINEAR) {
             return (float) threshold;
         } else {
             return (float) Math.exp(threshold);
@@ -132,7 +132,7 @@ class OEColorScale implements ColorScale {
     }
 
     public void setThreshold(double max) {
-        if (HiCGlobals.HACK_COLORSCALE || HiCGlobals.HACK_COLORSCALE_LINEAR) {
+        if (JBGlobals.HACK_COLORSCALE || JBGlobals.HACK_COLORSCALE_LINEAR) {
             threshold = max;
         } else {
             threshold = Math.log(max);
