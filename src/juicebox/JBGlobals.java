@@ -34,7 +34,7 @@ import java.util.ArrayList;
  */
 public class JBGlobals {
 
-    public static final String versionNum = "3.02.01";
+    public static final String versionNum = "3.02.02";
     public static final String juiceboxTitle = "[Juicebox " + versionNum + "] Hi-C Map ";
     public static final Color RULER_LINE_COLOR = new Color(0, 0, 230, 100);
     public static final Color DARKULA_RULER_LINE_COLOR = new Color(200, 200, 250, 100);

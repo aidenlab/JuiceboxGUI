@@ -450,7 +450,7 @@ public class SuperAdapter {
                 JOptionPane.showMessageDialog(mainWindow, "Hi-C file summing is not supported.\n" +
                         "Using only the first file:\n" + files.get(0));
             }
-            DatasetReader reader = DatasetReaderFactory.getReaderForFile(files.get(0), true);
+            DatasetReader reader = DatasetReaderFactory.getReaderForFile(files.get(0), JBGlobals.useCache);
 
             if (reader == null) return false;
             Dataset dataset = reader.read();
