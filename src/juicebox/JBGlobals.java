@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2022 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import java.util.ArrayList;
  */
 public class JBGlobals {
 
-    public static final String versionNum = "3.02.03";
+    public static final String versionNum = "3.03.00";
     public static final String juiceboxTitle = "[Juicebox " + versionNum + "] Hi-C Map ";
     public static final Color RULER_LINE_COLOR = new Color(0, 0, 230, 100);
     public static final Color DARKULA_RULER_LINE_COLOR = new Color(200, 200, 250, 100);

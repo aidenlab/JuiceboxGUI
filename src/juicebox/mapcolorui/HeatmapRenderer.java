@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2022 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -925,7 +925,7 @@ public class HeatmapRenderer {
     private List<Block> getTheBlocks(GUIMatrixZoomData zd, int x, int y, int maxX, int maxY, NormalizationType normType, boolean isImportant) {
         if (zd != null) {
             try {
-                return zd.getNormalizedBlocksOverlapping(x, y, maxX, maxY, normType, isImportant, false);
+                return zd.getNormalizedBlocksOverlapping(x, y, maxX, maxY, normType, false);
             } catch (Exception ee) {
                 if (JBGlobals.printVerboseComments) ee.printStackTrace();
             }

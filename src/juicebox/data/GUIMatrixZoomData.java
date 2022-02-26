@@ -94,11 +94,11 @@ public class GUIMatrixZoomData extends MatrixZoomData {
     }
 
     public List<Block> getNormalizedBlocksOverlapping(int binX1, int binY1, int binX2, int binY2, final NormalizationType no,
-                                                      boolean isImportant, boolean fillUnderDiagonal) {
+                                                      boolean fillUnderDiagonal) {
         if (SuperAdapter.assemblyModeCurrentlyActive) {
             return addNormalizedBlocksToListAssembly(binX1, binY1, binX2, binY2, no);
         } else {
-            return super.getNormalizedBlocksOverlapping(binX1, binY1, binX2, binY2, no, isImportant, fillUnderDiagonal);
+            return super.getNormalizedBlocksOverlapping(binX1, binY1, binX2, binY2, no, fillUnderDiagonal);
         }
     }
 
@@ -199,7 +199,7 @@ public class GUIMatrixZoomData extends MatrixZoomData {
         }
 
         BlockModifier modifier = new AssemblyModifier();
-        actuallyLoadGivenBlocks(blockList, blocksToLoad, no, modifier, getKey(),
+        actuallyLoadGivenBlocks(blockList, new ArrayList<>(blocksToLoad), no, modifier, getKey(),
                 chr1, chr2, zoom, blockCache, reader);
         return new ArrayList<>(new HashSet<>(blockList));
     }
@@ -220,7 +220,7 @@ public class GUIMatrixZoomData extends MatrixZoomData {
             }
         }
 
-        List<Block> blocks = getNormalizedBlocksOverlapping(binX, binY, binX, binY, normalizationType, false, false);
+        List<Block> blocks = getNormalizedBlocksOverlapping(binX, binY, binX, binY, normalizationType, false);
         if (blocks == null) return 0;
         for (Block b : blocks) {
             for (ContactRecord rec : b.getContactRecords()) {

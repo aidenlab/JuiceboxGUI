@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2022 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -570,12 +570,12 @@ public class HiC {
 
     public ExpectedValueFunction getExpectedValues() {
         if (dataset == null) return null;
-        return dataset.getExpectedValues(currentZoom, obsNormalizationType, true);
+        return dataset.getExpectedValues(currentZoom, obsNormalizationType, false);
     }
 
     public ExpectedValueFunction getExpectedControlValues() {
         if (controlDataset == null) return null;
-        return controlDataset.getExpectedValues(currentZoom, ctrlNormalizationType, true);
+        return controlDataset.getExpectedValues(currentZoom, ctrlNormalizationType, false);
     }
 
     // Note - this is an inefficient method, used to support tooltip text only.
@@ -951,10 +951,10 @@ public class HiC {
         try {
             if (isControl) {
                 GUIMatrixZoomData cZd = getControlZd();
-                return cZd.getPearsons(controlDataset.getExpectedValues(cZd.getZoom(), ctrlNormalizationType, true)) == null;
+                return cZd.getPearsons(controlDataset.getExpectedValues(cZd.getZoom(), ctrlNormalizationType, false)) == null;
             } else {
                 GUIMatrixZoomData zd = getZd();
-                return zd.getPearsons(dataset.getExpectedValues(zd.getZoom(), obsNormalizationType, true)) == null;
+                return zd.getPearsons(dataset.getExpectedValues(zd.getZoom(), obsNormalizationType, false)) == null;
             }
         } catch (Exception e) {
             return true;
@@ -964,9 +964,9 @@ public class HiC {
     public boolean isPearsonsNotAvailableAtSpecificZoom(boolean isControl, HiCZoom zoom) {
         try {
             if (isControl) {
-                return getControlZd().getPearsons(controlDataset.getExpectedValues(zoom, ctrlNormalizationType, true)) == null;
+                return getControlZd().getPearsons(controlDataset.getExpectedValues(zoom, ctrlNormalizationType, false)) == null;
             } else {
-                return getZd().getPearsons(dataset.getExpectedValues(zoom, obsNormalizationType, true)) == null;
+                return getZd().getPearsons(dataset.getExpectedValues(zoom, obsNormalizationType, false)) == null;
             }
         } catch (Exception e) {
             return true;
@@ -1039,7 +1039,7 @@ public class HiC {
     }
 
     private void clearAllCacheForDataset(Dataset ds) {
-        ds.clearCache();
+        ds.clearCache(false);
     }
 
     public String[] getNormalizationOptions(boolean isControl) {
