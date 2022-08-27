@@ -44,8 +44,9 @@ public class LogExpectedSpline {
 
     public LogExpectedSpline(MatrixZoomData zd, NormalizationType norm, Chromosome chrom, int res) {
         int maxBin = (int) (chrom.getLength() / res + 1);
-        maxX = logp1i(maxBin);
-        function = fitDataToFunction(zd, norm, maxBin);
+        int[] maxDist = new int[1];
+        function = fitDataToFunction(zd, norm, maxBin, maxDist);
+        maxX = logp1i(Math.min(maxBin, maxDist[0]));
     }
 
     public static double logp1(double x) {
@@ -64,9 +65,9 @@ public class LogExpectedSpline {
         }
     }
 
-    private PolynomialSplineFunction fitDataToFunction(MatrixZoomData zd, NormalizationType norm, int maxBin) {
+    private PolynomialSplineFunction fitDataToFunction(MatrixZoomData zd, NormalizationType norm, int maxBin, int[] maxDist) {
 
-        List<double[]> points = getAverageInEachBin(zd, norm, maxBin);
+        List<double[]> points = getAverageInEachBin(zd, norm, maxBin, maxDist);
         double[] x = new double[points.size()];
         double[] y = new double[points.size()];
         for (int i = 0; i < points.size(); i++) {
@@ -79,22 +80,26 @@ public class LogExpectedSpline {
         return interpolator.interpolate(x, y);
     }
 
-    private List<double[]> getAverageInEachBin(MatrixZoomData zd, NormalizationType norm, int maxBin) {
+    private List<double[]> getAverageInEachBin(MatrixZoomData zd, NormalizationType norm, int maxBin, int[] maxDist) {
 
         double[] initExpected = new double[maxBin];
         long[] countsPerBin = new long[maxBin];
-        populateWithCounts(zd, norm, initExpected, countsPerBin, maxBin);
+        populateWithCounts(zd, norm, initExpected, countsPerBin, maxBin, maxDist);
 
-        List<double[]> currentPoints = collapseToSetOfPoints(initExpected, countsPerBin, maxBin);
+        int maxDistToUse = Math.min(maxBin, maxDist[0]);
+
+        List<double[]> currentPoints = collapseToSetOfPoints(initExpected, countsPerBin, maxDistToUse);
         List<double[]> finalPoints = new ArrayList<>(currentPoints.size());
         initExpected = null;
         countsPerBin = null;
 
         for (double[] current : currentPoints) {
-            double[] finalPoint = new double[2];
-            finalPoint[0] = current[2] / current[3];
-            finalPoint[1] = current[0] / current[1];
-            finalPoints.add(finalPoint);
+            if (current[3] > 0 && current[1] > 0) {
+                double[] finalPoint = new double[2];
+                finalPoint[0] = current[2] / current[3];
+                finalPoint[1] = current[0] / current[1];
+                finalPoints.add(finalPoint);
+            }
         }
         currentPoints.clear();
 
@@ -106,7 +111,9 @@ public class LogExpectedSpline {
         double[] latest = new double[4]; // vals, counts, distances, num_distances
         int k = 0;
         int numToGroup = 1;
-        while (k < maxBin) {
+        //System.out.println(Arrays.toString(initExpected));
+        //System.out.println(Arrays.toString(countsPerBin));
+        while (k < initExpected.length) {
             latest[0] += initExpected[k];
             latest[1] += countsPerBin[k];
             latest[2] += logp1(k);
@@ -136,12 +143,13 @@ public class LogExpectedSpline {
     }
 
     private void populateWithCounts(MatrixZoomData zd, NormalizationType norm, double[] initExpected,
-                                    long[] countsPerBin, int maxBin) {
+                                    long[] countsPerBin, int maxBin, int[] maxDist) {
         Iterator<ContactRecord> records = getIterator(zd, norm);
         while (records.hasNext()) {
             ContactRecord record = records.next();
             int dist = getDist(record);
             if (dist < maxBin) {
+                maxDist[0] = Math.max(maxDist[0], dist);
                 initExpected[dist] += logp1(record.getCounts());
                 countsPerBin[dist]++;
             }
