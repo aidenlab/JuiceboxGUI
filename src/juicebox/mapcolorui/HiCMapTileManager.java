@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2022 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,12 @@
 
 package juicebox.mapcolorui;
 
-import javastraw.reader.expected.ExpectedValueFunction;
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationType;
 import juicebox.JBGlobals;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
+import juicebox.data.LogExpectedSpline;
 import juicebox.gui.SuperAdapter;
 import org.broad.igv.util.ObjectCache;
 
@@ -85,7 +85,7 @@ public class HiCMapTileManager {
     private BufferedImage renderDataWithCPU(JComponent parent, int bx0, int by0, int imageWidth, int imageHeight,
                                             GUIMatrixZoomData zd, GUIMatrixZoomData controlZd, MatrixType displayOption,
                                             NormalizationType obsNormalizationType, NormalizationType ctrlNormalizationType,
-                                            ExpectedValueFunction expectedValues, ExpectedValueFunction expectedControlValues) {
+                                            LogExpectedSpline expectedValues, LogExpectedSpline expectedControlValues) {
         BufferedImage image = (BufferedImage) parent.createImage(imageWidth, imageHeight);
         Graphics2D g2D = (Graphics2D) image.getGraphics();
         if (JBGlobals.isDarkulaModeEnabled) {

@@ -32,6 +32,7 @@ import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationType;
 import juicebox.JBGlobals;
 import juicebox.data.GUIMatrixZoomData;
+import juicebox.data.LogExpectedSpline;
 import org.broad.igv.renderer.ColorScale;
 
 import java.awt.*;
@@ -63,7 +64,7 @@ public class HeatmapRenderer {
                           final GUIMatrixZoomData zd, final GUIMatrixZoomData controlZD,
                           final MatrixType displayOption,
                           final NormalizationType observedNormalizationType, final NormalizationType controlNormalizationType,
-                          final ExpectedValueFunction df, final ExpectedValueFunction controlDF,
+                          final LogExpectedSpline df, final LogExpectedSpline controlDF,
                           boolean isImportant) {
         if (g != null) {
             g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_SPEED);
@@ -100,20 +101,20 @@ public class HeatmapRenderer {
         float pseudoCountCtrl = PSEUDO_COUNT;
 
         if (displayOption == MatrixType.PEARSON) {
-            renderPearson(zd, df, key, originX, originY, width, height);
+            //renderPearson(zd, df, key, originX, originY, width, height);
         } else if (displayOption == MatrixType.PEARSONCTRL) {
             if (controlDF == null) {
                 System.err.println("Control DF is NULL");
                 return false;
             }
-            renderPearson(controlZD, controlDF, controlKey, originX, originY, width, height);
+            //renderPearson(controlZD, controlDF, controlKey, originX, originY, width, height);
         } else if (displayOption == MatrixType.PEARSONVS) {
 
             if (controlDF == null) {
                 System.err.println("Control DF is NULL");
                 return false;
             }
-            renderPearsonVS(zd, controlZD, df, controlDF, key, originX, originY, width, height);
+            //renderPearsonVS(zd, controlZD, df, controlDF, key, originX, originY, width, height);
         } else if (displayOption == MatrixType.CONTROL) {
             List<Block> ctrlBlocks = getTheBlocks(controlZD, x, y, maxX, maxY, controlNormalizationType, isImportant);
             if (controlZD == null || ctrlBlocks == null) return false;
@@ -312,7 +313,7 @@ public class HeatmapRenderer {
 
     private void renderLogRatioWithExpMap(List<Block> blocks, List<Block> ctrlBlocks,
                                           GUIMatrixZoomData zd, GUIMatrixZoomData controlZD, int chr1,
-                                          ExpectedValueFunction df, ExpectedValueFunction controlDF,
+                                          LogExpectedSpline df, LogExpectedSpline controlDF,
                                           int originX, int originY, int width, int height,
                                           ColorScale cs, boolean sameChr, NormalizationType controlNormalizationType) {
         Map<String, Block> controlBlocks = convertBlockListToMap(ctrlBlocks, controlZD);
@@ -407,7 +408,7 @@ public class HeatmapRenderer {
 
     private void renderRatioWithExpMap(List<Block> blocks, List<Block> ctrlBlocks,
                                        GUIMatrixZoomData zd, GUIMatrixZoomData controlZD,
-                                       int chr1, ExpectedValueFunction df, ExpectedValueFunction controlDF,
+                                       int chr1, LogExpectedSpline df, LogExpectedSpline controlDF,
                                        float pseudoCountObs, float pseudoCountCtrl,
                                        int originX, int originY, int width, int height,
                                        ColorScale cs, boolean sameChr, NormalizationType controlNormalizationType) {
@@ -473,7 +474,7 @@ public class HeatmapRenderer {
 
     private void renderOERatioMap(List<Block> blocks, List<Block> ctrlBlocks,
                                   GUIMatrixZoomData zd, GUIMatrixZoomData controlZD,
-                                  ExpectedValueFunction df, ExpectedValueFunction controlDF,
+                                  LogExpectedSpline df, LogExpectedSpline controlDF,
                                   int originX, int originY, int width, int height,
                                   float pseudoCountObs, float pseudoCountCtrl, ColorScale cs, boolean sameChr,
                                   NormalizationType controlNormalizationType, int chr1) {
@@ -538,7 +539,7 @@ public class HeatmapRenderer {
         }
     }
 
-    private void renderNewBaseEMap(int chr1, List<Block> blocks, ExpectedValueFunction df, GUIMatrixZoomData zd,
+    private void renderNewBaseEMap(int chr1, List<Block> blocks, LogExpectedSpline df, GUIMatrixZoomData zd,
                                    ColorScale cs, boolean sameChr, int originX, int originY, int width, int height) {
         if (sameChr) {
             if (df != null) {
@@ -578,7 +579,7 @@ public class HeatmapRenderer {
         }
     }
 
-    private void renderExpectedMap(GUIMatrixZoomData zd, ExpectedValueFunction df,
+    private void renderExpectedMap(GUIMatrixZoomData zd, LogExpectedSpline df,
                                    boolean sameChr, ColorScale cs, int originX, int originY,
                                    int width, int height, int chr1) {
         if (sameChr) {
@@ -606,7 +607,7 @@ public class HeatmapRenderer {
     }
 
     private void renderLogObsOverExpVSMap(int chr1, List<Block> blocks, List<Block> ctrlBlocks,
-                                          ExpectedValueFunction df, ExpectedValueFunction controlDF,
+                                          LogExpectedSpline df, LogExpectedSpline controlDF,
                                           GUIMatrixZoomData zd, GUIMatrixZoomData controlZD, ColorScale cs,
                                           boolean sameChr, int originX, int originY, int width, int height) {
         if (zd != null && df != null) {
@@ -731,7 +732,7 @@ public class HeatmapRenderer {
         }
     }
 
-    private void renderLogObservedBaseExpectedMap(int chromosome, List<Block> blocks, ExpectedValueFunction df,
+    private void renderLogObservedBaseExpectedMap(int chromosome, List<Block> blocks, LogExpectedSpline df,
                                                   GUIMatrixZoomData zd, ColorScale cs, boolean sameChr,
                                                   int originX, int originY, int width, int height) {
         if (sameChr) {
@@ -773,7 +774,7 @@ public class HeatmapRenderer {
     }
 
     private void renderObservedOverExpectedVSMap(int chromosome, List<Block> blocks, List<Block> ctrlBlocks,
-                                                 ExpectedValueFunction df, ExpectedValueFunction controlDF,
+                                                 LogExpectedSpline df, LogExpectedSpline controlDF,
                                                  GUIMatrixZoomData zd, GUIMatrixZoomData controlZD, ColorScale cs,
                                                  boolean sameChr, int originX, int originY, int width, int height,
                                                  float pseudoCountObs, float pseudoCountCtrl) {
@@ -820,16 +821,16 @@ public class HeatmapRenderer {
         }
     }
 
-    private float getExpectedValue(ExpectedValueFunction df, int chromosome, ContactRecord record) {
+    private float getExpectedValue(LogExpectedSpline df, int chromosome, ContactRecord record) {
         return getExpectedValue(df, chromosome, record.getBinX(), record.getBinY());
     }
 
-    private float getExpectedValue(ExpectedValueFunction df, int chromosome, int binX, int binY) {
+    private float getExpectedValue(LogExpectedSpline df, int chromosome, int binX, int binY) {
         int dist = Math.abs(binX - binY);
-        return (float) df.getExpectedValue(chromosome, dist);
+        return (float) df.getExpectedFromUncompressedBin(dist);
     }
 
-    private void renderObservedOverExpectedMap(int chromosome, List<Block> blocks, ExpectedValueFunction df,
+    private void renderObservedOverExpectedMap(int chromosome, List<Block> blocks, LogExpectedSpline df,
                                                GUIMatrixZoomData zd, ColorScale cs, boolean sameChr,
                                                int originX, int originY, int width, int height, float pseudoCount) {
         if (sameChr) {

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2022 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,6 @@ import com.jidesoft.swing.JidePopupMenu;
 import javastraw.feature2D.Feature2D;
 import javastraw.reader.Matrix;
 import javastraw.reader.basics.Chromosome;
-import javastraw.reader.expected.ExpectedValueFunction;
 import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyOperationExecutor;
@@ -36,6 +35,7 @@ import juicebox.assembly.AssemblyScaffoldHandler;
 import juicebox.assembly.Scaffold;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
+import juicebox.data.LogExpectedSpline;
 import juicebox.gui.SuperAdapter;
 import juicebox.guifeature2d.*;
 import juicebox.track.HiCFragmentAxis;
@@ -399,12 +399,12 @@ public class HeatmapMouseHandler extends MouseAdapter {
     }
 
     private double getExpectedValue(int c1, int c2, int binX, int binY, GUIMatrixZoomData zd,
-                                    ExpectedValueFunction df) {
+                                    LogExpectedSpline df) {
         double ev = 0;
         if (c1 == c2) {
             if (df != null) {
                 int distance = Math.abs(binX - binY);
-                ev = df.getExpectedValue(c1, distance);
+                ev = df.getExpectedFromUncompressedBin(distance);
             }
         } else {
             ev = zd.getAverageCount();

@@ -30,7 +30,6 @@ import javastraw.reader.Dataset;
 import javastraw.reader.Matrix;
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.basics.ChromosomeHandler;
-import javastraw.reader.expected.ExpectedValueFunction;
 import javastraw.reader.type.HiCZoom;
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationHandler;
@@ -48,7 +47,9 @@ import java.awt.*;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is the "model" class for the HiC viewer.
@@ -558,24 +559,43 @@ public class HiC {
         }
     }
 
+    private final Map<Integer, Map<Integer, LogExpectedSpline>> expectedMap = new HashMap<>();
+    private final Map<Integer, Map<Integer, LogExpectedSpline>> ctrlExpectedMap = new HashMap<>();
+
     public double[] getEigenvector(boolean isControl) {
-        if (isControl) {
-            if (controlDataset == null) return null;
-            return getControlZd().getEigenvector(getExpectedControlValues());
-        } else {
-            if (dataset == null) return null;
-            return getZd().getEigenvector(getExpectedValues());
-        }
+        return null;
     }
 
-    public ExpectedValueFunction getExpectedValues() {
+    public LogExpectedSpline getExpectedValues() {
         if (dataset == null) return null;
-        return dataset.getExpectedValues(currentZoom, obsNormalizationType, false);
+        int ci = getXContext().getChromosome().getIndex();
+        int res = getZoom().getBinSize();
+
+        if (!expectedMap.containsKey(ci)) {
+            expectedMap.put(ci, new HashMap<>());
+        }
+        if (!expectedMap.get(ci).containsKey(res)) {
+            expectedMap.get(ci).put(res,
+                    new LogExpectedSpline(getZd(), getObsNormalizationType(), getXContext().getChromosome(),
+                            res));
+        }
+        return expectedMap.get(ci).get(res);
     }
 
-    public ExpectedValueFunction getExpectedControlValues() {
+    public LogExpectedSpline getExpectedControlValues() {
         if (controlDataset == null) return null;
-        return controlDataset.getExpectedValues(currentZoom, ctrlNormalizationType, false);
+        int ci = getXContext().getChromosome().getIndex();
+        int res = getZoom().getBinSize();
+
+        if (!ctrlExpectedMap.containsKey(ci)) {
+            ctrlExpectedMap.put(ci, new HashMap<>());
+        }
+        if (!ctrlExpectedMap.get(ci).containsKey(res)) {
+            ctrlExpectedMap.get(ci).put(res,
+                    new LogExpectedSpline(getZd(), getObsNormalizationType(), getXContext().getChromosome(),
+                            res));
+        }
+        return ctrlExpectedMap.get(ci).get(res);
     }
 
     // Note - this is an inefficient method, used to support tooltip text only.
