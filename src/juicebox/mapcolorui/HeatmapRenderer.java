@@ -24,6 +24,7 @@
 
 package juicebox.mapcolorui;
 
+import javastraw.expected.LogExpectedSpline;
 import javastraw.matrices.BasicMatrix;
 import javastraw.reader.block.Block;
 import javastraw.reader.block.ContactRecord;
@@ -32,7 +33,6 @@ import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationType;
 import juicebox.JBGlobals;
 import juicebox.data.GUIMatrixZoomData;
-import juicebox.data.LogExpectedSpline;
 import org.broad.igv.renderer.ColorScale;
 
 import java.awt.*;

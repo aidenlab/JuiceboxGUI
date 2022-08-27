@@ -25,6 +25,7 @@
 
 package juicebox.data;
 
+import javastraw.expected.LogExpectedSpline;
 import javastraw.feature2D.Feature2D;
 import javastraw.reader.Dataset;
 import javastraw.reader.basics.Chromosome;

@@ -25,6 +25,7 @@
 package juicebox.mapcolorui;
 
 import com.jidesoft.swing.JidePopupMenu;
+import javastraw.expected.LogExpectedSpline;
 import javastraw.feature2D.Feature2D;
 import javastraw.reader.basics.Chromosome;
 import javastraw.reader.mzd.Matrix;
@@ -35,7 +36,6 @@ import juicebox.assembly.AssemblyScaffoldHandler;
 import juicebox.assembly.Scaffold;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
-import juicebox.data.LogExpectedSpline;
 import juicebox.gui.SuperAdapter;
 import juicebox.guifeature2d.*;
 import juicebox.track.HiCFragmentAxis;

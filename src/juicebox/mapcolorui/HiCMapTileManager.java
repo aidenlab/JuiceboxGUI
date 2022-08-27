@@ -24,12 +24,12 @@
 
 package juicebox.mapcolorui;
 
+import javastraw.expected.LogExpectedSpline;
 import javastraw.reader.type.MatrixType;
 import javastraw.reader.type.NormalizationType;
 import juicebox.JBGlobals;
 import juicebox.data.GUIMatrixZoomData;
 import juicebox.data.HiC;
-import juicebox.data.LogExpectedSpline;
 import juicebox.gui.SuperAdapter;
 import org.broad.igv.util.ObjectCache;
 
