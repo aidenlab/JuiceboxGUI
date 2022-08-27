@@ -26,8 +26,8 @@ package juicebox.mapcolorui;
 
 import com.jidesoft.swing.JidePopupMenu;
 import javastraw.feature2D.Feature2D;
-import javastraw.reader.Matrix;
 import javastraw.reader.basics.Chromosome;
+import javastraw.reader.mzd.Matrix;
 import juicebox.JBGlobals;
 import juicebox.MainWindow;
 import juicebox.assembly.AssemblyOperationExecutor;

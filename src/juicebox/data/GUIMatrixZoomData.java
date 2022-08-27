@@ -200,7 +200,7 @@ public class GUIMatrixZoomData extends MatrixZoomData {
 
         BlockModifier modifier = new AssemblyModifier();
         actuallyLoadGivenBlocks(blockList, new ArrayList<>(blocksToLoad), no, modifier, getKey(),
-                chr1, chr2, zoom, blockCache, reader);
+                chr1, chr2, zoom, blockCache, reader, blockIndices);
         return new ArrayList<>(new HashSet<>(blockList));
     }
 
