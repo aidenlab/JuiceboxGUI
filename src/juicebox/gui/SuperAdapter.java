@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2011-2021 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
+ * Copyright (c) 2011-2022 Broad Institute, Aiden Lab, Rice University, Baylor College of Medicine
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -450,7 +450,7 @@ public class SuperAdapter {
                 JOptionPane.showMessageDialog(mainWindow, "Hi-C file summing is not supported.\n" +
                         "Using only the first file:\n" + files.get(0));
             }
-            DatasetReader reader = DatasetReaderFactory.getReaderForFile(files.get(0), JBGlobals.useCache);
+            DatasetReader reader = DatasetReaderFactory.getReaderForFile(files.get(0), JBGlobals.useCache, true);
 
             if (reader == null) return false;
             Dataset dataset = reader.read();
